@@ -1,0 +1,382 @@
+@import "tailwindcss";
+
+:root {
+  --header-height: 4rem;
+  --transition-toss: cubic-bezier(0.18, 0.68, 0.43, 0.99);
+
+  /* 토스 색상 변수 정의 - 라이트 테마 기본값 */
+  --color-toss-blue-50: #f3f7ff;
+  --color-toss-blue-100: #e6eeff;
+  --color-toss-blue-200: #c5d5ff;
+  --color-toss-blue-300: #a6baff;
+  --color-toss-blue-400: #849cff;
+  --color-toss-blue-500: #3b82f6;
+  --color-toss-blue-600: #2563eb;
+  --color-toss-blue-700: #1d4ed8;
+  --color-toss-blue-800: #1e40af;
+  --color-toss-blue-900: #1e3a8a;
+
+  --color-toss-green-50: #f0f9f5;
+  --color-toss-green-100: #dcefe5;
+  --color-toss-green-200: #00d284;
+  --color-toss-green-300: #00b36b;
+
+  --color-toss-red-100: #fee9e9;
+  --color-toss-red-200: #fed3d3;
+  --color-toss-red-500: #f43f5e;
+  --color-toss-red-600: #e11d48;
+
+  --color-toss-yellow-100: #fff8e6;
+  --color-toss-yellow-500: #ffcc00;
+
+  /* 중립 색상 - 라이트 테마 기본값 */
+  --color-background: #ffffff;
+  --color-foreground: #333d4b;
+  --color-white: #ffffff;
+  --color-black: #191f28;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e8eb;
+  --color-gray-300: #d1d6db;
+  --color-gray-400: #b0b8c1;
+  --color-gray-500: #8b95a1;
+  --color-gray-600: #6b7684;
+  --color-gray-700: #4e5968;
+  --color-gray-800: #333d4b;
+  --color-gray-900: #191f28;
+
+  /* 컴포넌트별 색상 - 라이트 테마 기본값 */
+  --color-card-background: var(--color-white);
+  --color-card-border: transparent;
+  --color-card-shadow: rgba(0, 0, 0, 0.06);
+  --color-card-shadow-hover: rgba(0, 0, 0, 0.1);
+
+  --color-input-background: var(--color-white);
+  --color-input-border: var(--color-gray-300);
+  --color-input-focus-ring: var(--color-toss-blue-100);
+  --color-input-focus-border: var(--color-toss-blue-500);
+
+  --color-button-primary: var(--color-toss-blue-500);
+  --color-button-primary-hover: var(--color-toss-blue-600);
+  --color-button-secondary: var(--color-gray-100);
+  --color-button-secondary-hover: var(--color-gray-200);
+
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-700);
+  --color-text-tertiary: var(--color-gray-500);
+  --color-text-inverse: var(--color-white);
+
+  --color-border-light: var(--color-gray-200);
+  --color-border-normal: var(--color-gray-300);
+
+  --color-overlay: rgba(0, 0, 0, 0.4);
+}
+
+/* 다크 테마 설정 */
+html[data-theme="dark"] {
+  --color-background: #101419;
+  --color-foreground: #e5e8eb;
+
+  /* 중립 색상 - 다크 테마 */
+  --color-gray-50: #1f2226;
+  --color-gray-100: #2a2e34;
+  --color-gray-200: #3a404a;
+  --color-gray-300: #4e5460;
+  --color-gray-400: #646d7a;
+  --color-gray-500: #808a99;
+  --color-gray-600: #a0a8b5;
+  --color-gray-700: #c5ccd3;
+  --color-gray-800: #eaecef;
+  --color-gray-900: #f9fafb;
+
+  /* 컴포넌트별 색상 - 다크 테마 */
+  --color-card-background: #1a1d23;
+  --color-card-border: #2a2e34;
+  --color-card-shadow: rgba(0, 0, 0, 0.2);
+  --color-card-shadow-hover: rgba(0, 0, 0, 0.3);
+
+  --color-input-background: #1a1d23;
+  --color-input-border: var(--color-gray-300);
+  --color-input-focus-ring: rgba(59, 130, 246, 0.2);
+  --color-input-focus-border: var(--color-toss-blue-500);
+
+  --color-button-primary: var(--color-toss-blue-500);
+  --color-button-primary-hover: var(--color-toss-blue-600);
+  --color-button-secondary: var(--color-gray-100);
+  --color-button-secondary-hover: var(--color-gray-200);
+
+  --color-text-primary: var(--color-gray-800);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-tertiary: var(--color-gray-500);
+
+  --color-border-light: var(--color-gray-200);
+  --color-border-normal: var(--color-gray-300);
+
+  --color-overlay: rgba(0, 0, 0, 0.6);
+}
+
+/* 토스 스타일 공통 요소 */
+.toss-btn-primary {
+  background-color: var(--color-button-primary);
+  color: var(--color-white);
+  padding: 0.875rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s var(--transition-toss);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.toss-btn-primary:hover {
+  background-color: var(--color-button-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+.toss-btn-primary:active {
+  transform: translateY(0);
+}
+
+.toss-btn-secondary {
+  background-color: var(--color-button-secondary);
+  color: var(--color-foreground);
+  padding: 0.875rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s var(--transition-toss);
+}
+.toss-btn-secondary:hover {
+  background-color: var(--color-button-secondary-hover);
+  transform: translateY(-2px);
+}
+.toss-btn-secondary:active {
+  transform: translateY(0);
+}
+
+.toss-card {
+  background-color: var(--color-card-background);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px var(--color-card-shadow);
+  transition: all 0.2s var(--transition-toss);
+  border: 1px solid var(--color-card-border);
+}
+.toss-card:hover {
+  box-shadow: 0 8px 16px var(--color-card-shadow-hover);
+  transform: translateY(-4px);
+}
+
+.toss-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-input-border);
+  background-color: var(--color-input-background);
+  color: var(--color-foreground);
+  transition: all 0.2s var(--transition-toss);
+  font-size: 1rem;
+}
+.toss-input:focus {
+  outline: none;
+  border-color: var(--color-input-focus-border);
+  box-shadow: 0 0 0 4px var(--color-input-focus-ring);
+}
+
+/* 태그 스타일 */
+.toss-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-700);
+}
+.toss-tag.blue {
+  background-color: var(--color-toss-blue-50);
+  color: var(--color-toss-blue-700);
+}
+.toss-tag.green {
+  background-color: var(--color-toss-green-50);
+  color: var(--color-toss-green-300);
+}
+.toss-tag.red {
+  background-color: var(--color-toss-red-100);
+  color: var(--color-toss-red-600);
+}
+.toss-tag.yellow {
+  background-color: var(--color-toss-yellow-100);
+  color: #9e6900;
+}
+
+/* 테마 토글 버튼 - 토스 스타일 */
+.toss-theme-toggle {
+  position: relative;
+  width: 3.25rem;
+  height: 1.75rem;
+  border-radius: 1.75rem;
+  background-color: var(--color-gray-200);
+  cursor: pointer;
+  transition: background-color 0.3s var(--transition-toss);
+  display: flex;
+  align-items: center;
+  padding: 0.125rem;
+  border: 1px solid var(--color-gray-300);
+}
+
+html[data-theme="dark"] .toss-theme-toggle {
+  background-color: var(--color-toss-blue-500);
+  border-color: var(--color-toss-blue-700);
+}
+
+.toss-theme-toggle::after {
+  content: "";
+  position: absolute;
+  left: 0.125rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  transition:
+    transform 0.3s var(--transition-toss),
+    box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+html[data-theme="dark"] .toss-theme-toggle::after {
+  transform: translateX(1.5rem);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toss-theme-toggle .sun-icon,
+.toss-theme-toggle .moon-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.toss-theme-toggle .sun-icon {
+  right: 0.375rem;
+  color: var(--color-gray-700);
+}
+
+.toss-theme-toggle .moon-icon {
+  left: 0.375rem;
+  color: var(--color-white);
+}
+
+html[data-theme="light"] .toss-theme-toggle .sun-icon,
+html[data-theme="dark"] .toss-theme-toggle .moon-icon {
+  opacity: 1;
+}
+
+/* 토스 애니메이션 효과 */
+.toss-hover-lift {
+  transition:
+    transform 0.3s var(--transition-toss),
+    box-shadow 0.3s var(--transition-toss);
+}
+.toss-hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 20px var(--color-card-shadow);
+}
+
+.toss-scale-hover {
+  transition: transform 0.3s var(--transition-toss);
+}
+.toss-scale-hover:hover {
+  transform: scale(1.05);
+}
+
+.toss-fade-in {
+  animation: toss-fadeIn 0.5s var(--transition-toss) forwards;
+}
+
+@keyframes toss-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 페이지 전환 */
+.toss-page-transition-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.toss-page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.3s,
+    transform 0.3s var(--transition-toss);
+}
+
+/* 페이지 스크롤 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 기본 스타일 */
+body {
+  font-family: var(
+    --font-sans,
+    "Pretendard",
+    "Apple SD Gothic Neo",
+    sans-serif
+  );
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+  line-height: 1.5;
+  transition:
+    background-color 0.3s var(--transition-toss),
+    color 0.3s var(--transition-toss);
+}
+
+/* 텍스트 스타일 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+p {
+  color: var(--color-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500);
+}
