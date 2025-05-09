@@ -55,7 +55,7 @@ const Navbar = () => {
             >
               <Link
                 href="/"
-                className="font-semibold text-xl md:text-2xl text-gray-900 dark:text-white flex items-center group"
+                className="text-gray-900 dark:text-white font-semibold text-xl md:text-2xl flex items-center group"
               >
                 <span className="group-hover:text-primary transition-colors duration-200">
                   KIWON

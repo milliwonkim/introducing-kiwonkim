@@ -23,6 +23,7 @@ export default function ThemeToggle() {
 
     // 저장된 테마가 있으면 사용, 없으면 시스템 설정 따르기
     const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", initialTheme);
     setTheme(initialTheme as "light" | "dark");
   }, []);
 

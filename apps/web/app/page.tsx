@@ -12,7 +12,7 @@ import IconThreeJS from "../icon/IconThreeJS";
 import SectionHeader from "../components/layout/SectionHeader";
 import SectionContainer from "../components/layout/SectionContainer";
 import SkillCard from "../components/home/SkillCard";
-import ProjectCard from "../components/home/ProjectCard";
+import ProjectCard, { Project } from "../components/projects/ProjectCard";
 import CTA from "../components/layout/CTA";
 
 /**
@@ -64,27 +64,49 @@ export default function Home() {
     },
   ];
 
-  const projects = [
+  // 프로젝트 데이터를 상수로 분리
+  const FEATURED_PROJECTS: Project[] = [
     {
-      title: "프로젝트 1",
+      id: 1,
+      title: "포트폴리오 웹사이트 (v2)",
       description:
-        "이 프로젝트는 React와 TypeScript를 활용하여 개발된 웹 애플리케이션입니다. 사용자 친화적인 인터페이스와 최적화된 성능을 제공합니다.",
-      technologies: ["React", "TypeScript", "Next.js"],
-      projectUrl: "/projects#project-1",
+        "Next.js, TypeScript, TailwindCSS, Motion One을 활용한 개인 포트폴리오 사이트입니다. 반응형 디자인과 깔끔한 애니메이션에 중점을 두었습니다.",
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "TailwindCSS",
+        "Motion One",
+        "Three.js",
+      ],
+      link: "/",
+      github: "https://github.com/your-username/portfolio-v2",
+      category: "frontend",
     },
     {
-      title: "프로젝트 2",
+      id: 2,
+      title: "인터랙티브 데이터 시각화",
       description:
-        "이 프로젝트는 React와 TypeScript를 활용하여 개발된 웹 애플리케이션입니다. 사용자 친화적인 인터페이스와 최적화된 성능을 제공합니다.",
-      technologies: ["React", "TypeScript", "Next.js"],
-      projectUrl: "/projects#project-2",
+        "D3.js와 React를 사용하여 복잡한 데이터를 사용자와 상호작용하는 시각화로 구현했습니다. 데이터 필터링 및 동적 업데이트 기능을 제공합니다.",
+      technologies: ["React", "D3.js", "TypeScript", "Styled Components"],
+      link: "#",
+      github: "https://github.com/your-username/data-viz",
+      category: "frontend",
     },
     {
-      title: "프로젝트 3",
+      id: 3,
+      title: "커뮤니티 플랫폼",
       description:
-        "이 프로젝트는 React와 TypeScript를 활용하여 개발된 웹 애플리케이션입니다. 사용자 친화적인 인터페이스와 최적화된 성능을 제공합니다.",
-      technologies: ["React", "TypeScript", "Next.js"],
-      projectUrl: "/projects#project-3",
+        "Next.js 기반의 풀스택 커뮤니티 플랫폼입니다. 게시글 작성, 댓글, 사용자 인증 및 프로필 기능을 포함하며, Prisma와 PostgreSQL을 사용했습니다.",
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "React Query",
+        "Prisma",
+        "PostgreSQL",
+        "TailwindCSS",
+      ],
+      link: "#",
+      category: "fullstack",
     },
   ];
 
@@ -235,21 +257,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 프로젝트 미리보기 섹션 */}
-      <SectionContainer>
+      {/* 프로젝트 섹션 */}
+      <SectionContainer className="container">
         <SectionHeader
           label="PROJECTS"
-          title="주요 프로젝트"
-          subtitle="최근에 작업한 주요 프로젝트들을 소개합니다."
+          title="프로젝트"
+          subtitle="최근에 진행한 주요 프로젝트들을 소개합니다."
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.title} {...project} index={index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {FEATURED_PROJECTS.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
-        <div className="text-center mt-12 md:mt-16">
-          <Link href="/projects" className="btn btn-secondary px-6 py-3">
+        <div className="text-center mt-12">
+          <Link
+            href="/projects"
+            className="inline-flex items-center text-sm font-medium text-primary hover:text-primary-hover transition-colors"
+          >
             모든 프로젝트 보기
+            <svg
+              className="w-4 h-4 ml-1 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-200 ease-in-out"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
           </Link>
         </div>
       </SectionContainer>
