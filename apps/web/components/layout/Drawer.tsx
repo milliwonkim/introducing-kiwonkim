@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, easeInOut, Variants } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -38,7 +38,7 @@ const backdropVariants = {
   },
 };
 
-const drawerVariants = {
+const drawerVariants: Variants = {
   hidden: {
     x: "100%",
     boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
@@ -51,12 +51,8 @@ const drawerVariants = {
     filter: "blur(0px)",
     opacity: 1,
     transition: {
-      type: "spring",
-      damping: 30,
-      stiffness: 300,
-      mass: 0.8,
-      bounce: 0.1,
-      duration: 0.6,
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1], // WRTN 스타일의 부드러운 cubic-bezier
     },
   },
   exit: {
@@ -66,21 +62,23 @@ const drawerVariants = {
     opacity: 0.9,
     transition: {
       duration: 0.3,
-      ease: [0.165, 0.84, 0.44, 1],
+      ease: [0.16, 1, 0.3, 1],
     },
   },
 };
 
 const navItemVariants = {
-  hidden: { opacity: 0, x: 20, filter: "blur(5px)" },
+  hidden: { opacity: 0, x: 20, filter: "blur(2px)" },
   visible: (i: number) => ({
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
     transition: {
-      delay: 0.05 * i + 0.2,
+      type: "spring",
+      damping: 35,
+      stiffness: 330,
+      delay: 0.05 * i + 0.15,
       duration: 0.5,
-      ease: [0.165, 0.84, 0.44, 1],
     },
   }),
   exit: (i: number) => ({
@@ -119,15 +117,26 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
     document.addEventListener("keydown", handleEscape);
     document.addEventListener("mousedown", handleClickOutside);
 
-    // 열렸을 때 스크롤 방지
+    // 스크롤 위치 저장 및 처리
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.top = `-${scrollY}px`;
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.removeEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = "";
+
+      // 스크롤 위치 복원
+      if (isOpen) {
+        const scrollY = document.body.style.top;
+        document.body.style.position = "";
+        document.body.style.width = "";
+        document.body.style.top = "";
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
     };
   }, [isOpen, onClose]);
 
@@ -138,37 +147,41 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
           {/* 백드롭 오버레이 - WRTN 스타일 */}
           <motion.div
             className="fixed inset-0 bg-black/25 backdrop-blur-[2.5px] z-50"
-            variants={backdropVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
+            variants={backdropVariants}
             onClick={onClose}
           />
 
           {/* Drawer 패널 - WRTN 스타일 */}
           <motion.div
             ref={drawerRef}
-            className="fixed top-0 right-0 h-full w-[85%] max-w-md bg-white dark:bg-[#191919] z-50 flex flex-col overflow-hidden shadow-xl"
+            className="fixed top-0 right-0 h-full w-[85%] max-w-md bg-white dark:bg-[#191919] z-50 flex flex-col overflow-hidden shadow-xl border-l border-gray-100 dark:border-gray-800/20"
             variants={drawerVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
             {/* Drawer 헤더 - WRTN 스타일 */}
-            <div className="py-6 px-7 flex-shrink-0 relative ">
+            <div className="py-6 px-7 flex-shrink-0 relative">
               <motion.div
                 className="flex items-center justify-between"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.3 }}
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.1,
+                  duration: 0.3,
+                  ease: [0.165, 0.84, 0.44, 1],
+                }}
               >
                 <Link
                   href="/"
-                  className="font-semibold text-xl text-text-primary flex items-center group"
+                  className="font-semibold text-xl text-primary dark:text-primary-light flex items-center group"
                   onClick={onClose}
                 >
                   <span className="text-primary mr-1">K.</span>
-                  <span className="group-hover:text-primary transition-colors duration-200">
+                  <span className="group-hover:text-primary transition-colors duration-200 ">
                     Kiwon
                   </span>
                 </Link>
@@ -206,14 +219,14 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
                 variants={{
                   visible: {
                     transition: {
-                      staggerChildren: 0.06,
-                      delayChildren: 0.15,
+                      staggerChildren: 0.05,
+                      delayChildren: 0.1,
                       when: "beforeChildren",
                     },
                   },
                   exit: {
                     transition: {
-                      staggerChildren: 0.04,
+                      staggerChildren: 0.03,
                       staggerDirection: -1,
                     },
                   },
@@ -241,8 +254,8 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
                           whileHover={{ x: isActive ? 0 : 3 }}
                           transition={{
                             type: "spring",
-                            stiffness: 400,
-                            damping: 30,
+                            stiffness: 500,
+                            damping: 25,
                           }}
                         >
                           {link.name}
@@ -270,13 +283,15 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
 
             {/* Drawer 푸터 - WRTN 스타일 */}
             <motion.div
-              className="px-7 py-6 flex-shrink-0 "
-              initial={{ opacity: 0, y: 15 }}
+              className="px-7 py-6 flex-shrink-0"
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 0.5,
+                type: "spring",
+                stiffness: 500,
+                damping: 40,
+                delay: 0.25,
                 duration: 0.4,
-                ease: [0.165, 0.84, 0.44, 1],
               }}
             >
               <div className="flex items-center justify-between">

@@ -101,11 +101,6 @@ const Navbar = () => {
                             <motion.div
                               className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary dark:bg-primary-light rounded-full"
                               layoutId="navbar-active-link"
-                              transition={{
-                                type: "spring",
-                                stiffness: 400,
-                                damping: 30,
-                              }}
                             />
                           )}
                         </span>

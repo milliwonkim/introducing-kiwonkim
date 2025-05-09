@@ -9,11 +9,85 @@ import IconTailwindcss from "../icon/IconTailwindcss";
 import IconTypeScript from "../icon/IconTypeScript";
 import IconTanstack from "../icon/IconTanstack";
 import IconThreeJS from "../icon/IconThreeJS";
+import SectionHeader from "../components/layout/SectionHeader";
+import SectionContainer from "../components/layout/SectionContainer";
+import SkillCard from "../components/home/SkillCard";
+import ProjectCard from "../components/home/ProjectCard";
+import CTA from "../components/layout/CTA";
 
 /**
  * @description 메인 포트폴리오 페이지 컴포넌트
  */
 export default function Home() {
+  const skills = [
+    {
+      name: "React",
+      icon: <IconReactJS width={32} height={32} className="text-cyan-500" />,
+    },
+    {
+      name: "Next.js",
+      icon: (
+        <IconNextJS
+          width={60}
+          height={32}
+          className="text-black dark:text-white"
+        />
+      ),
+    },
+    {
+      name: "TypeScript",
+      icon: (
+        <IconTypeScript
+          width={32}
+          height={32}
+          className="text-blue-600 dark:text-blue-400"
+        />
+      ),
+    },
+    {
+      name: "TailwindCSS",
+      icon: (
+        <IconTailwindcss
+          width={90}
+          height={32}
+          className="text-black dark:text-white"
+        />
+      ),
+    },
+    {
+      name: "React Query",
+      icon: <IconTanstack width={40} height={40} />,
+    },
+    {
+      name: "Three.js",
+      icon: <IconThreeJS width={40} height={40} className="" />,
+    },
+  ];
+
+  const projects = [
+    {
+      title: "프로젝트 1",
+      description:
+        "이 프로젝트는 React와 TypeScript를 활용하여 개발된 웹 애플리케이션입니다. 사용자 친화적인 인터페이스와 최적화된 성능을 제공합니다.",
+      technologies: ["React", "TypeScript", "Next.js"],
+      projectUrl: "/projects#project-1",
+    },
+    {
+      title: "프로젝트 2",
+      description:
+        "이 프로젝트는 React와 TypeScript를 활용하여 개발된 웹 애플리케이션입니다. 사용자 친화적인 인터페이스와 최적화된 성능을 제공합니다.",
+      technologies: ["React", "TypeScript", "Next.js"],
+      projectUrl: "/projects#project-2",
+    },
+    {
+      title: "프로젝트 3",
+      description:
+        "이 프로젝트는 React와 TypeScript를 활용하여 개발된 웹 애플리케이션입니다. 사용자 친화적인 인터페이스와 최적화된 성능을 제공합니다.",
+      technologies: ["React", "TypeScript", "Next.js"],
+      projectUrl: "/projects#project-3",
+    },
+  ];
+
   return (
     <Layout>
       {/* 히어로 섹션 */}
@@ -52,102 +126,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 기술 섹션 - 배경색 클래스 제거 */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 md:px-8">
-          <motion.div
-            className="text-center mb-12 md:mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <span className="text-primary font-medium text-sm mb-2 block tracking-wide">
-              SKILLS
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-3">
-              사용하는 기술 스택
-            </h2>
-            <p className="text-text-secondary max-w-lg mx-auto">
-              최신 기술 트렌드를 따라가며, 효율적이고 안정적인 웹 개발을
-              추구합니다.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-            {[
-              {
-                name: "React",
-                icon: (
-                  <IconReactJS
-                    width={32}
-                    height={32}
-                    className="text-cyan-500"
-                  />
-                ),
-              },
-              {
-                name: "Next.js",
-                icon: (
-                  <IconNextJS
-                    width={60}
-                    height={32}
-                    className="text-black dark:text-white"
-                  />
-                ),
-              },
-              {
-                name: "TypeScript",
-                icon: (
-                  <IconTypeScript
-                    width={32}
-                    height={32}
-                    className="text-blue-600 dark:text-blue-400"
-                  />
-                ),
-              },
-              {
-                name: "TailwindCSS",
-                icon: (
-                  <IconTailwindcss
-                    width={90}
-                    height={32}
-                    className="text-black dark:text-white"
-                  />
-                ),
-              },
-              {
-                name: "React Query",
-                icon: <IconTanstack width={40} height={40} />,
-              },
-              {
-                name: "Three.js",
-                icon: <IconThreeJS width={40} height={40} className="" />,
-              },
-            ].map((skill, index) => (
-              <motion.div
-                key={skill.name}
-                className="card text-center p-4 md:p-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.05 * index,
-                  ease: "easeOut",
-                }}
-              >
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 rounded-xl p-[4px] flex items-center justify-center">
-                    {skill.icon}
-                  </div>
-                </div>
-                <h3 className="font-medium text-text-primary">{skill.name}</h3>
-              </motion.div>
-            ))}
-          </div>
+      {/* 기술 섹션 */}
+      <SectionContainer>
+        <SectionHeader
+          label="SKILLS"
+          title="사용하는 기술 스택"
+          subtitle="최신 기술 트렌드를 따라가며, 효율적이고 안정적인 웹 개발을 추구합니다."
+        />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+          {skills.map((skill, index) => (
+            <SkillCard
+              key={skill.name}
+              name={skill.name}
+              icon={skill.icon}
+              index={index}
+            />
+          ))}
         </div>
-      </section>
+      </SectionContainer>
 
       {/* 소개 섹션 */}
       <section className="py-24 md:py-32">
@@ -185,13 +181,16 @@ export default function Home() {
                   ease: "easeOut",
                 }}
               >
-                <span className="text-primary font-medium text-sm mb-2 block tracking-wide">
-                  ABOUT ME
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold mb-5 text-text-primary">
-                  안녕하세요, <br />
-                  김기원입니다
-                </h2>
+                <SectionHeader
+                  label="ABOUT ME"
+                  title={
+                    <>
+                      안녕하세요, <br />
+                      김기원입니다
+                    </>
+                  }
+                  className="text-left"
+                />
                 <p className="text-text-secondary mb-4 text-lg">
                   프론트엔드 개발에 열정을 가진 개발자로, 사용자 중심의
                   인터페이스를 구현하는 데 전문성을 가지고 있습니다. React,
@@ -215,7 +214,7 @@ export default function Home() {
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
                     initial={{ x: 0 }}
-                    animate={{ x: [0, 3, 0] }} // 살짝 움직이는 효과
+                    animate={{ x: [0, 3, 0] }}
                     transition={{
                       repeat: Infinity,
                       duration: 1.5,
@@ -236,123 +235,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 프로젝트 미리보기 섹션 - 배경색 클래스 제거 */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 md:px-8">
-          <motion.div
-            className="text-center mb-12 md:mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <span className="text-primary font-medium text-sm mb-2 block tracking-wide">
-              PROJECTS
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-3">
-              주요 프로젝트
-            </h2>
-            <p className="text-text-secondary max-w-lg mx-auto">
-              사용자 경험과 성능을 최우선으로 고려한 프로젝트들을 소개합니다
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {[1, 2, 3].map((_, index) => (
-              <motion.div
-                key={index}
-                className="card"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.1 * index,
-                  ease: "easeOut",
-                }}
-              >
-                <div className="aspect-[16/9] bg-gray-100 rounded-xl mb-4 flex items-center justify-center text-text-tertiary overflow-hidden">
-                  {/* 실제 프로젝트 이미지로 대체 */}
-                  <svg
-                    className="w-full h-full text-gray-300 dark:text-gray-600 scale-110"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-                  </svg>
-                </div>
-                <h3 className="font-semibold text-lg text-text-primary mb-1">
-                  프로젝트 {index + 1}
-                </h3>
-                <p className="text-text-secondary text-sm mb-4 line-clamp-2">
-                  이 프로젝트는 React와 TypeScript를 활용하여 개발된 웹
-                  애플리케이션입니다. 사용자 친화적인 인터페이스와 최적화된
-                  성능을 제공합니다.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {["React", "TypeScript", "Next.js"].map((tech) => (
-                    <span key={tech} className="tag blue">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <Link
-                  href={`/projects#project-${index + 1}`}
-                  className="text-primary font-medium text-sm inline-flex items-center group hover:text-primary-hover transition-colors"
-                >
-                  자세히 보기
-                  <svg
-                    className="w-4 h-4 ml-1 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-200 ease-in-out"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12 md:mt-16">
-            <Link href="/projects" className="btn btn-secondary px-6 py-3">
-              모든 프로젝트 보기
-            </Link>
-          </div>
+      {/* 프로젝트 미리보기 섹션 */}
+      <SectionContainer>
+        <SectionHeader
+          label="PROJECTS"
+          title="주요 프로젝트"
+          subtitle="최근에 작업한 주요 프로젝트들을 소개합니다."
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.title} {...project} index={index} />
+          ))}
         </div>
-      </section>
+        <div className="text-center mt-12 md:mt-16">
+          <Link href="/projects" className="btn btn-secondary px-6 py-3">
+            모든 프로젝트 보기
+          </Link>
+        </div>
+      </SectionContainer>
 
       {/* CTA 섹션 */}
-      <section className="py-24 md:py-32">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mx-auto">
-            <motion.div
-              className="card flex flex-col items-center justify-center text-center"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 mb-4">
-                함께 일하고 싶으신가요?
-              </h2>
-              <p className="text-text-primary mb-8 max-w-lg mx-auto text-lg">
-                새로운 프로젝트에 대해 이야기하고 싶거나 질문이 있으시면
-                언제든지 연락해주세요. 빠른 시일 내에 답변드리겠습니다.
-              </p>
-              <Link href="/contact" className="btn btn-primary px-8">
-                연락하기
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <CTA
+        title="함께 일하고 싶으신가요?"
+        description="새로운 프로젝트에 대해 이야기하고 싶거나 질문이 있으시면 언제든지 연락해주세요. 빠른 시일 내에 답변드리겠습니다."
+        buttonText="연락하기"
+        buttonUrl="/contact"
+      />
     </Layout>
   );
 }

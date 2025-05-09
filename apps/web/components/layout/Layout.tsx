@@ -15,9 +15,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-screen bg-background text-text-primary">
       <Navbar />
-      <main className="flex-grow pt-[var(--header-height)] fade-in">
-        {children}
-      </main>
+      <main className="flex-grow fade-in">{children}</main>
     </div>
   );
 };
