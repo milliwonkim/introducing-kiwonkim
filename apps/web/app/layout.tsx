@@ -33,7 +33,7 @@ export default function RootLayout({
     <html lang="ko" className={`${inter.variable}`} suppressHydrationWarning>
       <ThemeProvider>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen`}
+          className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen smooth-scroll`}
         >
           <div className="flex flex-col min-h-screen overflow-hidden">
             <Navbar />

@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useThemeToggle } from "./index";
+import { motion } from "framer-motion";
 
 /**
- * @description 라이트/다크 테마 토글 컴포넌트
+ * @description 라이트/다크 테마 토글 컴포넌트 - WRTN 스타일
  * @returns 테마 전환 토글 버튼 UI
  */
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useThemeToggle();
+  const { theme, resolvedTheme, toggleTheme } = useThemeToggle();
   const [mounted, setMounted] = useState(false);
 
   // 마운트 상태 관리
@@ -18,55 +19,58 @@ export function ThemeToggle() {
 
   // 서버 렌더링 시 불일치 방지
   if (!mounted) {
-    return (
-      <div className="w-[3.25rem] h-[1.75rem] rounded-full bg-gray-200 opacity-80" />
-    );
+    return <div className="w-8 h-8 opacity-0" />;
   }
 
+  const isDark = resolvedTheme === "dark";
+
   return (
-    <button
-      className="theme-toggle"
+    <motion.button
+      className="theme-toggle-button"
       onClick={toggleTheme}
-      aria-label={`테마 전환: 현재 ${theme === "light" ? "라이트" : "다크"} 모드`}
+      whileTap={{ scale: 0.92 }}
+      whileHover={{ scale: 1.05 }}
+      aria-label={`테마 전환: 현재 ${isDark ? "다크" : "라이트"} 모드`}
     >
-      <span className="sun-icon">
-        <svg
-          width="16"
-          height="16"
+      {isDark ? (
+        <motion.svg
+          width="18"
+          height="18"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          initial={{ scale: 0.7, rotate: -30, opacity: 0 }}
+          animate={{ scale: 1, rotate: 0, opacity: 1 }}
+          exit={{ scale: 0.7, rotate: 30, opacity: 0 }}
+          transition={{ duration: 0.2, ease: [0.165, 0.84, 0.44, 1] }}
+          className="text-gray-300"
         >
-          <circle cx="12" cy="12" r="5" />
-          <line x1="12" y1="1" x2="12" y2="3" />
-          <line x1="12" y1="21" x2="12" y2="23" />
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-          <line x1="1" y1="12" x2="3" y2="12" />
-          <line x1="21" y1="12" x2="23" y2="12" />
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-        </svg>
-      </span>
-      <span className="moon-icon">
-        <svg
-          width="16"
-          height="16"
+          <path
+            d="M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1ZM19.071 4.929a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0ZM16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 12a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1ZM12 19a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1ZM19.071 19.071a1 1 0 0 1-1.414 0l-.707-.707a1 1 0 0 1 1.414-1.414l.707.707a1 1 0 0 1 0 1.414ZM4.929 19.071a1 1 0 0 1 0-1.414l.707-.707a1 1 0 0 1 1.414 1.414l-.707.707a1 1 0 0 1-1.414 0ZM4.929 4.929a1 1 0 0 1 1.414 0l.707.707A1 1 0 1 1 5.636 7.05l-.707-.707a1 1 0 0 1 0-1.414ZM18 12a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1Z"
+            fill="currentColor"
+          />
+        </motion.svg>
+      ) : (
+        <motion.svg
+          width="18"
+          height="18"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          initial={{ scale: 0.7, rotate: 30, opacity: 0 }}
+          animate={{ scale: 1, rotate: 0, opacity: 1 }}
+          exit={{ scale: 0.7, rotate: -30, opacity: 0 }}
+          transition={{ duration: 0.2, ease: [0.165, 0.84, 0.44, 1] }}
+          className="text-gray-700"
         >
-          <path d="M21 12.79C20.8427 14.4922 20.2037 16.1144 19.1582 17.4668C18.1126 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7499 21.1181 10.0797 20.7461C8.40948 20.3741 6.8833 19.5345 5.67423 18.3255C4.46516 17.1165 3.62571 15.5904 3.25373 13.9203C2.88174 12.2501 2.99262 10.5121 3.57336 8.9043C4.1541 7.29651 5.18073 5.88737 6.53311 4.84182C7.88548 3.79627 9.50767 3.15731 11.21 3C10.2134 4.34827 9.73385 6.00945 9.85853 7.68141C9.98322 9.35338 10.7039 10.9251 11.8894 12.1106C13.0749 13.2961 14.6466 14.0168 16.3186 14.1415C17.9906 14.2662 19.6517 13.7866 21 12.79Z" />
-        </svg>
-      </span>
-    </button>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"
+            fill="currentColor"
+          />
+        </motion.svg>
+      )}
+    </motion.button>
   );
 }
