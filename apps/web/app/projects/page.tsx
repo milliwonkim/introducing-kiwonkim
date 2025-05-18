@@ -65,7 +65,7 @@ export default function ProjectsPage() {
 
   return (
     <Layout>
-      <section className="py-24 lg:py-32 bg-gradient-to-b from-white via-zinc-50/50 to-zinc-100/30 dark:from-zinc-900 dark:via-zinc-900/50 dark:to-zinc-800/30 min-h-[calc(100vh-var(--header-height))]">
+      <section className="py-24 lg:py-32 bg-gradient-to-b from-[var(--color-background)] via-[var(--color-gray-50)]/50 to-[var(--color-gray-100)]/30 min-h-[calc(100vh-var(--header-height))]">
         <div className="container mx-auto px-6 md:px-8">
           <motion.div
             className="max-w-3xl mx-auto text-center mb-12 lg:mb-16"
@@ -73,10 +73,10 @@ export default function ProjectsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-zinc-900 dark:text-white">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-slate-900">
               프로젝트
             </h1>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400">
+            <p className="text-lg text-slate-500">
               다양한 기술 스택을 활용하여 진행했던 주요 프로젝트들입니다.
             </p>
           </motion.div>

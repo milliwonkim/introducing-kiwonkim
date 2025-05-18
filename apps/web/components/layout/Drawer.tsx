@@ -1,10 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence, easeInOut, Variants } from "framer-motion";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { ThemeToggle } from "@repo/ui";
 
 /**
  * @description 모바일 내비게이션 Drawer 컴포넌트 - WRTN 스타일 적용
@@ -47,7 +46,7 @@ const drawerVariants: Variants = {
   },
   visible: {
     x: 0,
-    boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0px 0px 20px var(--color-card-shadow)",
     filter: "blur(0px)",
     opacity: 1,
     transition: {
@@ -146,7 +145,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
         <>
           {/* 백드롭 오버레이 - WRTN 스타일 */}
           <motion.div
-            className="fixed inset-0 bg-black/25 backdrop-blur-[2.5px] z-50"
+            className="fixed inset-0 bg-[var(--color-overlay)] backdrop-blur-[2.5px] z-50"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -157,7 +156,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
           {/* Drawer 패널 - WRTN 스타일 */}
           <motion.div
             ref={drawerRef}
-            className="fixed top-0 right-0 h-full w-[85%] max-w-md bg-white dark:bg-[#191919] z-50 flex flex-col overflow-hidden shadow-xl border-l border-gray-100 dark:border-gray-800/20"
+            className="fixed top-0 right-0 h-full w-[85%] max-w-md bg-[var(--color-background)] z-50 flex flex-col overflow-hidden shadow-xl border-l border-[var(--color-border-light)]"
             variants={drawerVariants}
             initial="hidden"
             animate="visible"
@@ -346,8 +345,6 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
                     </svg>
                   </motion.a>
                 </div>
-                {/* 테마 토글 스위치 */}
-                <ThemeToggle />
               </div>
             </motion.div>
           </motion.div>

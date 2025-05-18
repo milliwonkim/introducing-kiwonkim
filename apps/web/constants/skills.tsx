@@ -1,10 +1,10 @@
+import { JSX } from "react";
 import IconNextJS from "../icon/IconNextJS";
 import IconReactJS from "../icon/IconReactJS";
 import IconTailwindcss from "../icon/IconTailwindcss";
-import IconTypeScript from "../icon/IconTypeScript";
 import IconTanstack from "../icon/IconTanstack";
-import IconThreeJS from "../icon/IconThreeJS";
-import { JSX } from "react";
+import IconTypeScript from "../icon/IconTypeScript";
+import IconVite from "../icon/IconVite";
 
 export interface Skill {
   name: string;
@@ -24,7 +24,7 @@ export const SKILLS: Skill[] = [
       <IconNextJS
         width={60}
         height={32}
-        className="text-black dark:text-white"
+        className="text-[var(--color-text-primary)]"
       />
     ),
     description: "서버 사이드 렌더링과 정적 사이트 생성",
@@ -35,7 +35,7 @@ export const SKILLS: Skill[] = [
       <IconTypeScript
         width={32}
         height={32}
-        className="text-blue-600 dark:text-blue-400"
+        className="text-[var(--color-blue-600)]"
       />
     ),
     description: "타입 안정성을 갖춘 JavaScript 확장",
@@ -46,7 +46,7 @@ export const SKILLS: Skill[] = [
       <IconTailwindcss
         width={90}
         height={32}
-        className="text-black dark:text-white"
+        className="text-[var(--color-text-primary)]"
       />
     ),
     description: "유틸리티 기반의 CSS 프레임워크",
@@ -57,8 +57,14 @@ export const SKILLS: Skill[] = [
     description: "서버 상태 관리 및 데이터 페칭",
   },
   {
-    name: "Three.js",
-    icon: <IconThreeJS width={40} height={40} className="" />,
-    description: "3D 그래픽스 라이브러리",
+    name: "Vite",
+    icon: (
+      <IconVite
+        width={32}
+        height={32}
+        className="text-[var(--color-purple-500)]"
+      />
+    ),
+    description: "빠른 개발 환경 제공",
   },
 ];

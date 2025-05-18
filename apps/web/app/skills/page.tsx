@@ -11,7 +11,7 @@ import { SKILLS } from "../../constants/skills";
 export default function SkillsPage() {
   return (
     <Layout>
-      <section className="py-24 lg:py-32 min-h-[calc(100vh-var(--header-height))]">
+      <section className="py-24 lg:py-32 min-h-[calc(100vh-var(--header-height))] bg-[var(--color-background)]">
         <div className="container mx-auto px-6 md:px-8">
           <motion.div
             className="max-w-3xl mx-auto text-center mb-12 lg:mb-16"
@@ -19,10 +19,10 @@ export default function SkillsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-slate-900">
               보유 기술
             </h1>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400">
+            <p className="text-lg text-slate-500">
               제가 주로 사용하는 기술 스택들을 소개합니다.
             </p>
           </motion.div>

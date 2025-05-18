@@ -9,6 +9,7 @@ import IconTailwindcss from "../icon/IconTailwindcss";
 import IconTypeScript from "../icon/IconTypeScript";
 import IconTanstack from "../icon/IconTanstack";
 import IconThreeJS from "../icon/IconThreeJS";
+import IconVite from "../icon/IconVite";
 import SectionHeader from "../components/layout/SectionHeader";
 import SectionContainer from "../components/layout/SectionContainer";
 import SkillCard from "../components/home/SkillCard";
@@ -22,15 +23,21 @@ export default function Home() {
   const skills = [
     {
       name: "React",
-      icon: <IconReactJS width={32} height={32} className="text-cyan-500" />,
+      icon: (
+        <IconReactJS
+          width={32}
+          height={32}
+          className="text-[var(--color-blue-500)]"
+        />
+      ),
     },
     {
       name: "Next.js",
       icon: (
         <IconNextJS
+          className="text-[var(--color-text-primary)]"
           width={60}
           height={32}
-          className="text-black dark:text-white"
         />
       ),
     },
@@ -40,7 +47,7 @@ export default function Home() {
         <IconTypeScript
           width={32}
           height={32}
-          className="text-blue-600 dark:text-blue-400"
+          className="text-[var(--color-blue-500)]"
         />
       ),
     },
@@ -50,17 +57,39 @@ export default function Home() {
         <IconTailwindcss
           width={90}
           height={32}
-          className="text-black dark:text-white"
+          className="text-[var(--color-text-primary)]"
+        />
+      ),
+    },
+    {
+      name: "Vite",
+      icon: (
+        <IconVite
+          width={28}
+          height={28}
+          className="text-[var(--color-purple-500)]"
         />
       ),
     },
     {
       name: "React Query",
-      icon: <IconTanstack width={40} height={40} />,
+      icon: (
+        <span className="text-[var(--color-red-500)]">
+          <IconTanstack width={40} height={40} />
+        </span>
+      ),
     },
     {
       name: "Three.js",
-      icon: <IconThreeJS width={40} height={40} className="" />,
+      icon: (
+        <span className="text-[var(--color-text-secondary)]">
+          <IconThreeJS
+            width={40}
+            height={40}
+            className="text-[var(--color-text-secondary)]"
+          />
+        </span>
+      ),
     },
   ];
 
@@ -113,7 +142,7 @@ export default function Home() {
   return (
     <Layout>
       {/* 히어로 섹션 */}
-      <section className="pt-16 pb-24 md:pt-20 md:pb-32 lg:pt-24 lg:pb-40">
+      <section className="pt-16 pb-24 md:pt-20 md:pb-32 lg:pt-24 lg:pb-40 bg-[var(--color-background)]">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-5xl mx-auto">
             <motion.div
@@ -122,24 +151,33 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeInOut" }}
             >
-              <span className="text-primary font-medium text-sm md:text-base mb-3 block tracking-wide">
+              <span className="text-[var(--color-primary)] font-medium text-sm md:text-base mb-3 block tracking-wide">
                 프론트엔드 개발자 김기원
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary leading-tight mb-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-primary)] leading-tight mb-6">
                 사용자 경험에 <br className="md:hidden" />
-                <span className="text-primary">생동감을 불어넣는</span> <br />
+                <span className="text-[var(--color-primary)]">
+                  생동감을 불어넣는
+                </span>{" "}
+                <br />
                 인터페이스를 만듭니다
               </h1>
-              <p className="text-lg md:text-xl text-text-secondary mb-8 max-w-xl">
+              <p className="text-lg md:text-xl text-[var(--color-text-secondary)] mb-8 max-w-xl">
                 React, Next.js, TypeScript를 활용하여 직관적이고 아름다운 웹
                 경험을 디자인합니다. 사용자와 비즈니스 모두를 위한 최적의
                 솔루션을 제공합니다.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/projects" className="btn btn-primary">
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-md font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-[var(--color-primary)] text-[var(--color-text-inverse)] hover:bg-[var(--color-primary-hover)] focus-visible:ring-[var(--color-primary)]"
+                >
                   프로젝트 보기
                 </Link>
-                <Link href="/contact" className="btn btn-secondary">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-md font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-[var(--color-button-secondary)] text-[var(--color-text-primary)] hover:bg-[var(--color-button-secondary-hover)] border border-[var(--color-border-normal)] focus-visible:ring-[var(--color-primary)]"
+                >
                   연락하기
                 </Link>
               </div>
@@ -168,7 +206,7 @@ export default function Home() {
       </SectionContainer>
 
       {/* 소개 섹션 */}
-      <section className="py-24 md:py-32">
+      <section className="py-24 md:py-32 bg-[var(--color-background)]">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
@@ -179,11 +217,11 @@ export default function Home() {
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                <div className="bg-gray-100 rounded-2xl overflow-hidden aspect-square w-full">
-                  <div className="w-full h-full flex items-center justify-center text-text-tertiary">
+                <div className="bg-[var(--color-gray-100)] rounded-2xl overflow-hidden aspect-square w-full">
+                  <div className="w-full h-full flex items-center justify-center text-[var(--color-gray-300)]">
                     {/* 실제 프로필 이미지로 대체 */}
                     <svg
-                      className="w-1/3 h-1/3 text-gray-300 dark:text-gray-600"
+                      className="w-1/3 h-1/3 text-[var(--color-gray-400)]"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -213,20 +251,20 @@ export default function Home() {
                   }
                   className="text-left"
                 />
-                <p className="text-text-secondary mb-4 text-lg">
+                <p className="text-[var(--color-text-secondary)] mb-4 text-lg">
                   프론트엔드 개발에 열정을 가진 개발자로, 사용자 중심의
                   인터페이스를 구현하는 데 전문성을 가지고 있습니다. React,
                   Next.js, TypeScript를 활용한 개발을 주로 하며, 최신 기술
                   트렌드를 적극적으로 학습합니다.
                 </p>
-                <p className="text-text-secondary mb-6 text-lg">
+                <p className="text-[var(--color-text-secondary)] mb-6 text-lg">
                   다양한 규모의 웹 애플리케이션을 개발하고 배포한 경험을
                   바탕으로, 항상 사용자와 비즈니스 요구사항을 고려한 최적의
                   솔루션을 제공합니다.
                 </p>
                 <Link
                   href="/skills"
-                  className="text-primary font-medium inline-flex items-center group text-base hover:text-primary-hover transition-colors"
+                  className="text-[var(--color-primary)] font-medium inline-flex items-center group text-base hover:text-[var(--color-primary-hover)] transition-colors"
                 >
                   더 알아보기
                   <motion.svg
@@ -272,7 +310,7 @@ export default function Home() {
         <div className="text-center mt-12">
           <Link
             href="/projects"
-            className="inline-flex items-center text-sm font-medium text-primary hover:text-primary-hover transition-colors"
+            className="inline-flex items-center text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors"
           >
             모든 프로젝트 보기
             <svg

@@ -55,7 +55,7 @@ export default function CTA({
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-50/50 via-white to-white dark:from-zinc-900/50 dark:via-zinc-900 dark:to-zinc-900">
+    <section className="py-24 md:py-32 bg-gradient-to-b from-[var(--color-gray-100)] via-[var(--color-background)] to-[var(--color-background)]">
       <div className="container mx-auto px-6 md:px-8">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
@@ -64,14 +64,17 @@ export default function CTA({
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-zinc-900 dark:text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[var(--color-text-primary)]">
               {title}
             </h2>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">
+            <p className="text-lg text-[var(--color-text-secondary)] mb-8">
               {description}
             </p>
             <div className="flex flex-col items-center gap-6">
-              <Link href={buttonUrl} className="btn btn-primary">
+              <Link
+                href={buttonUrl}
+                className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-[var(--color-primary)] text-[var(--color-text-inverse)] hover:bg-[var(--color-primary-hover)] focus-visible:ring-[var(--color-primary)] shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
                 {buttonText}
               </Link>
               <div className="flex gap-4">
@@ -81,7 +84,7 @@ export default function CTA({
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors"
+                    className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                     aria-label={link.name}
                   >
                     {link.icon}
