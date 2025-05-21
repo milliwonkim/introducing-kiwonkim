@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "홈", path: "/" },
+    { name: "블로그", path: "/blog" },
     { name: "프로젝트", path: "/projects" },
     { name: "기술 스택", path: "/skills" },
     { name: "연락처", path: "/contact" },

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useThemeToggle } from "./index";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 /**
  * @description 라이트/다크 테마 토글 컴포넌트 - WRTN 스타일

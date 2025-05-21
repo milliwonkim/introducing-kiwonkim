@@ -11,8 +11,10 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@notionhq/client": "^3.0.1",
     "@repo/ui": "workspace:*",
     "autoprefixer": "^10.4.21",
+    "framer-motion": "^12.12.1",
     "motion": "^12.9.2",
     "next": "^15.3.0",
     "postcss": "^8.5.3",
