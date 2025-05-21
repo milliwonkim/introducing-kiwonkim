@@ -12,7 +12,7 @@ export interface NotionPost {
 }
 
 export default function BlogPage() {
-  const [posts, setPosts] = useState<NotionPost[]>([]);
+  const [posts, setPosts] = useState<NotionPost[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,7 +22,5 @@ export default function BlogPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div>로딩 중...</div>;
-
-  return <BlogList posts={posts} />;
+  return <BlogList posts={posts} loading={loading} />;
 }
