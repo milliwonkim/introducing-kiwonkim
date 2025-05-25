@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Client } from "@notionhq/client";
 
-const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID!;
+const NOTION_BLOG_DATABASE_ID = process.env.NOTION_BLOG_DATABASE_ID!;
 const NOTION_API_KEY = process.env.NOTION_API_KEY!;
 const notion = new Client({ auth: NOTION_API_KEY });
 
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
   }
   // 전체 리스트
   const response = await notion.databases.query({
-    database_id: NOTION_DATABASE_ID,
+    database_id: NOTION_BLOG_DATABASE_ID,
   });
   const posts = response.results.map((page: any) => {
     const properties = page.properties;

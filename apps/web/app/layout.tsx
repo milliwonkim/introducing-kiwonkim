@@ -4,6 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Navbar from "../components/layout/Navbar";
 import { ThemeProvider } from "@repo/ui";
+import ReactQueryProvider from "../providers/ReactQueryProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,23 +33,18 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${inter.variable}`} suppressHydrationWarning>
       <ThemeProvider>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen smooth-scroll`}
-        >
-          <div className="flex flex-col min-h-screen overflow-hidden">
-            <Navbar />
-            <main className="flex-grow pt-[var(--header-height)] toss-fade-in">
-              {children}
-            </main>
-            <footer className="py-6 text-center text-gray-500 text-sm">
-              <div className="container mx-auto px-4">
-                <p>
-                  © {new Date().getFullYear()} Kiwon Kim. All rights reserved.
-                </p>
-              </div>
-            </footer>
-          </div>
-        </body>
+        <ReactQueryProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen smooth-scroll`}
+          >
+            <div className="flex flex-col min-h-screen overflow-hidden">
+              <Navbar />
+              <main className="flex-grow pt-[var(--header-height)] toss-fade-in">
+                {children}
+              </main>
+            </div>
+          </body>
+        </ReactQueryProvider>
       </ThemeProvider>
     </html>
   );

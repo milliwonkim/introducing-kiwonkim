@@ -5,7 +5,7 @@ import Layout from "../../components/layout/Layout";
 import Link from "next/link";
 
 /**
- * @description 토스 스타일의 애니메이션이 적용된 연락처 페이지 컴포넌트
+ * @description 연락처 페이지 컴포넌트
  */
 export default function ContactPage() {
   const socialLinks = [
@@ -69,24 +69,33 @@ export default function ContactPage() {
 
   return (
     <Layout>
-      <section className="py-24 lg:py-32 bg-gradient-to-b from-[var(--color-gray-50)]/50 via-[var(--color-background)] to-[var(--color-background)] min-h-[calc(100vh-var(--header-height))]">
+      <section className="py-20 bg-gradient-to-b from-[var(--color-gray-50)]/50 via-[var(--color-background)] to-[var(--color-background)] min-h-[calc(100vh-var(--header-height))]">
         <div className="container mx-auto px-6 md:px-8">
           <motion.div
-            className="max-w-3xl mx-auto text-center mb-12 lg:mb-16"
+            className="max-w-3xl mx-auto text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[var(--color-text-primary)]">
-              연락하기
-            </h1>
-            <p className="text-lg text-[var(--color-text-secondary)]">
-              새로운 프로젝트나 협업에 대해 이야기하고 싶으시다면 아래의 채널로
-              연락해주세요.
+            <div className="flex flex-col items-center gap-2 mb-6">
+              <span className="text-4xl md:text-5xl">💬</span>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[var(--color-text-primary)]">
+                연락하기
+              </h1>
+            </div>
+            <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+              새로운 프로젝트나 협업에 대해 이야기하고 싶으시다면
+              <br />
+              아래의 채널로 언제든지 연락해주세요.
             </p>
           </motion.div>
 
-          <div className="max-w-2xl mx-auto">
+          <motion.div
+            className="max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {socialLinks.map((link, index) => (
                 <motion.div
@@ -96,7 +105,7 @@ export default function ContactPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
                     duration: 0.5,
-                    delay: index * 0.1,
+                    delay: 0.3 + index * 0.1,
                     ease: "easeOut",
                   }}
                 >
@@ -104,13 +113,13 @@ export default function ContactPage() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex flex-col w-full items-start gap-4 p-6 bg-[var(--color-card-background)]/[.8] backdrop-blur-sm rounded-2xl border border-[var(--color-border-light)]/[.5] hover:border-[var(--color-border-normal)]/[.5] transition-all duration-300 hover:shadow-lg"
+                    className="group flex flex-col w-full items-start gap-4 p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/60 hover:border-[var(--color-primary)]/30 transition-all duration-300 hover:shadow-lg hover:scale-105"
                   >
                     <div className="text-[var(--color-primary)] group-hover:text-[var(--color-primary-hover)] transition-colors">
                       {link.icon}
                     </div>
                     <div className="flex flex-col">
-                      <h3 className="font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors text-left">
+                      <h3 className="font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors text-left">
                         {link.name}
                       </h3>
                       <p className="text-sm text-[var(--color-text-secondary)] text-left break-all">
@@ -123,7 +132,26 @@ export default function ContactPage() {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
+
+          {/* 추가 정보 섹션 */}
+          <motion.div
+            className="max-w-2xl mx-auto mt-16 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          >
+            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-white/60">
+              <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-4">
+                함께 만들어가요! 🚀
+              </h2>
+              <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                새로운 아이디어나 프로젝트가 있으시다면 언제든지 연락해주세요.
+                <br />
+                함께 멋진 것을 만들어나갈 수 있을 거예요!
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
     </Layout>

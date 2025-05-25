@@ -3,340 +3,240 @@
 import { motion } from "motion/react";
 import Layout from "../components/layout/Layout";
 import Link from "next/link";
-import IconNextJS from "../icon/IconNextJS";
-import IconReactJS from "../icon/IconReactJS";
-import IconTailwindcss from "../icon/IconTailwindcss";
-import IconTypeScript from "../icon/IconTypeScript";
-import IconTanstack from "../icon/IconTanstack";
-import IconThreeJS from "../icon/IconThreeJS";
-import IconVite from "../icon/IconVite";
-import SectionHeader from "../components/layout/SectionHeader";
-import SectionContainer from "../components/layout/SectionContainer";
-import SkillCard from "../components/home/SkillCard";
-import ProjectCard, { Project } from "../components/projects/ProjectCard";
-import CTA from "../components/layout/CTA";
+import { useState, useEffect } from "react";
 
 /**
- * @description 메인 포트폴리오 페이지 컴포넌트
+ * @description 메인 홈 페이지 - 기술스택, 블로그, 프로젝트로 이동하는 네비게이션 중심 화면
  */
 export default function Home() {
-  const skills = [
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // 메인 네비게이션 카드들
+  const navigationCards = [
     {
-      name: "React",
-      icon: (
-        <IconReactJS
-          width={32}
-          height={32}
-          className="text-[var(--color-blue-500)]"
-        />
-      ),
+      title: "기술 스택",
+      description: "사용하는 기술들과 전문성을 확인해보세요",
+      href: "/skills",
+      icon: "⚡",
+      gradient: "from-blue-500 to-purple-600",
+      bgColor: "bg-blue-50/50",
+      delay: 0.1,
     },
     {
-      name: "Next.js",
-      icon: (
-        <IconNextJS
-          className="text-[var(--color-text-primary)]"
-          width={60}
-          height={32}
-        />
-      ),
+      title: "프로젝트",
+      description: "완성한 프로젝트들과 개발 경험을 살펴보세요",
+      href: "/projects",
+      icon: "🚀",
+      gradient: "from-purple-500 to-pink-600",
+      bgColor: "bg-purple-50/50",
+      delay: 0.2,
     },
     {
-      name: "TypeScript",
-      icon: (
-        <IconTypeScript
-          width={32}
-          height={32}
-          className="text-[var(--color-blue-500)]"
-        />
-      ),
-    },
-    {
-      name: "TailwindCSS",
-      icon: (
-        <IconTailwindcss
-          width={90}
-          height={32}
-          className="text-[var(--color-text-primary)]"
-        />
-      ),
-    },
-    {
-      name: "Vite",
-      icon: (
-        <IconVite
-          width={28}
-          height={28}
-          className="text-[var(--color-purple-500)]"
-        />
-      ),
-    },
-    {
-      name: "React Query",
-      icon: (
-        <span className="text-[var(--color-red-500)]">
-          <IconTanstack width={40} height={40} />
-        </span>
-      ),
-    },
-    {
-      name: "Three.js",
-      icon: (
-        <span className="text-[var(--color-text-secondary)]">
-          <IconThreeJS
-            width={40}
-            height={40}
-            className="text-[var(--color-text-secondary)]"
-          />
-        </span>
-      ),
+      title: "블로그",
+      description: "개발 경험과 학습 내용을 공유합니다",
+      href: "/blog",
+      icon: "📝",
+      gradient: "from-green-500 to-teal-600",
+      bgColor: "bg-green-50/50",
+      delay: 0.3,
     },
   ];
 
-  // 프로젝트 데이터를 상수로 분리
-  const FEATURED_PROJECTS: Project[] = [
-    {
-      id: 1,
-      title: "포트폴리오 웹사이트 (v2)",
-      description:
-        "Next.js, TypeScript, TailwindCSS, Motion One을 활용한 개인 포트폴리오 사이트입니다. 반응형 디자인과 깔끔한 애니메이션에 중점을 두었습니다.",
-      technologies: [
-        "Next.js",
-        "TypeScript",
-        "TailwindCSS",
-        "Motion One",
-        "Three.js",
-      ],
-      link: "/",
-      github: "https://github.com/your-username/portfolio-v2",
-      category: "frontend",
-    },
-    {
-      id: 2,
-      title: "인터랙티브 데이터 시각화",
-      description:
-        "D3.js와 React를 사용하여 복잡한 데이터를 사용자와 상호작용하는 시각화로 구현했습니다. 데이터 필터링 및 동적 업데이트 기능을 제공합니다.",
-      technologies: ["React", "D3.js", "TypeScript", "Styled Components"],
-      link: "#",
-      github: "https://github.com/your-username/data-viz",
-      category: "frontend",
-    },
-    {
-      id: 3,
-      title: "커뮤니티 플랫폼",
-      description:
-        "Next.js 기반의 풀스택 커뮤니티 플랫폼입니다. 게시글 작성, 댓글, 사용자 인증 및 프로필 기능을 포함하며, Prisma와 PostgreSQL을 사용했습니다.",
-      technologies: [
-        "Next.js",
-        "TypeScript",
-        "React Query",
-        "Prisma",
-        "PostgreSQL",
-        "TailwindCSS",
-      ],
-      link: "#",
-      category: "fullstack",
-    },
-  ];
+  if (!isMounted) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <h1 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">
+              김기원 포트폴리오
+            </h1>
+            <p className="text-[var(--color-text-secondary)]">로딩 중...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
       {/* 히어로 섹션 */}
-      <section className="pt-16 pb-24 md:pt-20 md:pb-32 lg:pt-24 lg:pb-40 bg-[var(--color-background)]">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-5xl mx-auto">
-            <motion.div
-              className="flex flex-col items-center md:items-start text-center md:text-left mb-12 md:mb-16"
+      <section className="relative py-20 overflow-hidden">
+        <div className="container mx-auto px-6 md:px-8 max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <motion.span
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-block text-[var(--color-primary)] font-semibold text-sm md:text-base mb-6 px-4 py-2 bg-[var(--color-primary)]/10 rounded-full tracking-wide border border-[var(--color-primary)]/20"
+            >
+              ✨ 프론트엔드 개발자
+            </motion.span>
+
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-black text-[var(--color-text-primary)] leading-tight mb-6"
             >
-              <span className="text-[var(--color-primary)] font-medium text-sm md:text-base mb-3 block tracking-wide">
-                프론트엔드 개발자 김기원
+              <span className="block">안녕하세요,</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-purple-600">
+                김기원
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-primary)] leading-tight mb-6">
-                사용자 경험에 <br className="md:hidden" />
-                <span className="text-[var(--color-primary)]">
-                  생동감을 불어넣는
-                </span>{" "}
-                <br />
-                인터페이스를 만듭니다
-              </h1>
-              <p className="text-lg md:text-xl text-[var(--color-text-secondary)] mb-8 max-w-xl">
-                React, Next.js, TypeScript를 활용하여 직관적이고 아름다운 웹
-                경험을 디자인합니다. 사용자와 비즈니스 모두를 위한 최적의
-                솔루션을 제공합니다.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/projects"
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-md font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-[var(--color-primary)] text-[var(--color-text-inverse)] hover:bg-[var(--color-primary-hover)] focus-visible:ring-[var(--color-primary)]"
-                >
-                  프로젝트 보기
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-md font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-[var(--color-button-secondary)] text-[var(--color-text-primary)] hover:bg-[var(--color-button-secondary-hover)] border border-[var(--color-border-normal)] focus-visible:ring-[var(--color-primary)]"
-                >
-                  연락하기
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+              <span className="block">입니다</span>
+            </motion.h1>
 
-      {/* 기술 섹션 */}
-      <SectionContainer>
-        <SectionHeader
-          label="SKILLS"
-          title="사용하는 기술 스택"
-          subtitle="최신 기술 트렌드를 따라가며, 효율적이고 안정적인 웹 개발을 추구합니다."
-        />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-          {skills.map((skill, index) => (
-            <SkillCard
-              key={skill.name}
-              name={skill.name}
-              icon={skill.icon}
-              index={index}
-            />
-          ))}
-        </div>
-      </SectionContainer>
-
-      {/* 소개 섹션 */}
-      <section className="py-24 md:py-32 bg-[var(--color-background)]">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
-              <motion.div
-                className="w-full max-w-sm mx-auto md:max-w-none"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-              >
-                <div className="bg-[var(--color-gray-100)] rounded-2xl overflow-hidden aspect-square w-full">
-                  <div className="w-full h-full flex items-center justify-center text-[var(--color-gray-300)]">
-                    {/* 실제 프로필 이미지로 대체 */}
-                    <svg
-                      className="w-1/3 h-1/3 text-[var(--color-gray-400)]"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.1,
-                  ease: "easeOut",
-                }}
-              >
-                <SectionHeader
-                  label="ABOUT ME"
-                  title={
-                    <>
-                      안녕하세요, <br />
-                      김기원입니다
-                    </>
-                  }
-                  className="text-left"
-                />
-                <p className="text-[var(--color-text-secondary)] mb-4 text-lg">
-                  프론트엔드 개발에 열정을 가진 개발자로, 사용자 중심의
-                  인터페이스를 구현하는 데 전문성을 가지고 있습니다. React,
-                  Next.js, TypeScript를 활용한 개발을 주로 하며, 최신 기술
-                  트렌드를 적극적으로 학습합니다.
-                </p>
-                <p className="text-[var(--color-text-secondary)] mb-6 text-lg">
-                  다양한 규모의 웹 애플리케이션을 개발하고 배포한 경험을
-                  바탕으로, 항상 사용자와 비즈니스 요구사항을 고려한 최적의
-                  솔루션을 제공합니다.
-                </p>
-                <Link
-                  href="/skills"
-                  className="text-[var(--color-primary)] font-medium inline-flex items-center group text-base hover:text-[var(--color-primary-hover)] transition-colors"
-                >
-                  더 알아보기
-                  <motion.svg
-                    className="w-5 h-5 ml-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    initial={{ x: 0 }}
-                    animate={{ x: [0, 3, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 1.5,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </motion.svg>
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 프로젝트 섹션 */}
-      <SectionContainer className="container">
-        <SectionHeader
-          label="PROJECTS"
-          title="프로젝트"
-          subtitle="최근에 진행한 주요 프로젝트들을 소개합니다."
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {FEATURED_PROJECTS.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
-        <div className="text-center mt-12">
-          <Link
-            href="/projects"
-            className="inline-flex items-center text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors"
-          >
-            모든 프로젝트 보기
-            <svg
-              className="w-4 h-4 ml-1 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-200 ease-in-out"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="text-lg md:text-xl text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto leading-relaxed"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </Link>
-        </div>
-      </SectionContainer>
+              React, Next.js, TypeScript로 사용자 중심의 웹 경험을 만듭니다.
+              <br className="hidden md:block" />
+              아래에서 저의 작업과 경험을 확인해보세요.
+            </motion.p>
+          </motion.div>
 
-      {/* CTA 섹션 */}
-      <CTA
-        title="함께 일하고 싶으신가요?"
-        description="새로운 프로젝트에 대해 이야기하고 싶거나 질문이 있으시면 언제든지 연락해주세요. 빠른 시일 내에 답변드리겠습니다."
-        buttonText="연락하기"
-        buttonUrl="/contact"
-      />
+          {/* 네비게이션 카드들 */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-20"
+          >
+            {navigationCards.map((card, index) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: card.delay + 0.8, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Link href={card.href} className="group block h-full">
+                  <div
+                    className={`relative h-full p-6 rounded-2xl ${card.bgColor} backdrop-blur-sm border border-white/60 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden`}
+                  >
+                    {/* 배경 그라데이션 효과 */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+                    />
+
+                    {/* 아이콘 */}
+                    <div className="relative z-10 mb-4">
+                      <div
+                        className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${card.gradient} text-white text-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                      >
+                        {card.icon}
+                      </div>
+                    </div>
+
+                    {/* 콘텐츠 */}
+                    <div className="relative z-10">
+                      <h3 className="text-xl font-bold text-[var(--color-text-primary)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--color-primary)] group-hover:to-purple-600 transition-all duration-300">
+                        {card.title}
+                      </h3>
+                      <p className="text-[var(--color-text-secondary)] leading-relaxed mb-4 text-sm">
+                        {card.description}
+                      </p>
+                      <div className="flex items-center text-[var(--color-primary)] font-medium text-sm group-hover:translate-x-2 transition-transform duration-300">
+                        자세히 보기
+                        <svg
+                          className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* 간단한 소개 섹션 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-white/60">
+              <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-4">
+                함께 만들어가는 웹의 미래
+              </h2>
+              <p className="text-[var(--color-text-secondary)] leading-relaxed mb-6">
+                사용자 경험을 최우선으로 생각하며, 최신 기술을 활용해 직관적이고
+                아름다운 웹 애플리케이션을 개발합니다. 새로운 도전과 학습을 통해
+                지속적으로 성장하고 있습니다.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <span className="px-3 py-1 text-xs font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/10 rounded-full border border-[var(--color-primary)]/20">
+                  React
+                </span>
+                <span className="px-3 py-1 text-xs font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/10 rounded-full border border-[var(--color-primary)]/20">
+                  Next.js
+                </span>
+                <span className="px-3 py-1 text-xs font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/10 rounded-full border border-[var(--color-primary)]/20">
+                  TypeScript
+                </span>
+                <span className="px-3 py-1 text-xs font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/10 rounded-full border border-[var(--color-primary)]/20">
+                  TailwindCSS
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* 연락하기 섹션 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4, duration: 0.8 }}
+            className="text-center"
+          >
+            <p className="text-lg text-[var(--color-text-secondary)] mb-8">
+              함께 세상에 더 나은 것을 만들어 나가고 싶다면
+            </p>
+            <Link
+              href="/contact"
+              className="group inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-[var(--color-primary)] to-purple-600 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              💬 연락하기
+              <svg
+                className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
     </Layout>
   );
 }

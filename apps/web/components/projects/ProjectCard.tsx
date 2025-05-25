@@ -1,16 +1,12 @@
 import { motion } from "motion/react";
-import Image from "next/image";
-import Link from "next/link";
 
 export interface Project {
   id: number;
   title: string;
-  description: string;
-  technologies: string[];
-  image?: string;
-  link: string;
-  github?: string;
-  category: "frontend" | "fullstack" | "mobile";
+  company: string;
+  date: string;
+  description?: string;
+  url?: string;
 }
 
 interface ProjectCardProps {
@@ -19,10 +15,18 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
+  const handleCardClick = () => {
+    if (project.url) {
+      window.open(project.url, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <motion.div
       key={project.id}
-      className="group relative bg-[var(--color-card-background)]/[.8] backdrop-blur-sm rounded-2xl overflow-hidden border border-[var(--color-card-border)]/[.5] hover:border-[var(--color-border-normal)]/[.5] transition-all duration-300 hover:shadow-lg"
+      className={`group relative bg-[var(--color-card-background)] border border-[var(--color-card-border)] rounded-2xl shadow-[0_2px_8px_0_rgba(59,130,246,0.06)] hover:shadow-[0_4px_16px_0_rgba(59,130,246,0.13)] transition-all duration-300 p-7 flex flex-col gap-3 items-start hover:-translate-y-1 hover:scale-[1.02] overflow-hidden ${
+        project.url ? "cursor-pointer" : "cursor-default"
+      }`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -30,57 +34,55 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         delay: index * 0.1,
         ease: "easeOut",
       }}
+      style={{ minHeight: 210 }}
+      onClick={handleCardClick}
+      role={project.url ? "button" : undefined}
+      tabIndex={project.url ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (project.url && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+      aria-label={
+        project.url ? `${project.title} 프로젝트 상세보기` : undefined
+      }
     >
-      <div className="aspect-[16/9] bg-[var(--color-gray-100)]/[.5] overflow-hidden">
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={`${project.title} thumbnail`}
-            layout="fill"
-            objectFit="cover"
-            className="transform group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-[var(--color-gray-300)]">
-            <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-            </svg>
-          </div>
-        )}
-      </div>
+      {/* 회사명 chip/badge - 대표색상 */}
+      <span className="inline-block px-3 py-1 rounded-[8px] bg-[var(--color-primary-light)] text-[var(--color-primary)] text-xs font-bold tracking-wide shadow-sm mb-1 border border-[var(--color-primary)]/20">
+        {project.company}
+      </span>
 
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="font-semibold text-xl text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors">
-            {project.title}
-          </h2>
-          <span className="text-xs font-medium px-2.5 py-1 bg-[var(--color-gray-100)]/[.5] text-[var(--color-text-secondary)] rounded-full capitalize">
-            {project.category}
-          </span>
-        </div>
-        <p className="text-[var(--color-text-secondary)] text-sm mb-4 line-clamp-2">
+      {/* 제목 강조 - 완전 검정 */}
+      <h2
+        className={`font-extrabold text-lg md:text-xl transition-colors mb-0.5 truncate w-full ${
+          project.url
+            ? "text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)]"
+            : "text-[var(--color-text-primary)]"
+        }`}
+      >
+        {project.title}
+      </h2>
+
+      {/* 날짜 - 제목 바로 아래, 세련된 gray */}
+      <span className="block text-xs text-[var(--color-text-tertiary)] mb-1">
+        {project.date}
+      </span>
+
+      {/* 설명 */}
+      {project.description && (
+        <p className="text-sm text-[var(--color-text-secondary)] mb-2 line-clamp-3 w-full">
           {project.description}
         </p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="px-2.5 py-1 text-xs font-medium bg-[var(--color-gray-100)]/[.5] text-[var(--color-text-secondary)] rounded-full"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-        <div className="flex gap-3">
-          <Link
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors"
-          >
-            사이트 보기
+      )}
+
+      {/* 하단 액션 영역 */}
+      <div className="mt-auto w-full flex justify-between items-center">
+        {project.url ? (
+          <div className="flex items-center text-sm text-[var(--color-primary)] group-hover:text-[var(--color-primary-hover)] transition-colors">
+            <span className="font-semibold">자세히 보기</span>
             <svg
-              className="w-4 h-4 ml-1 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-200 ease-in-out"
+              className="w-4 h-4 ml-2 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -89,28 +91,32 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M9 5l7 7-7 7"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
               />
             </svg>
-          </Link>
-          {project.github && (
-            <Link
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+          </div>
+        ) : (
+          <span className="text-sm text-gray-400 font-medium">링크 준비중</span>
+        )}
+
+        {/* 새창 아이콘 표시 */}
+        {project.url && (
+          <div className="opacity-60 group-hover:opacity-100 transition-opacity">
+            <svg
+              className="w-4 h-4 text-[var(--color-text-tertiary)]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              GitHub
-              <svg
-                className="w-4 h-4 ml-1"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-              </svg>
-            </Link>
-          )}
-        </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </div>
+        )}
       </div>
     </motion.div>
   );
