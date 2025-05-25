@@ -13,7 +13,7 @@ export interface NotionProject {
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const databaseId = process.env.NOTION_PORTFOLIO_DATABASE_ID;
 
-export async function fetchNotionProjects(): Promise<NotionProject[]> {
+async function fetchNotionProjects(): Promise<NotionProject[]> {
   if (!databaseId) throw new Error("NOTION_PORTFOLIO_DATABASE_ID is not set");
 
   const response = await notion.databases.query({
@@ -31,7 +31,7 @@ export async function fetchNotionProjects(): Promise<NotionProject[]> {
       date: props.date?.date
         ? `${props.date?.date?.start} ~ ${props.date?.date?.end}`
         : "unknown",
-      url: props.public_url ?? `https://notion.so/${page.id.replace(/-/g, "")}`,
+      url: props.url?.url ?? `https://notion.so/${page.id.replace(/-/g, "")}`,
     };
   });
 }

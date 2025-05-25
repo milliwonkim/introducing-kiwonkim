@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import Link from "next/link";
 import Navbar from "./Navbar";
 
 /**
@@ -52,30 +53,30 @@ const Layout = ({ children }: LayoutProps) => {
                 빠른 링크
               </h4>
               <nav className="flex flex-col space-y-2">
-                <a
+                <Link
                   href="/skills"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
                   기술 스택
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/projects"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
                   프로젝트
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/blog"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
                   블로그
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/contact"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
                   연락하기
-                </a>
+                </Link>
               </nav>
             </div>
 

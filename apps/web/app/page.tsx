@@ -114,7 +114,7 @@ export default function Home() {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-20"
           >
-            {navigationCards.map((card, index) => (
+            {navigationCards.map((card) => (
               <motion.div
                 key={card.title}
                 initial={{ opacity: 0, y: 30 }}

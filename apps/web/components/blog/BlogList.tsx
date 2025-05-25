@@ -1,6 +1,5 @@
 import React from "react";
 import type { NotionPost } from "../../app/blog/page";
-import Link from "next/link";
 import { motion } from "motion/react";
 import BlogCard from "./BlogCard";
 import Layout from "../layout/Layout";
