@@ -118,7 +118,7 @@ export default function ProjectsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 + groupIndex * 0.1 }}
                 >
-                  <h2 className="text-2xl font-bold text-[var(--color-primary)] mb-8 flex items-center gap-3">
+                  <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
                     <span className="text-2xl">🏢</span>
                     <span>{company}</span>
                   </h2>
