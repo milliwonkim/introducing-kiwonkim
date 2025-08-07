@@ -251,10 +251,6 @@ export default function Home() {
                 <MailIcon size={16} />
                 <span>kwk627@naver.com</span>
               </div>
-              <div className="flex items-center gap-1">
-                <PhoneIcon size={16} />
-                <span>+82 10-3355-9347</span>
-              </div>
             </div>
 
             {/* Action Buttons */}
