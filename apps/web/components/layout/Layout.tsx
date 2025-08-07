@@ -5,8 +5,8 @@ import Link from "next/link";
 import Navbar from "./Navbar";
 
 /**
- * @description 모든 페이지에서 사용되는 기본 레이아웃 컴포넌트
- * @param children 레이아웃 내부에 렌더링될 콘텐츠
+ * @description Base layout component used across all pages
+ * @param children Content to be rendered inside the layout
  */
 interface LayoutProps {
   children: ReactNode;
@@ -15,79 +15,79 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--color-background)] via-[var(--color-background)] to-slate-50/50">
-      {/* 배경 장식 요소들 */}
+      {/* Background decorative elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-green-400/10 to-blue-400/10 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-purple-400/5 to-pink-400/5 rounded-full blur-3xl" />
       </div>
 
-      {/* 네비게이션 */}
+      {/* Navigation */}
       <Navbar />
 
-      {/* 메인 콘텐츠 */}
+      {/* Main content */}
       <main className="relative z-10 pt-[var(--header-height)]">
         <div className="min-h-[calc(100vh-var(--header-height))]">
           {children}
         </div>
       </main>
 
-      {/* 푸터 */}
+      {/* Footer */}
       <footer className="relative z-10 bg-slate-50/80 backdrop-blur-sm border-t border-slate-200/50">
         <div className="container mx-auto px-6 md:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* 브랜드 섹션 */}
+            {/* Brand section */}
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-[var(--color-text-primary)]">
-                김기원 포트폴리오
+                Kiwon Kim Portfolio
               </h3>
               <p className="text-[var(--color-text-secondary)] leading-relaxed">
-                React, Next.js, TypeScript로 사용자 중심의 웹 경험을 만드는
-                프론트엔드 개발자입니다.
+                Frontend developer creating user-centered web experiences with
+                React, Next.js, and TypeScript.
               </p>
             </div>
 
-            {/* 빠른 링크 */}
+            {/* Quick links */}
             <div className="space-y-4">
               <h4 className="font-semibold text-[var(--color-text-primary)]">
-                빠른 링크
+                Quick Links
               </h4>
               <nav className="flex flex-col space-y-2">
                 <Link
                   href="/skills"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
-                  기술 스택
+                  Skills
                 </Link>
                 <Link
                   href="/projects"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
-                  프로젝트
+                  Projects
                 </Link>
                 <Link
                   href="/blog"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
-                  블로그
+                  Blog
                 </Link>
                 <Link
                   href="/contact"
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 >
-                  연락하기
+                  Contact
                 </Link>
               </nav>
             </div>
 
-            {/* 소셜 링크 */}
+            {/* Social links */}
             <div className="space-y-4">
               <h4 className="font-semibold text-[var(--color-text-primary)]">
-                연결하기
+                Connect
               </h4>
               <div className="flex space-x-4">
                 <a
-                  href="https://github.com/kiwonkim"
+                  href="https://github.com/milliwonkim"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded-lg transition-all duration-200"
@@ -102,9 +102,9 @@ const Layout = ({ children }: LayoutProps) => {
                   </svg>
                 </a>
                 <a
-                  href="mailto:contact@example.com"
+                  href="mailto:kwk627@naver.com"
                   className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded-lg transition-all duration-200"
-                  aria-label="이메일"
+                  aria-label="Email"
                 >
                   <svg
                     className="w-5 h-5"
@@ -124,10 +124,10 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
           </div>
 
-          {/* 하단 저작권 */}
+          {/* Copyright */}
           <div className="mt-8 pt-8 border-t border-slate-200/50 text-center">
             <p className="text-[var(--color-text-secondary)] text-sm">
-              © 2024 김기원. All rights reserved.
+              © 2024 Kiwon Kim. All rights reserved.
             </p>
           </div>
         </div>

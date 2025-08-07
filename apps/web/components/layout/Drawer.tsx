@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 /**
- * @description 모바일 내비게이션 Drawer 컴포넌트 - WRTN 스타일 적용
- * @param isOpen Drawer 열림 상태
- * @param onClose Drawer 닫기 함수
- * @param navLinks 내비게이션 링크 배열
+ * @description Mobile Navigation Drawer Component
+ * @param isOpen Drawer open state
+ * @param onClose Drawer close function
+ * @param navLinks Navigation links array
  */
 interface DrawerProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ interface DrawerProps {
   navLinks: Array<{ name: string; path: string }>;
 }
 
-// Drawer 애니메이션 변수 - WRTN 스타일
+// Drawer animation variables
 const backdropVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -51,7 +51,7 @@ const drawerVariants: Variants = {
     opacity: 1,
     transition: {
       duration: 0.4,
-      ease: [0.16, 1, 0.3, 1], // WRTN 스타일의 부드러운 cubic-bezier
+      ease: [0.16, 1, 0.3, 1], // Smooth cubic-bezier
     },
   },
   exit: {
@@ -95,7 +95,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
   const pathname = usePathname();
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  // ESC 키로 Drawer 닫기 및 외부 클릭 처리
+  // ESC key to close Drawer and handle outside clicks
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -116,7 +116,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
     document.addEventListener("keydown", handleEscape);
     document.addEventListener("mousedown", handleClickOutside);
 
-    // 스크롤 위치 저장 및 처리
+    // Save and handle scroll position
     if (isOpen) {
       const scrollY = window.scrollY;
       document.body.style.position = "fixed";
@@ -128,7 +128,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
       document.removeEventListener("keydown", handleEscape);
       document.removeEventListener("mousedown", handleClickOutside);
 
-      // 스크롤 위치 복원
+      // Restore scroll position
       if (isOpen) {
         const scrollY = document.body.style.top;
         document.body.style.position = "";
@@ -143,7 +143,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
     <AnimatePresence mode="wait">
       {isOpen && (
         <>
-          {/* 백드롭 오버레이 - WRTN 스타일 */}
+          {/* Backdrop overlay */}
           <motion.div
             className="fixed inset-0 bg-[var(--color-overlay)] backdrop-blur-[2.5px] z-50"
             initial="hidden"
@@ -153,7 +153,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
             onClick={onClose}
           />
 
-          {/* Drawer 패널 - WRTN 스타일 */}
+          {/* Drawer panel */}
           <motion.div
             ref={drawerRef}
             className="fixed top-0 right-0 h-full w-[85%] max-w-md bg-[var(--color-background)] z-50 flex flex-col overflow-hidden shadow-xl border-l border-[var(--color-border-light)]"
@@ -162,7 +162,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
             animate="visible"
             exit="exit"
           >
-            {/* Drawer 헤더 - WRTN 스타일 */}
+            {/* Drawer header */}
             <div className="py-6 px-7 flex-shrink-0 relative">
               <motion.div
                 className="flex items-center justify-between"
@@ -187,7 +187,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
                 <motion.button
                   onClick={onClose}
                   className="p-1.5 rounded-full text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-                  aria-label="닫기"
+                  aria-label="Close"
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: 1.05 }}
                 >
@@ -208,7 +208,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
               </motion.div>
             </div>
 
-            {/* 내비게이션 링크 - WRTN 스타일 */}
+            {/* Navigation links */}
             <nav className="flex-1 overflow-y-auto px-7 py-8">
               <motion.ul
                 className="space-y-5"
@@ -241,10 +241,10 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
                     >
                       <Link
                         href={link.path}
-                        className={`group flex items-center transition-colors duration-200 ${
+                        className={`group flex items-center ${
                           isActive
                             ? "text-primary dark:text-primary-light font-medium"
-                            : "text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light"
+                            : "text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light transition-colors duration-200"
                         }`}
                         onClick={onClose}
                       >
@@ -280,7 +280,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
               </motion.ul>
             </nav>
 
-            {/* Drawer 푸터 - WRTN 스타일 */}
+            {/* Drawer footer */}
             <motion.div
               className="px-7 py-6 flex-shrink-0"
               initial={{ opacity: 0, y: 10 }}
@@ -294,10 +294,10 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
               }}
             >
               <div className="flex items-center justify-between">
-                {/* 소셜 링크 */}
+                {/* Social links */}
                 <div className="flex items-center space-x-5">
                   <motion.a
-                    href="https://github.com/kiwonkim"
+                    href="https://github.com/milliwonkim"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -319,7 +319,7 @@ const Drawer = ({ isOpen, onClose, navLinks }: DrawerProps) => {
                     </svg>
                   </motion.a>
                   <motion.a
-                    href="mailto:kiwon@example.com"
+                    href="mailto:kwk627@naver.com"
                     className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                     aria-label="Email"
                     whileHover={{ scale: 1.08, y: -2 }}

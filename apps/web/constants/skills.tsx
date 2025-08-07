@@ -16,7 +16,7 @@ export const SKILLS: Skill[] = [
   {
     name: "React",
     icon: <IconReactJS width={32} height={32} className="text-cyan-500" />,
-    description: "컴포넌트 기반의 선언적 UI 개발",
+    description: "Component-based declarative UI development",
   },
   {
     name: "Next.js",
@@ -27,7 +27,7 @@ export const SKILLS: Skill[] = [
         className="text-[var(--color-text-primary)]"
       />
     ),
-    description: "서버 사이드 렌더링과 정적 사이트 생성",
+    description: "Server-side rendering and static site generation",
   },
   {
     name: "TypeScript",
@@ -38,7 +38,7 @@ export const SKILLS: Skill[] = [
         className="text-[var(--color-blue-600)]"
       />
     ),
-    description: "타입 안정성을 갖춘 JavaScript 확장",
+    description: "Type-safe JavaScript extension",
   },
   {
     name: "TailwindCSS",
@@ -49,12 +49,12 @@ export const SKILLS: Skill[] = [
         className="text-[var(--color-text-primary)]"
       />
     ),
-    description: "유틸리티 기반의 CSS 프레임워크",
+    description: "Utility-based CSS framework",
   },
   {
     name: "React Query",
     icon: <IconTanstack width={40} height={40} />,
-    description: "서버 상태 관리 및 데이터 페칭",
+    description: "Server state management and data fetching",
   },
   {
     name: "Vite",
@@ -65,6 +65,6 @@ export const SKILLS: Skill[] = [
         className="text-[var(--color-purple-500)]"
       />
     ),
-    description: "빠른 개발 환경 제공",
+    description: "Fast development environment",
   },
 ];

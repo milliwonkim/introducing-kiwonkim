@@ -3,25 +3,63 @@
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useRef, useCallback, useMemo } from "react";
 import Drawer from "./Drawer";
 
 /**
- * @description 전역 네비게이션 바 컴포넌트 - 현대적이고 깔끔한 디자인
+ * @description Global navigation bar component - Modern and clean design
  */
-const Navbar = () => {
+const Navbar = memo(() => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const navRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  const navLinks = [
-    { name: "홈", path: "/" },
-    { name: "기술 스택", path: "/skills" },
-    { name: "프로젝트", path: "/projects" },
-    { name: "블로그", path: "/blog" },
-    { name: "연락처", path: "/contact" },
-  ];
+  const navLinks = useMemo(
+    () => [
+      { name: "Home", path: "/" },
+      { name: "Skills", path: "/skills" },
+      { name: "Projects", path: "/projects" },
+      { name: "Resume", path: "/resume" },
+      { name: "Blog", path: "/blog" },
+      { name: "Contact", path: "/contact" },
+    ],
+    []
+  );
+
+  // Update indicator position based on active link
+  const updateIndicator = useCallback(() => {
+    if (!navRef.current) return;
+
+    const activeIndex = navLinks.findIndex((link) => link.path === pathname);
+    if (activeIndex === -1) return;
+
+    const navItems = navRef.current.querySelectorAll("a[data-nav-link]");
+    const activeItem = navItems[activeIndex] as HTMLElement;
+
+    if (activeItem) {
+      const navContainer = navRef.current;
+      const containerRect = navContainer.getBoundingClientRect();
+      const activeRect = activeItem.getBoundingClientRect();
+
+      setIndicatorStyle({
+        left: activeRect.left - containerRect.left,
+        width: activeRect.width,
+      });
+    }
+  }, [pathname, navLinks]);
+
+  useEffect(() => {
+    updateIndicator();
+
+    // Update on window resize
+    const handleResize = () => updateIndicator();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [updateIndicator]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,7 +72,7 @@ const Navbar = () => {
     };
   }, []);
 
-  // 세션 동안 애니메이션을 한 번만 실행
+  // Run animation only once per session
   useEffect(() => {
     const hasAnimated = sessionStorage.getItem("navbar-animated");
     if (!hasAnimated) {
@@ -60,7 +98,7 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-6 md:px-8 h-full">
           <div className="flex items-center justify-between h-full">
-            {/* 로고 */}
+            {/* Logo */}
             <motion.div
               className="flex-shrink-0"
               initial={
@@ -85,7 +123,8 @@ const Navbar = () => {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center">
               <motion.div
-                className="flex items-center space-x-1 bg-slate-50/80 backdrop-blur-sm rounded-full p-1 border border-slate-200/50"
+                ref={navRef}
+                className="relative flex items-center space-x-1 bg-slate-50/80 backdrop-blur-sm rounded-full p-1 border border-slate-200/50"
                 initial={
                   shouldAnimate ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }
                 }
@@ -95,11 +134,30 @@ const Navbar = () => {
                   delay: shouldAnimate ? 0.2 : 0,
                 }}
               >
+                {/* Moving Background Indicator */}
+                <motion.div
+                  className="absolute bg-[var(--color-primary)] rounded-full h-[calc(100%-8px)] top-1 -z-10"
+                  animate={{
+                    left: indicatorStyle.left,
+                    width: indicatorStyle.width,
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                    duration: 0.3,
+                  }}
+                  style={{
+                    left: indicatorStyle.left,
+                    width: indicatorStyle.width,
+                  }}
+                />
+
                 {navLinks.map((link, index) => {
                   const isActive = pathname === link.path;
                   return (
                     <motion.div
-                      key={link.path}
+                      key={`nav-${link.path}`}
                       initial={
                         shouldAnimate
                           ? { opacity: 0, y: -10 }
@@ -113,10 +171,11 @@ const Navbar = () => {
                     >
                       <Link
                         href={link.path}
-                        className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                        data-nav-link
+                        className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
                           isActive
-                            ? "text-white bg-[var(--color-primary)] shadow-lg"
-                            : "text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-white/80"
+                            ? "text-white"
+                            : "text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]"
                         }`}
                       >
                         {link.name}
@@ -127,7 +186,7 @@ const Navbar = () => {
               </motion.div>
             </nav>
 
-            {/* 오른쪽 액션 버튼들 */}
+            {/* Right action buttons */}
             <motion.div
               className="hidden md:flex items-center space-x-3"
               initial={
@@ -139,9 +198,9 @@ const Navbar = () => {
                 duration: shouldAnimate ? 0.6 : 0,
               }}
             >
-              {/* GitHub 링크 */}
+              {/* GitHub link */}
               <motion.a
-                href="https://github.com/kiwonkim"
+                href="https://github.com/milliwonkim"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded-lg transition-all duration-200"
@@ -159,7 +218,7 @@ const Navbar = () => {
                 </svg>
               </motion.a>
 
-              {/* 연락하기 버튼 */}
+              {/* Contact button */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -168,7 +227,7 @@ const Navbar = () => {
                   href="/contact"
                   className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-[var(--color-primary)] to-purple-600 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
                 >
-                  연락하기
+                  Contact
                 </Link>
               </motion.div>
             </motion.div>
@@ -177,7 +236,7 @@ const Navbar = () => {
             <motion.button
               className="md:hidden p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded-lg transition-all duration-200"
               onClick={() => setIsOpen(true)}
-              aria-label="메뉴 열기"
+              aria-label="Open menu"
               initial={
                 shouldAnimate ? { opacity: 0, x: 20 } : { opacity: 1, x: 0 }
               }
@@ -215,6 +274,8 @@ const Navbar = () => {
       />
     </div>
   );
-};
+});
+
+Navbar.displayName = "Navbar";
 
 export default Navbar;
