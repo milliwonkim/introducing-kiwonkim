@@ -19,10 +19,9 @@ const Navbar = memo(() => {
 
   const navLinks = useMemo(
     () => [
-      { name: "Home", path: "/" },
+      { name: "Resume", path: "/" },
       { name: "Skills", path: "/skills" },
       { name: "Projects", path: "/projects" },
-      { name: "Resume", path: "/resume" },
       { name: "Blog", path: "/blog" },
       { name: "Contact", path: "/contact" },
     ],
