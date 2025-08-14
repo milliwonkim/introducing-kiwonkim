@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Navbar from "../components/layout/Navbar";
+import TopNavbar from "../components/layout/TopNavbar";
 import { ThemeProvider } from "@repo/ui";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
 
@@ -21,13 +21,14 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "김기원 포트폴리오",
+  title: "김기원 - 프론트엔드 개발자 | Kiwon Kim - Frontend Developer",
   description:
-    "React, Next.js, TypeScript로 사용자 중심의 웹 경험을 만드는 프론트엔드 개발자",
-  keywords: "프론트엔드, 개발자, React, Next.js, TypeScript, 포트폴리오",
-  authors: [{ name: "김기원" }],
-  creator: "김기원",
-  publisher: "김기원",
+    "React, Next.js, TypeScript 전문 프론트엔드 개발자. 3년+ 경력으로 넥슨, 위메프, 한샘에서 확장 가능한 웹 애플리케이션을 구축했습니다. 디자인 시스템, 테스팅, 성능 최적화에 특화되어 있습니다.",
+  keywords:
+    "프론트엔드 개발자, Frontend Developer, React, Next.js, TypeScript, JavaScript, 웹 개발, UI/UX, 포트폴리오, 넥슨, 위메프, 한샘",
+  authors: [{ name: "김기원 (Kiwon Kim)" }],
+  creator: "김기원 (Kiwon Kim)",
+  publisher: "김기원 (Kiwon Kim)",
   robots: {
     index: true,
     follow: true,
@@ -41,6 +42,33 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: [
+      {
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/favicon.ico",
+        sizes: "any",
+      },
+    ],
+    apple: [
+      {
+        url: "/apple-touch-icon.svg",
+        sizes: "180x180",
+        type: "image/svg+xml",
+      },
+    ],
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/logo.svg",
+        color: "#3B82F6",
+      },
+    ],
+  },
+  manifest: "/manifest.json",
   other: {
     // AI 봇 차단 메타 태그
     ChatGPT: "noindex, nofollow",
@@ -60,16 +88,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    title: "김기원 포트폴리오",
+    title: "김기원 - 프론트엔드 개발자 | Kiwon Kim - Frontend Developer",
     description:
-      "React, Next.js, TypeScript로 사용자 중심의 웹 경험을 만드는 프론트엔드 개발자",
-    siteName: "김기원 포트폴리오",
+      "React, Next.js, TypeScript 전문 프론트엔드 개발자. 3년+ 경력으로 넥슨, 위메프, 한샘에서 확장 가능한 웹 애플리케이션을 구축했습니다.",
+    siteName: "김기원 포트폴리오 | Kiwon Kim Portfolio",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 64,
+        height: 64,
+        alt: "김기원 로고 (Kiwon Kim Logo)",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "김기원 포트폴리오",
+    title: "김기원 - 프론트엔드 개발자 | Kiwon Kim - Frontend Developer",
     description:
-      "React, Next.js, TypeScript로 사용자 중심의 웹 경험을 만드는 프론트엔드 개발자",
+      "React, Next.js, TypeScript 전문 프론트엔드 개발자. 3년+ 경력으로 넥슨, 위메프, 한샘에서 확장 가능한 웹 애플리케이션을 구축했습니다.",
+    images: ["/logo.svg"],
   },
 };
 
@@ -129,11 +166,9 @@ export default function RootLayout({
           <body
             className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen smooth-scroll`}
           >
+            <TopNavbar />
             <div className="flex flex-col min-h-screen overflow-hidden">
-              <Navbar />
-              <main className="flex-grow pt-[var(--header-height)] toss-fade-in">
-                {children}
-              </main>
+              <main className="flex-grow toss-fade-in">{children}</main>
             </div>
           </body>
         </ReactQueryProvider>

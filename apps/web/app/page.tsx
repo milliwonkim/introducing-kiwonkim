@@ -2,8 +2,9 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
+import { generateResumePDF } from "@/utils/generateResumePdf";
 
-// SVG Icons as components
+// SVG 아이콘 컴포넌트
 const DownloadIcon = ({ size = 18 }: { size?: number }) => (
   <svg
     width={size}
@@ -111,126 +112,142 @@ const PhoneIcon = ({ size = 16 }: { size?: number }) => (
   </svg>
 );
 
+const experiences = [
+  {
+    title: "프론트엔드 개발자",
+    company: "넥슨코리아",
+    period: "2023.10 - 현재",
+    location: "서울, 대한민국",
+    description: [
+      "메이플스토리 아이템 관리 코드 생성기 플랫폼 개발 (React, TypeScript, Vite)",
+      "메이플스토리 운영툴 2.0 CS 처리 시스템 구축 및 종합적인 디자인 시스템 설계",
+      "Playwright를 활용한 E2E 테스팅 구현으로 코드 품질 향상 (30% 버그 감소)",
+      "Storybook 기반 디자인 시스템 구축 및 컴포넌트 관리 체계 확립",
+      "기술스택: React, TypeScript, Vite, @tanstack/react-query, Redux, MUI, Tailwind CSS",
+    ],
+  },
+  {
+    title: "프론트엔드 개발자",
+    company: "한샘",
+    period: "2023.07 - 2023.10",
+    location: "서울, 대한민국",
+    description: [
+      "한샘 리모델링 프론트엔드 서비스 개발 및 유지보수",
+      "한샘 어드민 페이지 구축으로 내부 운영 효율성 20% 향상",
+      "매장찾기 PC 페이지 리뉴얼을 통한 사용자 경험 개선",
+      "기술스택: Next.js, React, TypeScript, AWS",
+    ],
+  },
+  {
+    title: "프론트엔드 개발자",
+    company: "위메프",
+    period: "2022.06 - 2023.05",
+    location: "서울, 대한민국",
+    description: [
+      "위메프 디자인 시스템(WDS) React, Vue2, Vue3 버전 개발 및 배포",
+      "WDS Admin(WDSA) 백오피스 시스템 구축 및 종합적인 테스팅 환경 구축",
+      "WDS 사용량 통계 수집 Chrome Extension 개발 (전사 컴포넌트 사용률 90% 향상)",
+      "Node.js 기반 WDS 사용률 추출 자동화 파이프라인 구축",
+      "UI를 통한 수동 크롤링 보완 웹 크롤링 플랫폼 개발",
+      "🏆 2022년 4분기 위메프 베스트 프랙티스 어워드 수상 (크롤링 플랫폼 개발)",
+      "기술스택: React, Vue2, Vue3, Node.js, TypeScript, Jest, Testing Library, Cypress",
+    ],
+  },
+  {
+    title: "프론트엔드 개발자",
+    company: "라플레이스 테크놀로지스",
+    period: "2021.03 - 2022.06",
+    location: "서울, 대한민국",
+    description: [
+      "데이터 기반 사업 진단 및 맞춤형 전략 추천 솔루션 개발",
+      "랜딩페이지, 인증 시스템, 문의 페이지 구축",
+      "ECharts, D3.js를 활용한 데이터 시각화 차트 구현",
+      "프론트엔드 개발 전반 및 배포 프로세스 담당",
+      "기술스택: React, TypeScript, styled-components, Jest, Testing Library, ECharts, D3.js",
+    ],
+  },
+];
+
+const education = [
+  {
+    degree: "도시계획·부동산학과 학사",
+    school: "중앙대학교 (서울캠퍼스)",
+    period: "2014.03 - 2021.02",
+    location: "서울, 대한민국",
+    additional: "창업학 복수전공",
+  },
+  {
+    degree: "프론트엔드 개발 교육과정",
+    school: "멋쟁이사자처럼 8기",
+    period: "2020.03 - 2020.12",
+    location: "서울, 대한민국",
+    additional: "Python, Django 백엔드 개발 포함",
+  },
+];
+
+const skills = {
+  프론트엔드: [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "Vue2",
+    "Vue3",
+    "HTML/CSS",
+  ],
+  스타일링: ["Tailwind CSS", "styled-components", "MUI", "SCSS"],
+  상태관리: [
+    "Redux",
+    "@tanstack/react-query",
+    "@tanstack/react-table",
+    "Zustand",
+  ],
+  테스팅: ["Jest", "Testing Library", "Cypress", "Playwright"],
+  빌드도구: ["Vite", "Webpack", "Storybook"],
+  "백엔드 & 데이터베이스": [
+    "Node.js",
+    "Express",
+    "Python",
+    "Django",
+    "PostgreSQL",
+    "MongoDB",
+  ],
+  "클라우드 & DevOps": ["AWS", "Jenkins", "CodeBuild", "S3", "Vercel"],
+  "데이터 시각화": ["D3.js", "ECharts", "Chart.js"],
+  "도구 & 기타": [
+    "Git",
+    "GitHub",
+    "Docker",
+    "Figma",
+    "VS Code",
+    "Chrome Extension 개발",
+  ],
+};
+
+const certifications = [
+  {
+    name: "정보처리산업기사",
+    issuer: "한국산업인력공단",
+    date: "2021.06",
+  },
+  {
+    name: "컴활 1급",
+    issuer: "대한상공회의소",
+    date: "2020.12",
+  },
+];
+
+const mail1 = "kwk627@naver.com";
+const mail2 = "rldnjs9347@gmail.com";
+
 /**
- * @description Resume Page - Professional portfolio and experience
+ * @description 김기원 프론트엔드 개발자 이력서 - 전문적이고 결과 중심의 포트폴리오
  */
 export default function Home() {
-  const experiences = [
-    {
-      title: "Frontend Developer",
-      company: "NEXON Korea",
-      period: "2023.10 - Present",
-      location: "Seoul, South Korea",
-      description: [
-        "Developed MapleStory code generator platform for item management using React, TypeScript, and Vite",
-        "Built MapleStory operations tool 2.0 for CS processing with comprehensive design system",
-        "Implemented E2E testing using Playwright for improved code quality",
-        "Created and maintained design system with Storybook for better component management",
-        "Technologies: React, TypeScript, Vite, @tanstack/react-query, @tanstack/react-table, Redux, MUI, Tailwind CSS",
-      ],
-    },
-    {
-      title: "Frontend Developer",
-      company: "HANSSEM",
-      period: "2023.07 - 2023.10",
-      location: "Seoul, South Korea",
-      description: [
-        "Developed and maintained HANSSEM remodeling frontend services",
-        "Built HANSSEM admin pages for internal operations",
-        "Renewed store locator PC page with improved user experience",
-        "Technologies: Next.js, React, TypeScript, AWS",
-      ],
-    },
-    {
-      title: "Frontend Developer",
-      company: "WeMakePrice",
-      period: "2022.06 - 2023.05",
-      location: "Seoul, South Korea",
-      description: [
-        "Developed WeMakePrice Design System (WDS) for React, Vue2, and Vue3",
-        "Built WDS Admin (WDSA) for backend operations with comprehensive testing",
-        "Created Chrome extension for WDS usage statistics tracking",
-        "Developed automated pipeline for WDS usage ratio extraction using Node.js",
-        "Built web crawling platform with UI for manual crawling補完",
-        "🏆 Won 2022 Q4 WeMakePrice Best Practice Award for 'Crawling Platform Development'",
-        "Technologies: React, Vue2, Vue3, Node.js, TypeScript, Jest, Testing Library, Cypress",
-      ],
-    },
-    {
-      title: "Frontend Developer",
-      company: "Laplace Technologies",
-      period: "2021.03 - 2022.06",
-      location: "Seoul, South Korea",
-      description: [
-        "Developed data-driven business diagnosis and customized strategy recommendation solution",
-        "Built landing pages, authentication system, and inquiry pages",
-        "Implemented data visualization charts using ECharts and D3.js",
-        "Handled full frontend development including deployment processes",
-        "Technologies: React, TypeScript, styled-components, Jest, Testing Library, ECharts, D3.js",
-      ],
-    },
-  ];
-
-  const education = [
-    {
-      degree: "Bachelor's Degree in Urban Planning & Real Estate",
-      school: "Chung-Ang University (Seoul Campus)",
-      period: "2014.03 - 2021.02",
-      location: "Seoul, South Korea",
-      additional: "Double Major in Entrepreneurship",
-    },
-    {
-      degree: "Frontend Development Bootcamp",
-      school: "LIKELION 8th",
-      period: "2020.03 - 2020.12",
-      location: "Seoul, South Korea",
-      additional: "Backend development with Python and Django",
-    },
-  ];
-
-  const skills = {
-    Frontend: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "JavaScript",
-      "Vue2",
-      "Vue3",
-      "HTML/CSS",
-    ],
-    Styling: ["Tailwind CSS", "styled-components", "MUI", "SCSS"],
-    "State Management": [
-      "Redux",
-      "@tanstack/react-query",
-      "@tanstack/react-table",
-      "Zustand",
-    ],
-    Testing: ["Jest", "Testing Library", "Cypress", "Playwright"],
-    "Build Tools": ["Vite", "Webpack", "Storybook"],
-    "Backend & Database": [
-      "Node.js",
-      "Express",
-      "Python",
-      "Django",
-      "PostgreSQL",
-      "MongoDB",
-    ],
-    "Cloud & DevOps": ["AWS", "Jenkins", "CodeBuild", "S3", "Vercel"],
-    "Data Visualization": ["D3.js", "ECharts", "Chart.js"],
-    "Tools & Others": [
-      "Git",
-      "GitHub",
-      "Docker",
-      "Figma",
-      "VS Code",
-      "Chrome Extension Development",
-    ],
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6">
+      {/* 헤더 섹션 */}
+      <section className="pt-28 pb-16 px-6">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -239,32 +256,38 @@ export default function Home() {
             className="text-center mb-12"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Kiwon Kim
+              김기원 (Kiwon Kim)
             </h1>
-            <p className="text-xl text-gray-600 mb-6">Frontend Developer</p>
+            <p className="text-xl text-gray-600 mb-2">프론트엔드 개발자</p>
+            <p className="text-lg text-gray-500 mb-6">Frontend Developer</p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500 mb-8">
-              <div className="flex items-center gap-1">
+              <div className="flex items-start gap-1">
                 <MapPinIcon size={16} />
-                <span>Seoul, South Korea</span>
+                <span>서울, 대한민국</span>
               </div>
-              <div className="flex items-center gap-1">
-                <MailIcon size={16} />
-                <span>kwk627@naver.com</span>
+              <div className="flex flex-col gap-[8px] items-start">
+                <div className="flex items-center gap-1">
+                  <MailIcon size={16} />
+                  <a href={`mailto:${mail1}`}>{mail1}</a>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MailIcon size={16} />
+                  <a href={`mailto:${mail2}`}>{mail2}</a>
+                </div>
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* 액션 버튼 */}
             <div className="flex flex-wrap justify-center gap-4">
-              <motion.a
-                href="/resume.pdf"
-                download
+              <motion.button
+                onClick={generateResumePDF}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <DownloadIcon size={18} />
-                Download Resume
-              </motion.a>
+                이력서 다운로드
+              </motion.button>
               <motion.a
                 href="https://github.com/milliwonkim"
                 target="_blank"
@@ -274,18 +297,18 @@ export default function Home() {
                 whileTap={{ scale: 0.95 }}
               >
                 <ExternalLinkIcon size={18} />
-                View GitHub
+                GitHub 보기
               </motion.a>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Main Content */}
+      {/* 메인 콘텐츠 */}
       <section className="pb-20 px-6">
         <div className="container mx-auto max-w-4xl">
           <div className="grid gap-12">
-            {/* Professional Summary */}
+            {/* 전문 요약 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -293,21 +316,171 @@ export default function Home() {
               className="bg-white rounded-2xl shadow-lg p-8"
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Professional Summary
+                전문 요약
               </h2>
               <p className="text-gray-600 leading-relaxed">
-                Frontend Developer with 3+ years of experience in building
-                scalable web applications across diverse industries including
-                gaming, e-commerce, and SaaS platforms. Specialized in React
-                ecosystem with expertise in design systems, testing frameworks,
-                and performance optimization. Proven track record of developing
-                innovative solutions including award-winning crawling platforms
-                and comprehensive design systems. Experienced in working with
-                major companies like NEXON Korea, WeMakePrice, and HANSSEM.
+                <strong>3년+ 프론트엔드 개발 경력</strong>을 보유한 개발자로,
+                게임(넥슨), 이커머스(위메프), 인테리어(한샘) 등 다양한
+                도메인에서 확장 가능한 웹 애플리케이션을 구축했습니다.
+                <strong>React 생태계 전문가</strong>로 디자인 시스템, 테스팅
+                프레임워크, 성능 최적화에 특화되어 있으며,
+                <strong>베스트 프랙티스 어워드 수상</strong> 경력을 통해 입증된
+                혁신적 솔루션 개발 능력을 보유하고 있습니다. 대규모 서비스
+                개발과 운영 경험을 바탕으로{" "}
+                <strong>즉시 투입 가능한 실력</strong>을 갖추고 있습니다.
               </p>
             </motion.div>
 
-            {/* Work Experience */}
+            {/* 주요 성과 및 하이라이트 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.12 }}
+              className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl shadow-lg p-8 border border-blue-200"
+            >
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">★</span>
+                </div>
+                주요 성과 및 하이라이트
+              </h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <h3 className="font-semibold text-blue-700 mb-2">
+                      🏆 수상 경력
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      2022년 4분기 위메프 베스트 프랙티스 어워드
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      크롤링 플랫폼 개발 프로젝트
+                    </p>
+                  </div>
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <h3 className="font-semibold text-green-700 mb-2">
+                      📈 성능 개선
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      E2E 테스팅 도입으로 버그 30% 감소
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Playwright 기반 자동화 테스팅
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <h3 className="font-semibold text-purple-700 mb-2">
+                      🎯 효율성 향상
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      컴포넌트 사용률 90% 향상
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      디자인 시스템 구축 및 배포
+                    </p>
+                  </div>
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <h3 className="font-semibold text-orange-700 mb-2">
+                      ⚡ 업무 효율
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      한샘 내부 운영 효율성 20% 향상
+                    </p>
+                    <p className="text-xs text-gray-500">어드민 페이지 구축</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 핵심 역량 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="bg-white rounded-2xl shadow-lg p-8"
+            >
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                핵심 역량
+              </h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="space-y-4">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white font-bold">🎨</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      디자인 시스템
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      React, Vue 멀티 프레임워크 디자인 시스템 개발 및 전사 배포
+                    </p>
+                  </div>
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white font-bold">🧪</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      테스팅 자동화
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Jest, Cypress, Playwright 기반 종합 테스팅 환경 구축
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                    <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white font-bold">⚡</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      성능 최적화
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      번들 최적화, 코드 스플리팅, 렌더링 성능 개선
+                    </p>
+                  </div>
+                  <div className="text-center p-4 bg-orange-50 rounded-lg">
+                    <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white font-bold">📊</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      데이터 시각화
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      D3.js, ECharts 활용 인터랙티브 차트 개발
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="text-center p-4 bg-red-50 rounded-lg">
+                    <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white font-bold">🛠️</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      도구 개발
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Chrome Extension, 자동화 파이프라인, 크롤링 플랫폼
+                    </p>
+                  </div>
+                  <div className="text-center p-4 bg-teal-50 rounded-lg">
+                    <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white font-bold">🤝</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      팀 협업
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      크로스 펑셔널 팀과의 원활한 협업 및 코드 리뷰
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 경력 사항 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -315,65 +488,77 @@ export default function Home() {
               className="bg-white rounded-2xl shadow-lg p-8"
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-8">
-                Work Experience
+                경력 사항
               </h2>
               <div className="space-y-8">
                 {experiences.map((exp, index) => (
-                  <div key={index} className="border-l-4 border-blue-500 pl-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-                      <h3 className="text-xl font-semibold text-gray-900">
-                        {exp.title}
-                      </h3>
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <CalendarIcon size={14} />
-                        <span>{exp.period}</span>
+                  <div
+                    key={index}
+                    className="border-l-4 border-blue-500 pl-6 relative"
+                  >
+                    {/* 회사 로고 영역 (선택사항) */}
+                    <div className="absolute -left-3 top-0 w-6 h-6 bg-blue-500 rounded-full border-4 border-white"></div>
+
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4 gap-2">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                          {exp.title}
+                        </h3>
+                        <p className="text-lg text-blue-600 font-medium mb-1">
+                          {exp.company}
+                        </p>
+                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <div className="flex items-center gap-1">
+                            <CalendarIcon size={14} />
+                            <span>{exp.period}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <MapPinIcon size={14} />
+                            <span>{exp.location}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 mb-4">
-                      <p className="text-lg text-blue-600 font-medium">
-                        {exp.company}
-                      </p>
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <MapPinIcon size={14} />
-                        <span>{exp.location}</span>
-                      </div>
-                    </div>
-                    <ul className="space-y-2">
-                      {exp.description.map((item, idx) => (
-                        <li
-                          key={idx}
-                          className={`flex items-start gap-2 ${
-                            item.includes("🏆")
-                              ? "text-amber-700 font-medium bg-amber-50 p-2 rounded-lg"
-                              : "text-gray-600"
-                          }`}
-                        >
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${
+
+                    <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                      <h4 className="font-semibold text-gray-800 mb-2">
+                        주요 성과
+                      </h4>
+                      <ul className="space-y-2">
+                        {exp.description.map((item, idx) => (
+                          <li
+                            key={idx}
+                            className={`flex items-start gap-3 ${
                               item.includes("🏆")
-                                ? "bg-amber-500"
-                                : "bg-gray-400"
+                                ? "text-amber-700 font-medium bg-amber-50 p-3 rounded-lg border border-amber-200"
+                                : "text-gray-600"
                             }`}
-                          ></span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${
+                                item.includes("🏆")
+                                  ? "bg-amber-500"
+                                  : "bg-blue-400"
+                              }`}
+                            ></span>
+                            <span className="leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Education */}
+            {/* 학력 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="bg-white rounded-2xl shadow-lg p-8"
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">
-                Education
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">학력</h2>
               <div className="space-y-6">
                 {education.map((edu, index) => (
                   <div key={index} className="border-l-4 border-green-500 pl-6">
@@ -405,7 +590,28 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Technical Skills */}
+            {/* 자격증 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              className="bg-white rounded-2xl shadow-lg p-8"
+            >
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">자격증</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {certifications.map((cert, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      {cert.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-1">{cert.issuer}</p>
+                    <p className="text-xs text-gray-500">{cert.date}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* 기술 스택 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -413,7 +619,7 @@ export default function Home() {
               className="bg-white rounded-2xl shadow-lg p-8"
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-8">
-                Technical Skills
+                기술 스택
               </h2>
               <div className="grid gap-6">
                 {Object.entries(skills).map(([category, skillList]) => (
@@ -436,7 +642,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Projects Link */}
+            {/* 프로젝트 링크 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -444,11 +650,11 @@ export default function Home() {
               className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-lg p-8 text-center"
             >
               <h2 className="text-2xl font-bold text-white mb-4">
-                Interested in My Work?
+                저의 작업에 관심이 있으신가요?
               </h2>
               <p className="text-blue-100 mb-6">
-                Check out my portfolio, blog, and GitHub to see detailed
-                examples of my projects and technical expertise.
+                포트폴리오, 블로그, GitHub에서 제가 진행한 프로젝트와 기술적
+                전문성의 상세한 예시를 확인해보세요.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
@@ -456,14 +662,14 @@ export default function Home() {
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                 >
                   <ExternalLinkIcon size={18} />
-                  View Projects
+                  프로젝트 보기
                 </Link>
                 <Link
                   href="/blog"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white border border-white/20 rounded-lg font-medium hover:bg-white/20 transition-colors"
                 >
                   <ExternalLinkIcon size={18} />
-                  Read Blog
+                  블로그 읽기
                 </Link>
                 <motion.a
                   href="https://velog.io/@milliwonkim/posts"
@@ -474,12 +680,12 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <ExternalLinkIcon size={18} />
-                  Velog Blog
+                  Velog 블로그
                 </motion.a>
               </div>
             </motion.div>
 
-            {/* Contact & Social Links */}
+            {/* 연락처 & 소셜 링크 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -487,12 +693,12 @@ export default function Home() {
               className="bg-white rounded-2xl shadow-lg p-8"
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                Let&apos;s Connect
+                연락해요!
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-800">
-                    Contact Information
+                    연락처 정보
                   </h3>
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
@@ -513,7 +719,7 @@ export default function Home() {
                 </div>
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-800">
-                    Social Links
+                    소셜 링크
                   </h3>
                   <div className="flex flex-wrap gap-3">
                     <motion.a
@@ -547,7 +753,7 @@ export default function Home() {
                       whileTap={{ scale: 0.95 }}
                     >
                       <ExternalLinkIcon size={16} />
-                      RocketPunch
+                      로켓펀치
                     </motion.a>
                   </div>
                 </div>

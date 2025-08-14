@@ -11,16 +11,23 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.2",
+    "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
     "@notionhq/client": "^3.0.1",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.76.1",
     "@tanstack/react-virtual": "^3.13.9",
+    "@types/html2canvas": "^1.0.0",
     "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.12.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
     "motion": "^12.9.2",
     "next": "^15.3.0",
     "postcss": "^8.5.3",
+    "puppeteer": "^24.16.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.4"

@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  --header-height: 4rem;
   /* 현대적인 애니메이션 이징 */
   --transition-smooth: cubic-bezier(0.165, 0.84, 0.44, 1);
   --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
