@@ -113,7 +113,7 @@ export async function GET(request: Request) {
       id: page.id,
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
-      url: (page as any).url,
+      url: (page as any).public_url || (page as any).url,
       createdAt: parseCreatedTime(properties.createdAt),
       blocks,
     };
@@ -129,7 +129,7 @@ export async function GET(request: Request) {
       id: page.id,
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
-      url: page.url,
+      url: page.public_url || page.url,
       createdAt: parseCreatedTime(properties.createdAt),
     };
   });
