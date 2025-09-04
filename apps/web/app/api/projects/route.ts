@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 
 import { Client } from "@notionhq/client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable turbo/no-undeclared-env-vars */
+
 export interface NotionProject {
   id: string;
   title: string;
