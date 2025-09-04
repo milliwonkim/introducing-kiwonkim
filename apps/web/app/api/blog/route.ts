@@ -114,6 +114,7 @@ export async function GET(request: Request) {
       description: parseRichText(properties.description),
       url: page.public_url || page.url,
       createdAt: parseCreatedTime(page.created_time),
+
       blocks,
     };
     return NextResponse.json(post);
