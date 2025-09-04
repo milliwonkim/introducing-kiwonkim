@@ -3,6 +3,7 @@ import type { NotionPost } from "../../app/blog/page";
 import { motion } from "motion/react";
 import BlogCard from "./BlogCard";
 import Layout from "../layout/Layout";
+import { getCategoryColor } from "../../utils/categoryColors";
 
 interface BlogListProps {
   posts?: NotionPost[];
@@ -129,19 +130,24 @@ const BlogList: React.FC<BlogListProps> = ({ posts, loading }) => {
             >
               All
             </button>
-            {categoryList.map((category) => (
-              <button
-                key={category}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === category
-                    ? "bg-[var(--color-primary)] text-white"
-                    : "bg-[var(--color-card-background)] text-[var(--color-text-primary)] border border-[var(--color-card-border)] hover:border-[var(--color-primary)]"
-                }`}
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
+            {categoryList.map((category) => {
+              const color = getCategoryColor(category);
+              const isSelected = selectedCategory === category;
+              return (
+                <button
+                  key={category}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors border ${color.border} ${
+                    isSelected
+                      ? `${color.bg} ${color.text}`
+                      : "bg-[var(--color-card-background)] text-[var(--color-text-primary)]"
+                  }`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </button>
+              );
+            })}
+
           </div>
 
           <motion.div

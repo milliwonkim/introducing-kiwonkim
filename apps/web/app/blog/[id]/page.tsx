@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { getCategoryColor } from "../../../utils/categoryColors";
 
 interface NotionBlock {
   id: string;
@@ -198,6 +199,7 @@ export default function BlogDetailPage() {
   const content: React.ReactNode[] = [];
   let listBuffer: NotionBlock[] = [];
   let lastListType: string | null = null;
+  const categoryColor = post.category ? getCategoryColor(post.category) : null;
   blocks.forEach((block, idx) => {
     if (
       block.type === "bulleted_list_item" ||
@@ -245,8 +247,10 @@ export default function BlogDetailPage() {
         {post.title}
       </h1>
       <div className="flex items-center text-xs text-[var(--color-text-secondary)] mb-6 gap-2">
-        {post.category && (
-          <span className="px-2 py-1 bg-[var(--color-primary)]/10 text-[var(--color-primary)] rounded-full font-medium">
+        {post.category && categoryColor && (
+          <span
+            className={`px-2 py-1 rounded-full font-medium ${categoryColor.bg} ${categoryColor.text}`}
+          >
             {post.category}
           </span>
         )}
