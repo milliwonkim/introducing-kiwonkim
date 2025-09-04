@@ -224,19 +224,6 @@ const skills = {
   ],
 };
 
-const certifications = [
-  {
-    name: "정보처리산업기사",
-    issuer: "한국산업인력공단",
-    date: "2021.06",
-  },
-  {
-    name: "컴활 1급",
-    issuer: "대한상공회의소",
-    date: "2020.12",
-  },
-];
-
 const mail1 = "kwk627@naver.com";
 const mail2 = "rldnjs9347@gmail.com";
 
@@ -585,27 +572,6 @@ export default function Home() {
                         {edu.additional}
                       </p>
                     )}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* 자격증 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="bg-white rounded-2xl shadow-lg p-8"
-            >
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">자격증</h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                {certifications.map((cert, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      {cert.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-1">{cert.issuer}</p>
-                    <p className="text-xs text-gray-500">{cert.date}</p>
                   </div>
                 ))}
               </div>
