@@ -20,7 +20,7 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
           {/* 헤더 섹션 */}
           <div className="flex flex-col mb-4">
             {post.category && (
-              <span className="inline-block px-3 py-1 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-medium mb-2">
+              <span className="inline-flex w-fit px-3 py-1 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-medium mb-2">
                 {post.category}
               </span>
             )}
