@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { NotionPost } from "../../app/blog/page";
 import { motion } from "motion/react";
 import BlogCard from "./BlogCard";
@@ -44,6 +44,8 @@ function BlogListSkeleton() {
 }
 
 const BlogList: React.FC<BlogListProps> = ({ posts, loading }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   if (loading || !posts) return <BlogListSkeleton />;
 
   if (!posts.length) {
@@ -85,6 +87,13 @@ const BlogList: React.FC<BlogListProps> = ({ posts, loading }) => {
     );
   }
 
+  const categoryList = Array.from(
+    new Set(posts.map((p) => p.category))
+  ).filter(Boolean);
+  const filteredPosts = selectedCategory
+    ? posts.filter((p) => p.category === selectedCategory)
+    : posts;
+
   return (
     <Layout>
       <section className="py-20 min-h-[calc(100vh-var(--header-height))] bg-[var(--color-background)]">
@@ -108,13 +117,40 @@ const BlogList: React.FC<BlogListProps> = ({ posts, loading }) => {
             </p>
           </motion.div>
 
+          {/* Category filter buttons */}
+          <div className="flex flex-wrap gap-3 justify-center mb-12">
+            <button
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                !selectedCategory
+                  ? "bg-[var(--color-primary)] text-white"
+                  : "bg-[var(--color-card-background)] text-[var(--color-text-primary)] border border-[var(--color-card-border)] hover:border-[var(--color-primary)]"
+              }`}
+              onClick={() => setSelectedCategory(null)}
+            >
+              All
+            </button>
+            {categoryList.map((category) => (
+              <button
+                key={category}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === category
+                    ? "bg-[var(--color-primary)] text-white"
+                    : "bg-[var(--color-card-background)] text-[var(--color-text-primary)] border border-[var(--color-card-border)] hover:border-[var(--color-primary)]"
+                }`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            {posts.map((post, idx) => (
+            {filteredPosts.map((post, idx) => (
               <BlogCard key={post.id} post={post} index={idx} />
             ))}
           </motion.div>

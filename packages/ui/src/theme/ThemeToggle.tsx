@@ -9,7 +9,7 @@ import { motion } from "motion/react";
  * @returns 테마 전환 토글 버튼 UI
  */
 export function ThemeToggle() {
-  const { theme, resolvedTheme, toggleTheme } = useThemeToggle();
+  const { resolvedTheme, toggleTheme } = useThemeToggle();
   const [mounted, setMounted] = useState(false);
 
   // 마운트 상태 관리
