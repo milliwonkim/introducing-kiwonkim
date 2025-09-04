@@ -23,15 +23,16 @@ async function fetchNotionProjects(): Promise<NotionProject[]> {
 
   return response.results.map((page: any) => {
     const props = page.properties;
-    console.info(page);
     return {
       id: page.id,
       title: props.title?.title?.[0]?.plain_text ?? "",
       company: props.company?.select?.name ?? "",
-      date: props.date?.date
-        ? `${props.date?.date?.start} ~ ${props.date?.date?.end}`
-        : "unknown",
-      url: props.url?.url ?? `https://notion.so/${page.id.replace(/-/g, "")}`,
+      date: (() => {
+        const start = props.date?.date?.start ?? "";
+        const end = props.date?.date?.end ?? "";
+        return start && end ? `${start} ~ ${end}` : start;
+      })(),
+      url: page.public_url || props.url?.url || `https://notion.so/${page.id.replace(/-/g, "")}`,
     };
   });
 }
