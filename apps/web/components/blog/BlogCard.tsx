@@ -1,5 +1,4 @@
 import { motion } from "motion/react";
-import Link from "next/link";
 import type { NotionPost } from "../../app/blog/page";
 
 interface BlogCardProps {
@@ -9,7 +8,7 @@ interface BlogCardProps {
 
 export default function BlogCard({ post, index = 0 }: BlogCardProps) {
   return (
-    <Link href={`/blog/${post.id}`} className="block h-full">
+    <a href={post.url} className="block h-full">
       <motion.div
         key={post.id}
         className="group relative h-full bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/60 hover:border-[var(--color-primary)]/30 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer hover:scale-105"
@@ -64,6 +63,6 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
           </div>
         </div>
       </motion.div>
-    </Link>
+    </a>
   );
 }
