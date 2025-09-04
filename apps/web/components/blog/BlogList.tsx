@@ -147,6 +147,7 @@ const BlogList: React.FC<BlogListProps> = ({ posts, loading }) => {
                 </button>
               );
             })}
+
           </div>
 
           <motion.div
