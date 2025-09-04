@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import type { NotionPost } from "../../app/blog/page";
+import { getCategoryColor } from "../../utils/categoryColors";
 
 interface BlogCardProps {
   post: NotionPost;
@@ -7,6 +8,9 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ post, index = 0 }: BlogCardProps) {
+  const categoryColor = post.category
+    ? getCategoryColor(post.category)
+    : null;
   return (
     <a href={post.url} className="block h-full">
       <motion.div
@@ -19,6 +23,13 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
         <div className="p-6 h-full flex flex-col">
           {/* 헤더 섹션 */}
           <div className="flex flex-col mb-4">
+            {post.category && categoryColor && (
+              <span
+                className={`inline-flex w-fit px-3 py-1 rounded-full text-xs font-medium mb-2 ${categoryColor.bg} ${categoryColor.text}`}
+              >
+                {post.category}
+              </span>
+            )}
             <div className="flex items-start justify-between mb-3">
               <h2 className="font-bold text-lg text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors leading-tight line-clamp-2 flex-1 mr-2">
                 {post.title}

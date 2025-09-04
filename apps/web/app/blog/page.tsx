@@ -7,6 +7,7 @@ export interface NotionPost {
   id: string;
   title: string;
   description: string;
+  category: string;
   url: string;
   createdAt: string;
 }

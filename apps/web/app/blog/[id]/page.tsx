@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { getCategoryColor } from "../../../utils/categoryColors";
 
 interface NotionBlock {
   id: string;
@@ -19,6 +20,7 @@ interface NotionPostDetail {
   id: string;
   title: string;
   description: string;
+  category: string;
   url: string;
   createdAt: string;
   blocks: NotionBlock[];
@@ -186,8 +188,6 @@ export default function BlogDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  console.log(post);
-
   if (loading) return <BlogDetailSkeleton />;
   if (error)
     return <div className="py-10 text-center text-red-500">{error}</div>;
@@ -199,6 +199,7 @@ export default function BlogDetailPage() {
   const content: React.ReactNode[] = [];
   let listBuffer: NotionBlock[] = [];
   let lastListType: string | null = null;
+  const categoryColor = post.category ? getCategoryColor(post.category) : null;
   blocks.forEach((block, idx) => {
     if (
       block.type === "bulleted_list_item" ||
@@ -245,8 +246,21 @@ export default function BlogDetailPage() {
       <h1 className="text-3xl font-bold mb-4 text-[var(--color-text-primary)]">
         {post.title}
       </h1>
-      <div className="text-xs text-[var(--color-text-secondary)] mb-6">
-        {post.createdAt}
+      <div className="flex items-center text-xs text-[var(--color-text-secondary)] mb-6 gap-2">
+        {post.category && categoryColor && (
+          <span
+            className={`px-2 py-1 rounded-full font-medium ${categoryColor.bg} ${categoryColor.text}`}
+          >
+            {post.category}
+          </span>
+        )}
+        <span>
+          {new Date(post.createdAt).toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </span>
       </div>
       <div className="prose prose-neutral dark:prose-invert mb-8">
         <p>{post.description}</p>
