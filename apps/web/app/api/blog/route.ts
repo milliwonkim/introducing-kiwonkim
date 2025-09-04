@@ -19,10 +19,9 @@ function parseRichText(property: any): string {
     return "";
   return property.rich_text.map((t: any) => t.plain_text).join("");
 }
-function parseCreatedTime(property: any): string {
-  if (!property || property.type !== "created_time" || !property.created_time)
-    return "";
-  const date = new Date(property.created_time);
+function parseCreatedTime(value: string | undefined): string {
+  if (!value) return "";
+  const date = new Date(value);
   return date.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 }
 
@@ -101,8 +100,8 @@ export async function GET(request: Request) {
   const id = searchParams.get("id");
   if (id) {
     // 단일 글 상세 조회
-    const page = await notion.pages.retrieve({ page_id: id });
-    const properties = (page as any).properties;
+    const page: any = await notion.pages.retrieve({ page_id: id });
+    const properties = page.properties;
     // 본문 블록 가져오기
     const blocksRes = await notion.blocks.children.list({
       block_id: id,
@@ -113,8 +112,8 @@ export async function GET(request: Request) {
       id: page.id,
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
-      url: (page as any).url,
-      createdAt: parseCreatedTime(properties.createdAt),
+      url: page.public_url || page.url,
+      createdAt: parseCreatedTime(page.created_time),
       blocks,
     };
     return NextResponse.json(post);
@@ -129,8 +128,8 @@ export async function GET(request: Request) {
       id: page.id,
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
-      url: page.url,
-      createdAt: parseCreatedTime(properties.createdAt),
+      url: page.public_url || page.url,
+      createdAt: parseCreatedTime(page.created_time),
     };
   });
   posts.sort(
