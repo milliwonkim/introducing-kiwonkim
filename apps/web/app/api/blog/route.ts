@@ -19,11 +19,6 @@ function parseRichText(property: any): string {
     return "";
   return property.rich_text.map((t: any) => t.plain_text).join("");
 }
-function parseCreatedTime(value: string | undefined): string {
-  if (!value) return "";
-  const date = new Date(value);
-  return date.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
-}
 
 // 블록 파싱 함수 (텍스트, 헤딩, 리스트 등 기본 지원)
 function parseBlock(block: any): any {
@@ -113,8 +108,7 @@ export async function GET(request: Request) {
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
       url: page.public_url || page.url,
-      createdAt: parseCreatedTime(page.created_time),
-
+      createdAt: page.created_time,
       blocks,
     };
     return NextResponse.json(post);
@@ -130,7 +124,7 @@ export async function GET(request: Request) {
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
       url: page.public_url || page.url,
-      createdAt: parseCreatedTime(page.created_time),
+      createdAt: page.created_time,
     };
   });
   posts.sort(
