@@ -19,6 +19,11 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
         <div className="p-6 h-full flex flex-col">
           {/* 헤더 섹션 */}
           <div className="flex flex-col mb-4">
+            {post.category && (
+              <span className="inline-block px-3 py-1 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-medium mb-2">
+                {post.category}
+              </span>
+            )}
             <div className="flex items-start justify-between mb-3">
               <h2 className="font-bold text-lg text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors leading-tight line-clamp-2 flex-1 mr-2">
                 {post.title}

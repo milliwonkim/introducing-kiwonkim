@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { Client } from "@notionhq/client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable turbo/no-undeclared-env-vars */
+
 const NOTION_BLOG_DATABASE_ID = process.env.NOTION_BLOG_DATABASE_ID!;
 const NOTION_API_KEY = process.env.NOTION_API_KEY!;
 const notion = new Client({ auth: NOTION_API_KEY });
@@ -95,8 +98,9 @@ export async function GET(request: Request) {
   const id = searchParams.get("id");
   if (id) {
     // 단일 글 상세 조회
-    const page: any = await notion.pages.retrieve({ page_id: id });
-    const properties = page.properties;
+    const page = await notion.pages.retrieve({ page_id: id });
+    const pageData = page as any;
+    const properties = pageData.properties;
     // 본문 블록 가져오기
     const blocksRes = await notion.blocks.children.list({
       block_id: id,
@@ -104,11 +108,12 @@ export async function GET(request: Request) {
     });
     const blocks = blocksRes.results.map(parseBlock);
     const post = {
-      id: page.id,
+      id: pageData.id,
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
-      url: page.public_url || page.url,
-      createdAt: page.created_time,
+      category: properties.category?.select?.name ?? "",
+      url: pageData.public_url || pageData.url,
+      createdAt: pageData.created_time,
       blocks,
     };
     return NextResponse.json(post);
@@ -117,14 +122,16 @@ export async function GET(request: Request) {
   const response = await notion.databases.query({
     database_id: NOTION_BLOG_DATABASE_ID,
   });
-  const posts = response.results.map((page: any) => {
-    const properties = page.properties;
+  const posts = response.results.map((page) => {
+    const pageData = page as any;
+    const properties = pageData.properties;
     return {
-      id: page.id,
+      id: pageData.id,
       title: parseTitle(properties.title),
       description: parseRichText(properties.description),
-      url: page.public_url || page.url,
-      createdAt: page.created_time,
+      category: properties.category?.select?.name ?? "",
+      url: pageData.public_url || pageData.url,
+      createdAt: pageData.created_time,
     };
   });
   posts.sort(
