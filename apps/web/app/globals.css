@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
+
   /* 현대적인 애니메이션 이징 */
   --transition-smooth: cubic-bezier(0.165, 0.84, 0.44, 1);
   --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
   /* 기본 테마 색상 */
-  --color-primary: #3b82f6; /* Blue 500 */
-  --color-primary-hover: #2563eb; /* Blue 600 */
-  --color-primary-light: #bfdbfe; /* Blue 200 */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-primary-light: #bfdbfe;
 
-  /* 테마 컬러 (새로운 Primary에 맞춰 조정) */
+  /* 테마 컬러 (Blue 계열) */
   --color-blue-50: #eff6ff;
   --color-blue-100: #dbeafe;
   --color-blue-200: #bfdbfe;
@@ -22,50 +24,166 @@
   --color-blue-800: #1e40af;
   --color-blue-900: #1e3a8a;
 
-  /* 추가 색상: 보라색 (Vite 로고 등) */
+  /* 추가 포인트 컬러 */
   --color-purple-500: #646cff;
 
   /* 기본 중립 색상 (Tailwind Slate 기반) */
-  --color-background: #ffffff; /* 기본 배경: 흰색 */
-  --color-foreground: #0f172a; /* Slate 900 - 기본 텍스트 */
+  --color-background: #f5f7ff;
+  --color-foreground: #0f172a;
   --color-white: #ffffff;
   --color-black: #000000;
-  --color-gray-50: #f8fafc; /* Slate 50 - 밝은 배경 또는 카드 배경 */
-  --color-gray-100: #f1f5f9; /* Slate 100 - 연한 구분선, 보조 배경 */
-  --color-gray-200: #e2e8f0; /* Slate 200 - 구분선 */
-  --color-gray-300: #cbd5e1; /* Slate 300 - 보더, 비활성 요소 */
-  --color-gray-400: #94a3b8; /* Slate 400 - 보조 텍스트 */
-  --color-gray-500: #64748b; /* Slate 500 - 좀 더 어두운 보조 텍스트 */
-  --color-gray-600: #475569; /* Slate 600 - 일반 텍스트 */
-  --color-gray-700: #334155; /* Slate 700 - 강조 텍스트 */
-  --color-gray-800: #1e293b; /* Slate 800 */
-  --color-gray-900: #0f172a; /* Slate 900 - 가장 어두운 텍스트, 제목 */
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
 
   /* 컴포넌트별 색상 */
-  --color-card-background: var(--color-gray-50); /* 카드 배경은 약간의 회색 */
-  --color-card-border: var(--color-gray-200);
-  --color-card-shadow: rgba(0, 0, 0, 0.05);
-  --color-card-shadow-hover: rgba(0, 0, 0, 0.07);
+  --color-card-background: rgba(255, 255, 255, 0.86);
+  --color-card-border: rgba(148, 163, 184, 0.18);
+  --color-card-shadow: rgba(15, 23, 42, 0.06);
+  --color-card-shadow-hover: rgba(15, 23, 42, 0.15);
 
-  --color-input-background: var(--color-white);
-  --color-input-border: var(--color-gray-300);
-  --color-input-focus-ring: rgba(59, 130, 246, 0.25);
+  --color-input-background: rgba(255, 255, 255, 0.95);
+  --color-input-border: rgba(148, 163, 184, 0.24);
+  --color-input-focus-ring: rgba(59, 130, 246, 0.18);
   --color-input-focus-border: var(--color-primary);
 
   --color-button-primary: var(--color-primary);
   --color-button-primary-hover: var(--color-primary-hover);
-  --color-button-secondary: var(--color-gray-100);
-  --color-button-secondary-hover: var(--color-gray-200);
+  --color-button-secondary: rgba(241, 245, 249, 0.85);
+  --color-button-secondary-hover: rgba(226, 232, 240, 0.9);
 
   --color-text-primary: var(--color-gray-900);
   --color-text-secondary: var(--color-gray-600);
-  --color-text-tertiary: var(--color-gray-400); /* 기존 gray-500에서 변경 */
+  --color-text-tertiary: var(--color-gray-400);
   --color-text-inverse: var(--color-white);
 
-  --color-border-light: var(--color-gray-200);
-  --color-border-normal: var(--color-gray-300);
+  --color-border-light: rgba(148, 163, 184, 0.2);
+  --color-border-normal: rgba(148, 163, 184, 0.32);
 
-  --color-overlay: rgba(15, 23, 42, 0.5); /* Slate 900 기반 Overlay */
+  --color-overlay: rgba(15, 23, 42, 0.4);
+
+  /* 글래스모피즘 및 토글용 커스텀 변수 */
+  --app-gradient: radial-gradient(
+      circle at 12% 0%,
+      rgba(59, 130, 246, 0.16),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 88% 5%,
+      rgba(14, 165, 233, 0.12),
+      transparent 62%
+    ),
+    linear-gradient(180deg, #f5f7ff 0%, #ffffff 45%, #f8fafc 100%);
+  --app-overlay: radial-gradient(
+      circle at 18% 28%,
+      rgba(99, 102, 241, 0.16),
+      transparent 68%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(59, 130, 246, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(16, 185, 129, 0.1),
+      transparent 70%
+    );
+  --app-surface: rgba(255, 255, 255, 0.72);
+  --app-surface-strong: rgba(255, 255, 255, 0.92);
+  --app-surface-border: rgba(148, 163, 184, 0.18);
+  --app-surface-border-strong: rgba(148, 163, 184, 0.32);
+  --app-shadow-soft: 0 24px 45px -25px rgba(15, 23, 42, 0.25);
+  --app-shadow-strong: 0 38px 70px -32px rgba(15, 23, 42, 0.35);
+  --app-toggle-track: rgba(255, 255, 255, 0.9);
+  --app-toggle-thumb: #ffffff;
+  --app-toggle-thumb-shadow: rgba(15, 23, 42, 0.18);
+  --app-toggle-icon: rgba(71, 85, 105, 0.78);
+  --app-glass-blur: 18px;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-background: #020617;
+  --color-foreground: #e2e8f0;
+  --color-gray-50: #0f172a;
+  --color-gray-100: #111827;
+  --color-gray-200: #1e293b;
+  --color-gray-300: #334155;
+  --color-gray-400: #475569;
+  --color-gray-500: #64748b;
+  --color-gray-600: #94a3b8;
+  --color-gray-700: #cbd5f5;
+  --color-gray-800: #e2e8f0;
+  --color-gray-900: #f8fafc;
+
+  --color-card-background: rgba(15, 23, 42, 0.72);
+  --color-card-border: rgba(148, 163, 184, 0.2);
+  --color-card-shadow: rgba(2, 6, 23, 0.6);
+  --color-card-shadow-hover: rgba(2, 6, 23, 0.75);
+
+  --color-input-background: rgba(15, 23, 42, 0.85);
+  --color-input-border: rgba(148, 163, 184, 0.28);
+  --color-input-focus-ring: rgba(59, 130, 246, 0.3);
+  --color-input-focus-border: rgba(96, 165, 250, 0.9);
+
+  --color-button-secondary: rgba(15, 23, 42, 0.82);
+  --color-button-secondary-hover: rgba(30, 41, 59, 0.85);
+
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-tertiary: #64748b;
+  --color-text-inverse: #0f172a;
+
+  --color-border-light: rgba(148, 163, 184, 0.18);
+  --color-border-normal: rgba(148, 163, 184, 0.35);
+
+  --color-overlay: rgba(2, 6, 23, 0.7);
+
+  --app-gradient: radial-gradient(
+      circle at 12% 4%,
+      rgba(59, 130, 246, 0.28),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(14, 165, 233, 0.22),
+      transparent 62%
+    ),
+    linear-gradient(180deg, #020617 0%, #0b1120 45%, #020617 100%);
+  --app-overlay: radial-gradient(
+      circle at 18% 24%,
+      rgba(59, 130, 246, 0.35),
+      transparent 68%
+    ),
+    radial-gradient(
+      circle at 80% 18%,
+      rgba(56, 189, 248, 0.2),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 42% 90%,
+      rgba(30, 64, 175, 0.18),
+      transparent 70%
+    );
+  --app-surface: rgba(15, 23, 42, 0.72);
+  --app-surface-strong: rgba(15, 23, 42, 0.85);
+  --app-surface-border: rgba(59, 130, 246, 0.18);
+  --app-surface-border-strong: rgba(96, 165, 250, 0.28);
+  --app-shadow-soft: 0 30px 60px -28px rgba(2, 6, 23, 0.75);
+  --app-shadow-strong: 0 40px 80px -35px rgba(2, 6, 23, 0.92);
+  --app-toggle-track: rgba(15, 23, 42, 0.9);
+  --app-toggle-thumb: #f8fafc;
+  --app-toggle-thumb-shadow: rgba(2, 6, 23, 0.68);
+  --app-toggle-icon: rgba(226, 232, 240, 0.92);
 }
 
 /* 전역 스타일 */
@@ -84,6 +202,50 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  background-image: var(--app-gradient);
+  background-attachment: fixed;
+  background-size: cover;
+  transition:
+    color 0.4s var(--transition-smooth),
+    background-color 0.6s var(--transition-smooth),
+    background-image 0.6s var(--transition-smooth);
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--app-overlay);
+  opacity: 0.9;
+  transition:
+    opacity 0.6s var(--transition-smooth),
+    background 0.6s var(--transition-smooth);
+}
+
+html[data-theme="dark"] body::before {
+  opacity: 0.7;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s var(--transition-smooth);
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.25);
+  color: var(--color-text-inverse);
 }
 
 button {
@@ -218,6 +380,117 @@ button {
   .container {
     max-width: 640px;
   }
+}
+
+/* 상단 네비게이션 글래스 효과 */
+.nav-surface {
+  background: var(--app-surface);
+  border-bottom: 1px solid var(--app-surface-border);
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(var(--app-glass-blur));
+  -webkit-backdrop-filter: blur(var(--app-glass-blur));
+  transition:
+    background 0.45s var(--transition-smooth),
+    border-color 0.45s var(--transition-smooth),
+    box-shadow 0.45s var(--transition-smooth);
+}
+
+.nav-surface--scrolled {
+  background: var(--app-surface-strong);
+  border-color: var(--app-surface-border-strong);
+  box-shadow: var(--app-shadow-strong);
+}
+
+/* 토글 버튼 (다크/라이트) */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  width: 3.5rem;
+  height: 1.9rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--app-surface-border);
+  background: var(--app-toggle-track);
+  color: var(--app-toggle-icon);
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
+  transition:
+    background 0.4s var(--transition-smooth),
+    border-color 0.4s var(--transition-smooth),
+    box-shadow 0.4s var(--transition-smooth),
+    transform 0.25s var(--transition-bounce);
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 36px rgba(15, 23, 42, 0.18);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.55);
+  outline-offset: 3px;
+}
+
+html[data-theme="dark"] .theme-toggle {
+  box-shadow: 0 24px 42px rgba(2, 6, 23, 0.55);
+}
+
+.theme-toggle__thumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1.45rem;
+  width: 1.45rem;
+  border-radius: 999px;
+  background: var(--app-toggle-thumb);
+  box-shadow: 0 8px 18px var(--app-toggle-thumb-shadow);
+}
+
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  opacity: 0.6;
+  transition:
+    opacity 0.35s var(--transition-smooth),
+    transform 0.35s var(--transition-smooth),
+    color 0.35s var(--transition-smooth);
+}
+
+.theme-toggle .sun-icon svg,
+.theme-toggle .moon-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+html[data-theme="light"] .theme-toggle .sun-icon {
+  color: #fbbf24;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+html[data-theme="light"] .theme-toggle .moon-icon {
+  opacity: 0.45;
+}
+
+html[data-theme="dark"] .theme-toggle {
+  border-color: var(--app-surface-border);
+  background: var(--app-toggle-track);
+}
+
+html[data-theme="dark"] .theme-toggle .moon-icon {
+  color: #60a5fa;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+html[data-theme="dark"] .theme-toggle .sun-icon {
+  opacity: 0.45;
 }
 
 @media (min-width: 768px) {

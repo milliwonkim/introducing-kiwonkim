@@ -46,9 +46,11 @@ export default function ThemeToggle() {
 
   return (
     <motion.button
+      type="button"
       className="theme-toggle"
       onClick={toggleTheme}
       aria-label={`테마 전환: 현재 ${theme === "light" ? "라이트" : "다크"} 모드`}
+      aria-pressed={theme === "dark"}
       whileTap={{ scale: 0.95 }}
     >
       <span className="sun-icon">
@@ -90,13 +92,20 @@ export default function ThemeToggle() {
         </svg>
       </span>
       <motion.span
-        className="absolute top-1/2 -translate-y-1/2 bg-white h-[1.5rem] w-[1.5rem] rounded-full"
-        initial={{ left: theme === "light" ? 2 : "calc(100% - 1.5rem - 2px)" }}
+        className="theme-toggle__thumb"
+        initial={{
+          left:
+            theme === "light"
+              ? "0.4rem"
+              : "calc(100% - 1.45rem - 0.4rem)",
+        }}
         animate={{
-          left: theme === "light" ? 2 : "calc(100% - 1.5rem - 2px)",
+          left:
+            theme === "light"
+              ? "0.4rem"
+              : "calc(100% - 1.45rem - 0.4rem)",
           transition: { duration: 0.3, ease: [0.18, 0.68, 0.43, 0.99] },
         }}
-        style={{ boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)" }}
       />
     </motion.button>
   );
