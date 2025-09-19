@@ -14,6 +14,7 @@ import {
   XMarkIcon,
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
+import clsx from "clsx";
 import ThemeToggle from "../ThemeToggle";
 
 const TopNavbar = () => {
@@ -43,26 +44,28 @@ const TopNavbar = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled ? "nav-surface nav-surface--scrolled" : "nav-surface"
-        }`}
+        className={clsx(
+          "sticky top-0 left-0 right-0 z-50 w-full transition-all duration-500",
+          "nav-surface",
+          { "nav-surface--scrolled": isScrolled }
+        )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* 로고 */}
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/" className="flex items-center gap-3">
+            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+              <Link href="/" className="flex items-center gap-3 md:gap-3.5">
                 <div className="relative">
                   <motion.div
-                    className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-blue-500 dark:to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25 dark:shadow-blue-500/35"
-                    whileHover={{ rotate: 10 }}
-                    transition={{ type: "spring", stiffness: 300 }}
+                    className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-blue-500/30"
+                    whileHover={{ rotate: 6 }}
+                    transition={{ type: "spring", stiffness: 280 }}
                   >
                     <span className="text-white font-bold text-lg">K</span>
                   </motion.div>
                   {/* 글로우 효과 */}
                   <motion.div
-                    className="absolute inset-0 rounded-xl bg-blue-400/35 dark:bg-blue-500/35 blur-xl"
+                    className="absolute inset-0 rounded-2xl bg-blue-400/25 dark:bg-blue-500/25 blur-xl"
                     animate={{
                       scale: [1, 1.2, 1],
                       opacity: [0.2, 0.4, 0.2],
@@ -75,8 +78,10 @@ const TopNavbar = () => {
                   />
                 </div>
                 <div className="hidden sm:block">
-                  <h1 className="font-bold text-gray-900 dark:text-slate-100 text-lg">김기원</h1>
-                  <p className="text-xs text-gray-500 dark:text-slate-400 -mt-1">
+                  <h1 className="text-base sm:text-lg font-semibold text-[color:var(--color-text-primary)]">
+                    김기원
+                  </h1>
+                  <p className="text-xs text-[color:var(--color-text-secondary)] -mt-1 tracking-wide">
                     Frontend Developer
                   </p>
                 </div>
@@ -85,7 +90,12 @@ const TopNavbar = () => {
 
             {/* 데스크톱 네비게이션 */}
             <div className="hidden md:flex items-center">
-              <div className="flex items-center space-x-2 rounded-full px-3 py-2.5 border border-gray-200/60 dark:border-slate-700/50 bg-white/75 dark:bg-slate-950/60 backdrop-blur-lg shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] dark:shadow-[0_28px_55px_-24px_rgba(2,6,23,0.78)] transition-colors duration-300">
+              <motion.div
+                className="nav-tray"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+              >
                 {navigation.map((item, index) => {
                   const isActive = pathname === item.href;
                   const Icon = item.icon;
@@ -93,36 +103,31 @@ const TopNavbar = () => {
                   return (
                     <motion.div
                       key={item.href}
+                      className="inline-flex"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: 0.1 + index * 0.05, duration: 0.3 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.96 }}
                     >
                       <Link
                         href={item.href}
-                        className={`relative flex items-center gap-3 px-5 py-3 rounded-full text-base font-medium transition-all duration-300 ${
-                          isActive
-                            ? "text-white bg-blue-600 dark:bg-blue-500/90 shadow-[0_16px_40px_-20px_rgba(59,130,246,0.6)]"
-                            : "text-gray-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-white/70 dark:hover:bg-slate-900/50"
-                        }`}
+                        className={clsx("nav-pill", { "nav-pill--active": isActive })}
                       >
-                        <Icon className="w-5 h-5" />
+                        <motion.span
+                          className="nav-pill__icon"
+                          whileHover={{ rotate: isActive ? 0 : 5 }}
+                          transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                        >
+                          <Icon className="w-full h-full" />
+                        </motion.span>
                         <span>{item.name}</span>
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeTab"
-                            className="absolute inset-0 bg-blue-600 dark:bg-blue-500 rounded-full -z-10"
-                            transition={{
-                              type: "spring",
-                              bounce: 0.2,
-                              duration: 0.6,
-                            }}
-                          />
-                        )}
+                        <span className="nav-pill__indicator" aria-hidden />
                       </Link>
                     </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
             </div>
 
             {/* 우측 버튼들 */}
@@ -141,9 +146,10 @@ const TopNavbar = () => {
                 href="https://github.com/milliwonkim"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800/70 transition-colors border border-gray-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-950/60 backdrop-blur-lg shadow-[0_16px_32px_-18px_rgba(15,23,42,0.35)] dark:shadow-[0_26px_44px_-18px_rgba(2,6,23,0.75)]"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                aria-label="GitHub"
+                className="hidden sm:inline-flex nav-icon-button"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.92 }}
               >
                 <svg
                   className="w-5 h-5"
@@ -161,7 +167,7 @@ const TopNavbar = () => {
               >
                 <Link
                   href="/contact"
-                  className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25 dark:shadow-blue-500/35"
+                  className="hidden sm:inline-flex nav-primary-button"
                 >
                   <EnvelopeIcon className="w-4 h-4" />
                   연락하기
@@ -171,7 +177,9 @@ const TopNavbar = () => {
               {/* 모바일 메뉴 버튼 */}
               <motion.button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden flex items-center justify-center w-10 h-10 text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white rounded-full hover:bg-gray-100 dark:hover:bg-slate-800/70 transition-colors border border-gray-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-950/60 backdrop-blur-lg"
+                className={clsx("md:hidden nav-icon-button", {
+                  "text-[color:var(--color-primary)]": isMobileMenuOpen,
+                })}
                 whileTap={{ scale: 0.9 }}
               >
                 <motion.div
@@ -198,7 +206,7 @@ const TopNavbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-20 left-0 right-0 z-40 bg-white/95 dark:bg-slate-950/85 backdrop-blur-xl border-b border-gray-200/70 dark:border-slate-800/60 shadow-xl shadow-[0_24px_50px_-24px_rgba(15,23,42,0.35)] dark:shadow-[0_32px_65px_-28px_rgba(2,6,23,0.85)] md:hidden"
+            className="fixed top-20 left-0 right-0 z-40 md:hidden nav-mobile-panel"
           >
             <div className="max-w-md mx-auto p-6 space-y-4">
               {navigation.map((item, index) => {
@@ -215,22 +223,18 @@ const TopNavbar = () => {
                     <Link
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
-                        isActive
-                          ? "bg-blue-600 dark:bg-blue-500/85 text-white shadow-lg"
-                          : "text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-900/60"
-                      }`}
+                      className={clsx("nav-mobile-link", {
+                        "nav-mobile-link--active": isActive,
+                      })}
                     >
-                      <Icon className="w-5 h-5" />
+                      <motion.span
+                        className="nav-mobile-link__icon"
+                        whileHover={{ rotate: isActive ? 0 : 5 }}
+                        transition={{ type: "spring", stiffness: 280, damping: 20 }}
+                      >
+                        <Icon className="w-full h-full" />
+                      </motion.span>
                       <span className="font-medium">{item.name}</span>
-                      {isActive && (
-                        <motion.div
-                          className="ml-auto w-2 h-2 bg-white dark:bg-slate-200 rounded-full"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.2 }}
-                        />
-                      )}
                     </Link>
                   </motion.div>
                 );
@@ -242,13 +246,13 @@ const TopNavbar = () => {
                   href="https://github.com/milliwonkim"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-900/60 rounded-xl transition-colors"
+                  className="nav-mobile-link"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 }}
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="nav-mobile-link__icon"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -266,7 +270,7 @@ const TopNavbar = () => {
                   <Link
                     href="/contact"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 p-3 bg-blue-600 dark:bg-blue-500/85 text-white rounded-xl font-medium hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors shadow-[0_16px_34px_-20px_rgba(37,99,235,0.55)] dark:shadow-[0_22px_40px_-18px_rgba(37,99,235,0.7)]"
+                    className="nav-primary-button nav-primary-button--block"
                   >
                     <EnvelopeIcon className="w-5 h-5" />
                     연락하기
@@ -286,7 +290,7 @@ const TopNavbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-30 md:hidden"
+            className="fixed inset-0 z-30 md:hidden nav-overlay"
             onClick={() => setIsMobileMenuOpen(false)}
           />
         )}
