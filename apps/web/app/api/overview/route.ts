@@ -24,10 +24,21 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
 const FALLBACK_OVERVIEW_PAGE_ID = "2749a57291028051aafcf7982552da08";
 
-function normalizeNotionId(id: string): string {
-  const cleaned = id.replace(/-/g, "").replace(/\?.*/, "");
-  if (cleaned.length !== 32) return id;
-  return `${cleaned.slice(0, 8)}-${cleaned.slice(8, 12)}-${cleaned.slice(12, 16)}-${cleaned.slice(16, 20)}-${cleaned.slice(20)}`;
+function normalizeNotionId(rawId: string): string {
+  const trimmed = rawId.trim();
+  if (!trimmed) return "";
+
+  const matches = trimmed
+    .replace(/-/g, "")
+    .match(/[0-9a-f]{32}/i);
+
+  if (!matches) {
+    return "";
+  }
+
+  const id = matches[0].toLowerCase();
+
+  return `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
 }
 
 function extractPlainText(property: any): string {
@@ -128,7 +139,9 @@ export async function GET() {
     const pageId = normalizeNotionId(rawPageId);
 
     if (!pageId) {
-      throw new Error("NOTION_OVERVIEW_PAGE_ID is not set");
+      throw new Error(
+        "NOTION_OVERVIEW_PAGE_ID is not set or is invalid. Provide a Notion page ID or share URL."
+      );
     }
 
     const page = (await notion.pages.retrieve({ page_id: pageId })) as any;
