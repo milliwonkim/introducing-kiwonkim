@@ -5,7 +5,8 @@
     "paths": {
       "@/components/*": ["components/*"],
       "@/app/*": ["app/*"],
-      "@/utils/*": ["utils/*"]
+      "@/utils/*": ["utils/*"],
+      "@/constants/*": ["constants/*"]
     },
     "plugins": [
       {

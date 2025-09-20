@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import TopNavbar from "../components/layout/TopNavbar";
+import SiteHeader from "../components/layout/SiteHeader";
 import { ThemeProvider } from "@repo/ui";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
 
@@ -164,11 +164,18 @@ export default function RootLayout({
       <ThemeProvider>
         <ReactQueryProvider>
           <body
-            className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen smooth-scroll`}
+            className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased smooth-scroll`}
           >
-            <TopNavbar />
-            <div className="flex flex-col min-h-screen overflow-hidden">
-              <main className="flex-grow toss-fade-in">{children}</main>
+            <div className="relative min-h-screen bg-[color:var(--color-background)] text-[color:var(--color-text-primary)]">
+              <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+                <div className="absolute -top-24 right-[-5%] h-72 w-72 rounded-full bg-[color:var(--color-primary)]/12 blur-3xl" />
+                <div className="absolute bottom-[-20%] left-[12%] h-80 w-80 rounded-full bg-[color:var(--color-primary)]/10 blur-3xl" />
+                <div className="absolute top-1/3 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[color:var(--color-primary)]/8 blur-[180px]" />
+              </div>
+              <SiteHeader />
+              <main className="pt-[calc(var(--header-height,4.5rem)+3rem)] pb-24">
+                <div className="toss-fade-in">{children}</div>
+              </main>
             </div>
           </body>
         </ReactQueryProvider>
