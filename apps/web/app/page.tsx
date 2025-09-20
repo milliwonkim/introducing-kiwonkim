@@ -7,6 +7,8 @@ import CaseStudiesSection from "@/components/sections/CaseStudiesSection";
 import ExpertiseSection from "@/components/sections/ExpertiseSection";
 import CultureSection from "@/components/sections/CultureSection";
 import ContactSection from "@/components/sections/ContactSection";
+import NotionProjectsSection from "@/components/sections/NotionProjectsSection";
+import NotionBlogSection from "@/components/sections/NotionBlogSection";
 import {
   heroContent,
   impactMetrics,
@@ -29,7 +31,9 @@ const HomePage = () => {
       <FocusSection areas={focusAreas} />
       <ExperienceSection experiences={experiences} />
       <CaseStudiesSection studies={caseStudies} />
+      <NotionProjectsSection />
       <ExpertiseSection pillars={expertisePillars} />
+      <NotionBlogSection />
       <CultureSection signals={cultureSignals} />
       <ContactSection
         availability={heroContent.availability}
