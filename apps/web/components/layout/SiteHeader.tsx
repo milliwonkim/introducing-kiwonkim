@@ -6,13 +6,15 @@ import clsx from "clsx";
 import ThemeToggle from "../ThemeToggle";
 
 const NAV_ITEMS = [
-  { label: "Intro", id: "hero", href: "#hero" },
-  { label: "Experience", id: "experience", href: "#experience" },
-  { label: "Work", id: "work", href: "#work" },
-  { label: "Expertise", id: "expertise", href: "#expertise" },
-  { label: "How I Work", id: "culture", href: "#culture" },
-  { label: "Contact", id: "contact", href: "#contact" },
-];
+  { label: "Intro", id: "hero" },
+  { label: "Experience", id: "experience" },
+  { label: "Work", id: "work" },
+  { label: "Expertise", id: "expertise" },
+  { label: "How I Work", id: "culture" },
+  { label: "Contact", id: "contact" },
+] as const;
+
+const getNavHref = (id: (typeof NAV_ITEMS)[number]["id"]) => `/#${id}`;
 
 const OBSERVER_IDS = [
   "hero",
@@ -95,7 +97,7 @@ const SiteHeader = () => {
     >
       <div className="mx-auto flex h-[var(--header-height,4.5rem)] max-w-6xl items-center justify-between px-6 sm:px-8">
         <Link
-          href="/#hero"
+          href={getNavHref("hero")}
           className="text-lg font-semibold text-[color:var(--color-text-primary)] hover:text-[color:var(--color-primary)]"
         >
           김기원 · Frontend
@@ -107,7 +109,7 @@ const SiteHeader = () => {
             return (
               <Link
                 key={item.id}
-                href={item.href}
+                href={getNavHref(item.id)}
                 onClick={() => setIsMenuOpen(false)}
                 className={clsx(
                   "inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors",
@@ -163,7 +165,7 @@ const SiteHeader = () => {
               return (
                 <Link
                   key={`mobile-${item.id}`}
-                  href={item.href}
+                  href={getNavHref(item.id)}
                   onClick={() => setIsMenuOpen(false)}
                   className={clsx(
                     "rounded-2xl px-4 py-3 text-base font-medium transition-colors",
