@@ -6,7 +6,8 @@
       "@/components/*": ["components/*"],
       "@/app/*": ["app/*"],
       "@/utils/*": ["utils/*"],
-      "@/constants/*": ["constants/*"]
+      "@/constants/*": ["constants/*"],
+      "@/types/*": ["types/*"]
     },
     "plugins": [
       {

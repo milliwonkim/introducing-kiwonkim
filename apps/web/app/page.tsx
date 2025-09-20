@@ -9,6 +9,7 @@ import CultureSection from "@/components/sections/CultureSection";
 import ContactSection from "@/components/sections/ContactSection";
 import NotionProjectsSection from "@/components/sections/NotionProjectsSection";
 import NotionBlogSection from "@/components/sections/NotionBlogSection";
+import OverviewSection from "@/components/sections/OverviewSection";
 import {
   heroContent,
   impactMetrics,
@@ -28,6 +29,7 @@ const HomePage = () => {
         metrics={impactMetrics}
         onDownloadResume={generateResumePDF}
       />
+      <OverviewSection />
       <FocusSection areas={focusAreas} />
       <ExperienceSection experiences={experiences} />
       <CaseStudiesSection studies={caseStudies} />
