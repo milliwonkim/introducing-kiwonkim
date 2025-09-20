@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useTheme } from "@repo/ui";
 import { getCategoryColor } from "../../../utils/categoryColors";
 
 interface NotionBlock {
@@ -33,53 +35,75 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
 function renderBlock(
   block: NotionBlock,
   idx: number,
-  allBlocks: NotionBlock[]
+  allBlocks: NotionBlock[],
+  monacoTheme: "vs-dark" | "vs-light"
 ) {
   switch (block.type) {
     case "heading_1":
       return (
-        <h1 key={block.id} className="text-2xl font-bold mt-8 mb-3">
+        <h1
+          key={block.id}
+          className="mt-8 mb-3 text-2xl font-bold text-[color:var(--color-text-primary)]"
+        >
           {block.text}
         </h1>
       );
     case "heading_2":
       return (
-        <h2 key={block.id} className="text-xl font-semibold mt-6 mb-2">
+        <h2
+          key={block.id}
+          className="mt-6 mb-2 text-xl font-semibold text-[color:var(--color-text-primary)]"
+        >
           {block.text}
         </h2>
       );
     case "heading_3":
       return (
-        <h3 key={block.id} className="text-lg font-medium mt-4 mb-2">
+        <h3
+          key={block.id}
+          className="mt-4 mb-2 text-lg font-medium text-[color:var(--color-text-primary)]"
+        >
           {block.text}
         </h3>
       );
     case "bulleted_list_item":
       return (
-        <li key={block.id} className="list-disc ml-6 mb-1">
+        <li
+          key={block.id}
+          className="mb-1 ml-6 list-disc text-[color:var(--color-text-primary)]"
+        >
           {block.text}
         </li>
       );
     case "numbered_list_item":
       return (
-        <li key={block.id} className="list-decimal ml-6 mb-1">
+        <li
+          key={block.id}
+          className="mb-1 ml-6 list-decimal text-[color:var(--color-text-primary)]"
+        >
           {block.text}
         </li>
       );
     case "paragraph":
       return (
-        <p key={block.id} className="mb-3 leading-relaxed">
+        <p
+          key={block.id}
+          className="mb-3 leading-relaxed text-[color:var(--color-text-primary)]"
+        >
           {block.text}
         </p>
       );
     case "code":
       return (
-        <div key={block.id} className="my-4">
+        <div
+          key={block.id}
+          className="my-4 overflow-hidden rounded-2xl border border-[color:var(--color-card-border)] bg-[color:var(--color-card-background)]/70 shadow-[0_18px_42px_var(--color-card-shadow)]"
+        >
           <MonacoEditor
             height="600px"
             defaultLanguage={block.language || "plaintext"}
             value={block.text || ""}
-            theme="vs-dark"
+            theme={monacoTheme}
             options={{
               readOnly: true,
               minimap: { enabled: false },
@@ -87,22 +111,25 @@ function renderBlock(
               scrollBeyondLastLine: false,
             }}
           />
-          <div className="text-xs text-gray-400 mt-1 text-right">
+          <div className="mt-1 px-3 pb-3 text-right text-xs text-[color:var(--color-text-tertiary)]">
             {block.language}
           </div>
         </div>
       );
     case "image":
       return (
-        <figure key={block.id} className="my-6 flex flex-col items-center">
+        <figure
+          key={block.id}
+          className="my-6 flex flex-col items-center gap-3 rounded-2xl border border-[color:var(--color-card-border)] bg-[color:var(--color-card-background)]/70 p-4 shadow-[0_18px_42px_var(--color-card-shadow)]"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={block.url}
             alt={block.caption || "이미지"}
-            className="rounded max-w-full h-auto shadow"
+            className="h-auto w-full max-w-3xl rounded-xl border border-[color:var(--color-card-border)] object-cover"
           />
           {block.caption && (
-            <figcaption className="text-xs text-gray-500 mt-2 text-center">
+            <figcaption className="text-center text-xs text-[color:var(--color-text-tertiary)]">
               {block.caption}
             </figcaption>
           )}
@@ -112,7 +139,7 @@ function renderBlock(
       return (
         <hr
           key={block.id}
-          className="my-8 border-t border-gray-300 dark:border-gray-600"
+          className="my-8 border-t border-[color:var(--color-border-normal)]"
         />
       );
     case "table": {
@@ -131,13 +158,16 @@ function renderBlock(
       return (
         <table
           key={block.id}
-          className="my-8 border border-gray-300 dark:border-gray-600 w-full text-sm"
+          className="my-8 w-full overflow-hidden rounded-xl border border-[color:var(--color-border-normal)] text-sm"
         >
           <tbody>
             {rows.map((row) => (
               <tr key={row.id}>
                 {row.cells?.map((cell, ci) => (
-                  <td key={ci} className="border px-3 py-2">
+                  <td
+                    key={ci}
+                    className="border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/60 px-3 py-2 text-[color:var(--color-text-primary)]"
+                  >
                     {cell}
                   </td>
                 ))}
@@ -154,17 +184,17 @@ function renderBlock(
 
 function BlogDetailSkeleton() {
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="animate-pulse">
-        <div className="h-10 w-2/3 bg-gray-400  rounded mb-4" />
-        <div className="h-4 w-24 bg-gray-300  rounded mb-6" />
-        <div className="space-y-3 mb-8">
-          <div className="h-4 w-full bg-gray-400 rounded" />
-          <div className="h-4 w-5/6 bg-gray-400  rounded" />
-          <div className="h-4 w-4/6 bg-gray-400  rounded" />
-          <div className="h-4 w-3/6 bg-gray-300  rounded" />
+        <div className="mb-4 h-10 w-2/3 rounded bg-[color:var(--color-border-normal)]/40" />
+        <div className="mb-6 h-4 w-24 rounded bg-[color:var(--color-border-normal)]/30" />
+        <div className="mb-8 space-y-3">
+          <div className="h-4 w-full rounded bg-[color:var(--color-border-normal)]/35" />
+          <div className="h-4 w-5/6 rounded bg-[color:var(--color-border-normal)]/35" />
+          <div className="h-4 w-4/6 rounded bg-[color:var(--color-border-normal)]/30" />
+          <div className="h-4 w-3/6 rounded bg-[color:var(--color-border-normal)]/25" />
         </div>
-        <div className="h-10 w-32 bg-gray-300  rounded" />
+        <div className="h-10 w-32 rounded bg-[color:var(--color-border-normal)]/30" />
       </div>
     </div>
   );
@@ -175,6 +205,12 @@ export default function BlogDetailPage() {
   const [post, setPost] = useState<NotionPostDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { resolvedTheme } = useTheme();
+
+  const monacoTheme = useMemo<"vs-dark" | "vs-light">(
+    () => (resolvedTheme === "dark" ? "vs-dark" : "vs-light"),
+    [resolvedTheme]
+  );
 
   useEffect(() => {
     if (!id) return;
@@ -196,7 +232,7 @@ export default function BlogDetailPage() {
 
   // 리스트 블록 그룹핑
   const blocks = post.blocks;
-  const content: React.ReactNode[] = [];
+  const content: ReactNode[] = [];
   let listBuffer: NotionBlock[] = [];
   let lastListType: string | null = null;
   const categoryColor = post.category ? getCategoryColor(post.category) : null;
@@ -211,8 +247,11 @@ export default function BlogDetailPage() {
       } else {
         // 타입이 바뀌면 이전 리스트 렌더
         content.push(
-          <ul key={listBuffer[0]?.id + "-ul"} className="mb-3">
-            {listBuffer.map((b) => renderBlock(b, idx, blocks))}
+          <ul
+            key={listBuffer[0]?.id + "-ul"}
+            className="mb-3 space-y-1 text-[color:var(--color-text-primary)]"
+          >
+            {listBuffer.map((b) => renderBlock(b, idx, blocks, monacoTheme))}
           </ul>
         );
         listBuffer = [block];
@@ -221,32 +260,38 @@ export default function BlogDetailPage() {
     } else {
       if (listBuffer.length > 0) {
         content.push(
-          <ul key={listBuffer[0]?.id + "-ul"} className="mb-3">
-            {listBuffer.map((b) => renderBlock(b, idx, blocks))}
+          <ul
+            key={listBuffer[0]?.id + "-ul"}
+            className="mb-3 space-y-1 text-[color:var(--color-text-primary)]"
+          >
+            {listBuffer.map((b) => renderBlock(b, idx, blocks, monacoTheme))}
           </ul>
         );
         listBuffer = [];
         lastListType = null;
       }
-      content.push(renderBlock(block, idx, blocks));
+      content.push(renderBlock(block, idx, blocks, monacoTheme));
     }
   });
   if (listBuffer.length > 0) {
     content.push(
-      <ul key={listBuffer[0]?.id + "-ul"} className="mb-3">
+      <ul
+        key={listBuffer[0]?.id + "-ul"}
+        className="mb-3 space-y-1 text-[color:var(--color-text-primary)]"
+      >
         {listBuffer
           .filter(Boolean)
-          .map((b) => renderBlock(b, blocks.length, blocks))}
+          .map((b) => renderBlock(b, blocks.length, blocks, monacoTheme))}
       </ul>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <h1 className="text-3xl font-bold mb-4 text-[var(--color-text-primary)]">
+    <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6 lg:px-8">
+      <h1 className="mb-4 text-3xl font-bold text-[color:var(--color-text-primary)]">
         {post.title}
       </h1>
-      <div className="flex items-center text-xs text-[var(--color-text-secondary)] mb-6 gap-2">
+      <div className="mb-6 flex items-center gap-2 text-xs text-[color:var(--color-text-secondary)]">
         {post.category && categoryColor && (
           <span
             className={`px-2 py-1 rounded-full font-medium ${categoryColor.bg} ${categoryColor.text}`}
@@ -262,17 +307,47 @@ export default function BlogDetailPage() {
           })}
         </span>
       </div>
-      <div className="prose prose-neutral dark:prose-invert mb-8">
-        <p>{post.description}</p>
+      <div className="mb-8 space-y-4 text-[color:var(--color-text-primary)]">
+        <p className="text-[color:var(--color-text-secondary)]">
+          {post.description}
+        </p>
         {content}
       </div>
       <a
         href={post.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block px-4 py-2 bg-[var(--color-primary)] text-white rounded hover:bg-[var(--color-primary-hover)] transition-colors"
+        className="inline-flex items-center gap-2 rounded-full bg-[color:var(--color-primary)] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[color:var(--color-primary-hover)]"
       >
         노션에서 원문 보기
+        <svg
+          className="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11.25 3.75H16.25V8.75"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M8.75 11.25L16.25 3.75"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M8.75 3.75H5.75C4.64543 3.75 3.75 4.64543 3.75 5.75V14.25C3.75 15.3546 4.64543 16.25 5.75 16.25H14.25C15.3546 16.25 16.25 15.3546 16.25 14.25V11.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </a>
     </div>
   );

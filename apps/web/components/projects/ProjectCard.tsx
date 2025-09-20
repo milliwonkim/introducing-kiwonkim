@@ -96,7 +96,9 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </svg>
           </div>
         ) : (
-          <span className="text-sm text-gray-400 font-medium">링크 준비중</span>
+          <span className="text-sm font-medium text-[color:var(--color-text-tertiary)]">
+            링크 준비중
+          </span>
         )}
 
         {/* 새창 아이콘 표시 */}

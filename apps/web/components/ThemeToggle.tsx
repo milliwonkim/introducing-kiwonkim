@@ -2,55 +2,45 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { useThemeToggle } from "@repo/ui";
 
 /**
  * @description 토스 스타일의 라이트/다크 테마 토글 컴포넌트
  * @returns 테마 전환 토글 버튼 UI
  */
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme, resolvedTheme, toggleTheme } = useThemeToggle();
   const [mounted, setMounted] = useState(false);
 
-  // 초기 테마 설정 및 마운트 상태 관리
   useEffect(() => {
     setMounted(true);
-
-    // 로컬 스토리지에서 테마 불러오기 또는 시스템 설정 확인
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-
-    // 저장된 테마가 있으면 사용, 없으면 시스템 설정 따르기
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
-    document.documentElement.setAttribute("data-theme", initialTheme);
-    setTheme(initialTheme as "light" | "dark");
   }, []);
 
-  /**
-   * 테마 전환 함수
-   */
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
-
-  // 서버 렌더링 시 불일치 방지
   if (!mounted) {
     return (
-      <div className="w-[3.25rem] h-[1.75rem] rounded-full bg-gray-200 opacity-80" />
+      <div className="h-[1.75rem] w-[3.25rem] rounded-full bg-[color:var(--color-card-border)]/50" />
     );
   }
+
+  const isLight = resolvedTheme === "light";
+  const labelTheme =
+    theme === "system"
+      ? `시스템 (${isLight ? "라이트" : "다크"})`
+      : theme === "light"
+        ? "라이트"
+        : "다크";
+
+  const thumbPosition = isLight
+    ? "0.4rem"
+    : "calc(100% - 1.45rem - 0.4rem)";
 
   return (
     <motion.button
       type="button"
       className="theme-toggle"
       onClick={toggleTheme}
-      aria-label={`테마 전환: 현재 ${theme === "light" ? "라이트" : "다크"} 모드`}
-      aria-pressed={theme === "dark"}
+      aria-label={`테마 전환: 현재 ${labelTheme} 모드`}
+      aria-pressed={!isLight}
       whileTap={{ scale: 0.95 }}
     >
       <span className="sun-icon">
@@ -93,19 +83,9 @@ export default function ThemeToggle() {
       </span>
       <motion.span
         className="theme-toggle__thumb"
-        initial={{
-          left:
-            theme === "light"
-              ? "0.4rem"
-              : "calc(100% - 1.45rem - 0.4rem)",
-        }}
-        animate={{
-          left:
-            theme === "light"
-              ? "0.4rem"
-              : "calc(100% - 1.45rem - 0.4rem)",
-          transition: { duration: 0.3, ease: [0.18, 0.68, 0.43, 0.99] },
-        }}
+        initial={false}
+        animate={{ left: thumbPosition }}
+        transition={{ duration: 0.3, ease: [0.18, 0.68, 0.43, 0.99] }}
       />
     </motion.button>
   );
