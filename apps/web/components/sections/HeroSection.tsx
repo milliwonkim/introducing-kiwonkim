@@ -15,8 +15,8 @@ interface HeroSectionProps {
 
 const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
   return (
-    <SectionContainer id="hero" className="pt-24 sm:pt-32 pb-12">
-      <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-center">
+    <SectionContainer id="hero" className="pt-20 sm:pt-28 pb-12">
+      <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -116,7 +116,7 @@ const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
           <h2 className="text-sm font-semibold uppercase tracking-[0.32em] text-[color:var(--color-text-tertiary)]">
             Impact Metrics
           </h2>
-          <div className="mt-6 grid grid-cols-2 gap-6">
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {metrics.map((metric) => (
               <div
                 key={metric.label}

@@ -15,7 +15,7 @@ const CaseStudiesSection = ({ studies }: CaseStudiesSectionProps) => {
         description="단순 기능 개발을 넘어, 실제 운영 지표를 개선하고 팀의 작업 방식을 바꾼 사례들입니다."
         align="center"
       />
-      <div className="mt-14 grid gap-8 lg:grid-cols-3">
+      <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {studies.map((study) => (
           <article
             key={study.title}

@@ -20,7 +20,7 @@ const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
             key={`${experience.company}-${experience.period}`}
             className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/60"
           >
-            <div className="flex flex-wrap items-start justify-between gap-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                   {experience.company}
@@ -29,7 +29,7 @@ const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                   {experience.role}
                 </h3>
               </div>
-              <div className="text-sm text-right text-[color:var(--color-text-secondary)]">
+              <div className="text-sm text-left text-[color:var(--color-text-secondary)] sm:text-right">
                 <p className="font-medium text-[color:var(--color-text-primary)]">
                   {experience.period}
                 </p>

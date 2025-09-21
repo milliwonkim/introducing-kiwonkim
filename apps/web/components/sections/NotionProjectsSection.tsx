@@ -33,7 +33,7 @@ export default function NotionProjectsSection() {
       id="projects"
       className="bg-[color:var(--color-card-background)]/35 backdrop-blur-md"
     >
-      <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <SectionHeader
           eyebrow="Notion Projects"
           title="최근 프로젝트 기록"
@@ -41,7 +41,7 @@ export default function NotionProjectsSection() {
         />
         <Link
           href="/projects"
-          className="inline-flex items-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-5 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] shadow-sm transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+          className="inline-flex w-full items-center justify-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-5 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] shadow-sm transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)] sm:w-auto"
         >
           전체 프로젝트 보기
           <svg
@@ -75,7 +75,7 @@ export default function NotionProjectsSection() {
         </Link>
       </div>
 
-      <div className="mt-14 grid gap-6 md:grid-cols-3">
+      <div className="mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
         {isPending &&
           skeletonCards.map((_, index) => (
             <div
