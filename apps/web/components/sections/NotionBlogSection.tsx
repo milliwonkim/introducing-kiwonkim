@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import type { NotionPost } from "@/app/blog/page";
+import BlogArchive from "../blog/BlogArchive";
 import BlogCard from "../blog/BlogCard";
 import SectionContainer from "./SectionContainer";
 import SectionHeader from "./SectionHeader";
@@ -77,73 +78,46 @@ export default function NotionBlogSection() {
           title="기술 블로그 전체 글"
           description="Notion에 발행한 모든 아카이브를 모아두었어요. 원하는 글을 선택해 자세히 살펴보세요."
         >
-          {isPending ? (
-            <div className="flex flex-wrap gap-6">
-              {skeletonCards.map((_, index) => (
-                <div key={`blog-modal-skeleton-${index}`} className="flex flex-1 min-w-[18rem]">
-                  <div className="h-full w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm">
-                    <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
-                    <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
-                    <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
-                    <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
-                    <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
-                    <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : hasError ? (
-            <div className="w-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
-              블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
-            </div>
-          ) : posts.length === 0 ? (
-            <div className="w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
-              게시된 글이 없습니다. Notion에 글을 작성하면 여기에서 확인할 수 있습니다.
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-6">
-              {posts.map((post, index) => (
-                <div key={post.id} className="flex flex-1 min-w-[18rem]">
-                  <BlogCard post={post} index={index} />
-                </div>
-              ))}
-            </div>
-          )}
+          <BlogArchive
+            posts={posts}
+            loading={isPending}
+            errorMessage={hasError ? "블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요." : undefined}
+            containerClassName="w-full"
+          />
         </Modal>
       </div>
 
-      <div className="mt-14 flex flex-wrap gap-6">
+      <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
         {isPending &&
           skeletonCards.map((_, index) => (
-            <div key={`blog-skeleton-${index}`} className="flex flex-1 min-w-[18rem]">
-              <div className="h-full w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm">
-                <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
-                <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
-                <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
-                <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
-                <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
-                <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
-              </div>
+            <div
+              key={`blog-skeleton-${index}`}
+              className="h-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm"
+            >
+              <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
+              <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
+              <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
+              <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
+              <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
+              <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
             </div>
           ))}
 
         {hasError && !isPending && (
-          <div className="w-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
+          <div className="col-span-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
             블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
           </div>
         )}
 
         {!isPending && !hasError && previewPosts.length === 0 && (
-          <div className="w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
+          <div className="col-span-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
             게시된 글이 없습니다. Notion에 글을 작성하면 여기에서 확인할 수 있습니다.
           </div>
         )}
 
         {!isPending && !hasError &&
           previewPosts.map((post, index) => (
-            <div key={post.id} className="flex flex-1 min-w-[18rem]">
-              <BlogCard post={post} index={index} />
-            </div>
+            <BlogCard key={post.id} post={post} index={index} />
           ))}
       </div>
     </SectionContainer>
