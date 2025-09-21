@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import type { NotionPost } from "@/app/blog/page";
@@ -12,7 +11,6 @@ import Modal from "../ui/Modal";
 const skeletonCards = Array.from({ length: 3 });
 
 export default function NotionBlogSection() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data, isPending, error } = useQuery<NotionPost[]>({
     queryKey: ["homepage-notion-posts"],
     queryFn: async () => {
@@ -39,41 +37,79 @@ export default function NotionBlogSection() {
           title="기술 블로그"
           description="Notion에 기록한 글을 불러와 최신 인사이트를 소개합니다."
         />
-        <button
-          type="button"
-          onClick={() => setIsModalOpen(true)}
-          className="inline-flex items-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-5 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] shadow-sm transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+        <Modal
+          trigger={
+            <button
+              type="button"
+              className="inline-flex items-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-5 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] shadow-sm transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+            >
+              전체 기술 블로그 보기
+              <svg
+                className="ml-2 h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.25 3.75H16.25V8.75"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8.75 11.25L16.25 3.75"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8.75 3.75H5.75C4.64543 3.75 3.75 4.64543 3.75 5.75V14.25C3.75 15.3546 4.64543 16.25 5.75 16.25H14.25C15.3546 16.25 16.25 15.3546 16.25 14.25V11.5"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          }
+          title="기술 블로그 전체 글"
+          description="Notion에 발행한 모든 아카이브를 모아두었어요. 원하는 글을 선택해 자세히 살펴보세요."
         >
-          전체 기술 블로그 보기
-          <svg
-            className="ml-2 h-4 w-4"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11.25 3.75H16.25V8.75"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M8.75 11.25L16.25 3.75"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M8.75 3.75H5.75C4.64543 3.75 3.75 4.64543 3.75 5.75V14.25C3.75 15.3546 4.64543 16.25 5.75 16.25H14.25C15.3546 16.25 16.25 15.3546 16.25 14.25V11.5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+          {isPending ? (
+            <div className="flex flex-wrap gap-6">
+              {skeletonCards.map((_, index) => (
+                <div key={`blog-modal-skeleton-${index}`} className="flex flex-1 min-w-[18rem]">
+                  <div className="h-full w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm">
+                    <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
+                    <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
+                    <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
+                    <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
+                    <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
+                    <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : hasError ? (
+            <div className="w-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
+              블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
+              게시된 글이 없습니다. Notion에 글을 작성하면 여기에서 확인할 수 있습니다.
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-6">
+              {posts.map((post, index) => (
+                <div key={post.id} className="flex flex-1 min-w-[18rem]">
+                  <BlogCard post={post} index={index} />
+                </div>
+              ))}
+            </div>
+          )}
+        </Modal>
       </div>
 
       <div className="mt-14 flex flex-wrap gap-6">
@@ -110,46 +146,6 @@ export default function NotionBlogSection() {
             </div>
           ))}
       </div>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="기술 블로그 전체 글"
-        description="Notion에 발행한 모든 아카이브를 모아두었어요. 원하는 글을 선택해 자세히 살펴보세요."
-      >
-        {isPending ? (
-          <div className="flex flex-wrap gap-6">
-            {skeletonCards.map((_, index) => (
-              <div key={`blog-modal-skeleton-${index}`} className="flex flex-1 min-w-[18rem]">
-                <div className="h-full w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm">
-                  <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
-                  <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
-                  <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
-                  <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
-                  <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
-                  <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : hasError ? (
-          <div className="w-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
-            블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
-          </div>
-        ) : posts.length === 0 ? (
-          <div className="w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
-            게시된 글이 없습니다. Notion에 글을 작성하면 여기에서 확인할 수 있습니다.
-          </div>
-        ) : (
-          <div className="flex flex-wrap gap-6">
-            {posts.map((post, index) => (
-              <div key={post.id} className="flex flex-1 min-w-[18rem]">
-                <BlogCard post={post} index={index} />
-              </div>
-            ))}
-          </div>
-        )}
-      </Modal>
     </SectionContainer>
   );
 }
