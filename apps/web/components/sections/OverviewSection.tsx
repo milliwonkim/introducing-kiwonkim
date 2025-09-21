@@ -65,6 +65,17 @@ const notionTagColorMap: Record<
   },
 };
 
+function formatDateLabel(value?: string) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 function getTagStyles(tag: NotionOverviewTag) {
   const fallback = {
     background: "rgba(148, 163, 184, 0.16)",
@@ -296,6 +307,112 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
         </li>
       );
     }
+    case "child_database": {
+      if (!block.database) return null;
+
+      return (
+        <div key={block.id} className="space-y-5">
+          {(block.database.title || block.text) && (
+            <h3 className="text-xl font-semibold text-[color:var(--color-text-primary)]">
+              {block.database.title || block.text}
+            </h3>
+          )}
+          {block.database.entries.length === 0 ? (
+            <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/70 px-5 py-6 text-sm text-[color:var(--color-text-secondary)]">
+              연결된 데이터베이스 항목이 없습니다. 노션에서 항목을 추가하면 자동으로 반영됩니다.
+            </div>
+          ) : (
+            <div className="space-y-5">
+              {block.database.entries.map((entry) => {
+                const entryUpdatedLabel =
+                  formatDateLabel(entry.lastEditedTime ?? entry.createdTime);
+                const visibleProperties = entry.properties;
+
+                return (
+                  <article
+                    key={entry.id}
+                    className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/75 px-5 py-5 shadow-[0_18px_42px_var(--color-card-shadow)]/45"
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h4 className="text-lg font-semibold text-[color:var(--color-text-primary)]">
+                          {entry.title || "제목 없음"}
+                        </h4>
+                        {entryUpdatedLabel && (
+                          <span className="text-xs text-[color:var(--color-text-tertiary)]">
+                            업데이트: {entryUpdatedLabel}
+                          </span>
+                        )}
+                      </div>
+                      {entry.url && (
+                        <a
+                          href={entry.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-3 py-1.5 text-xs font-semibold text-[color:var(--color-text-primary)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+                        >
+                          노션에서 보기
+                          <svg
+                            className="h-3.5 w-3.5"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.25 3.75H16.25V8.75"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M8.75 11.25L16.25 3.75"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M8.75 3.75H5.75C4.64543 3.75 3.75 4.64543 3.75 5.75V14.25C3.75 15.3546 4.64543 16.25 5.75 16.25H14.25C15.3546 16.25 16.25 15.3546 16.25 14.25V11.5"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+
+                    {visibleProperties.length > 0 ? (
+                      <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+                        {visibleProperties.map((property) => (
+                          <div
+                            key={`${entry.id}-${property.id}`}
+                            className="rounded-xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 px-4 py-3"
+                          >
+                            <dt className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)]">
+                              {property.name}
+                            </dt>
+                            <dd className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
+                              {renderPropertyValue(property)}
+                            </dd>
+                          </div>
+                        ))}
+                      </dl>
+                    ) : (
+                      <p className="mt-4 text-sm text-[color:var(--color-text-tertiary)]">
+                        표시할 속성이 없습니다.
+                      </p>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      );
+    }
     default:
       return block.text ? (
         <p
@@ -397,14 +514,7 @@ export default function OverviewSection() {
   }, [data]);
 
   const lastUpdatedLabel = useMemo(() => {
-    if (!data?.lastEditedTime) return "";
-    const date = new Date(data.lastEditedTime);
-    if (Number.isNaN(date.getTime())) return "";
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+    return formatDateLabel(data?.lastEditedTime);
   }, [data?.lastEditedTime]);
 
   return (

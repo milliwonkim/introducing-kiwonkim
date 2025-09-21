@@ -10,10 +10,13 @@ interface BlogListProps {
   loading?: boolean;
 }
 
+const sectionBaseClasses =
+  "py-20 min-h-[calc(100vh-var(--header-height)-10rem)] bg-[var(--color-background)]";
+
 function BlogListSkeleton() {
   return (
     <Layout>
-      <section className="py-20 min-h-[calc(100vh-var(--header-height))] bg-[var(--color-background)]">
+      <section className={sectionBaseClasses}>
         <div className="container mx-auto px-6 md:px-8">
           <motion.div
             className="max-w-3xl mx-auto text-center mb-16"
@@ -52,7 +55,7 @@ const BlogList: React.FC<BlogListProps> = ({ posts, loading }) => {
   if (!posts.length) {
     return (
       <Layout>
-        <section className="py-20 min-h-[calc(100vh-var(--header-height))] bg-[var(--color-background)]">
+        <section className={sectionBaseClasses}>
           <div className="container mx-auto px-6 md:px-8">
             <motion.div
               className="max-w-3xl mx-auto text-center mb-16"
@@ -97,7 +100,7 @@ const BlogList: React.FC<BlogListProps> = ({ posts, loading }) => {
 
   return (
     <Layout>
-      <section className="py-20 min-h-[calc(100vh-var(--header-height))] bg-[var(--color-background)]">
+      <section className={sectionBaseClasses}>
         <div className="container mx-auto px-6 md:px-8">
           <motion.div
             className="max-w-3xl mx-auto text-center mb-16"
