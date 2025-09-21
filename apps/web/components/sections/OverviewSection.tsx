@@ -7,14 +7,156 @@ import { useQuery } from "@tanstack/react-query";
 
 import type {
   NotionOverviewBlock,
+  NotionOverviewProperty,
   NotionOverviewResponse,
+  NotionOverviewTag,
 } from "@/app/api/overview/route";
 import SectionContainer from "./SectionContainer";
 import SectionHeader from "./SectionHeader";
 
 const skeletonParagraphs = Array.from({ length: 4 });
+const propertySkeletons = Array.from({ length: 6 });
 
 type ListBlockType = "bulleted_list_item" | "numbered_list_item";
+
+const notionTagColorMap: Record<
+  NonNullable<NotionOverviewTag["color"]>,
+  { background: string; color: string }
+> = {
+  default: {
+    background: "rgba(148, 163, 184, 0.18)",
+    color: "var(--color-text-secondary)",
+  },
+  gray: {
+    background: "rgba(148, 163, 184, 0.18)",
+    color: "rgb(71, 85, 105)",
+  },
+  brown: {
+    background: "rgba(120, 53, 15, 0.18)",
+    color: "rgb(88, 28, 13)",
+  },
+  orange: {
+    background: "rgba(234, 88, 12, 0.18)",
+    color: "rgb(154, 52, 18)",
+  },
+  yellow: {
+    background: "rgba(202, 138, 4, 0.18)",
+    color: "rgb(133, 77, 14)",
+  },
+  green: {
+    background: "rgba(22, 163, 74, 0.2)",
+    color: "rgb(22, 101, 52)",
+  },
+  blue: {
+    background: "rgba(37, 99, 235, 0.18)",
+    color: "rgb(37, 99, 235)",
+  },
+  purple: {
+    background: "rgba(168, 85, 247, 0.18)",
+    color: "rgb(126, 34, 206)",
+  },
+  pink: {
+    background: "rgba(236, 72, 153, 0.18)",
+    color: "rgb(190, 24, 93)",
+  },
+  red: {
+    background: "rgba(239, 68, 68, 0.18)",
+    color: "rgb(185, 28, 28)",
+  },
+};
+
+function getTagStyles(tag: NotionOverviewTag) {
+  const fallback = {
+    background: "rgba(148, 163, 184, 0.16)",
+    color: "var(--color-text-secondary)",
+  };
+  if (!tag.color) return fallback;
+  return notionTagColorMap[tag.color] ?? fallback;
+}
+
+function renderPropertyValue(property: NotionOverviewProperty): ReactNode {
+  if (property.tags && property.tags.length > 0) {
+    return (
+      <div className="flex flex-wrap gap-2">
+        {property.tags.map((tag) => {
+          const style = getTagStyles(tag);
+          return (
+            <span
+              key={`${property.id}-${tag.id}`}
+              className="rounded-full border border-transparent px-3 py-1 text-xs font-medium"
+              style={{
+                background: style.background,
+                color: style.color,
+              }}
+            >
+              {tag.name}
+            </span>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (property.people && property.people.length > 0) {
+    return (
+      <div className="flex flex-wrap gap-2 text-sm text-[color:var(--color-text-secondary)]">
+        {property.people.map((person) => (
+          <span key={`${property.id}-${person.id}`}>{person.name}</span>
+        ))}
+      </div>
+    );
+  }
+
+  if (property.files && property.files.length > 0) {
+    return (
+      <ul className="space-y-2 text-sm">
+        {property.files.map((file) => (
+          <li key={`${property.id}-${file.url}`}>
+            <a
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[color:var(--color-primary)] underline-offset-4 hover:underline"
+            >
+              {file.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (property.type === "url" && property.value) {
+    return (
+      <a
+        href={property.value}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[color:var(--color-primary)] underline-offset-4 hover:underline"
+      >
+        {property.value}
+      </a>
+    );
+  }
+
+  if (property.value) {
+    return (
+      <span className="text-sm text-[color:var(--color-text-secondary)]">
+        {property.value}
+      </span>
+    );
+  }
+
+  if (property.isEmpty) {
+    return (
+      <span className="text-sm italic text-[color:var(--color-text-tertiary)]">
+        비어 있음
+      </span>
+    );
+  }
+
+  return null;
+}
 
 function renderBlock(block: NotionOverviewBlock): ReactNode {
   switch (block.type) {
@@ -234,6 +376,26 @@ export default function OverviewSection() {
     [data]
   );
 
+  const renderedProperties = useMemo(() => {
+    if (!data?.properties?.length) {
+      return [];
+    }
+
+    return data.properties.map((property) => (
+      <div
+        key={property.id}
+        className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/70 px-4 py-3"
+      >
+        <dt className="text-xs font-medium uppercase tracking-[0.2em] text-[color:var(--color-text-tertiary)]">
+          {property.name}
+        </dt>
+        <dd className="mt-2 text-[color:var(--color-text-primary)]">
+          {renderPropertyValue(property)}
+        </dd>
+      </div>
+    ));
+  }, [data]);
+
   const lastUpdatedLabel = useMemo(() => {
     if (!data?.lastEditedTime) return "";
     const date = new Date(data.lastEditedTime);
@@ -301,15 +463,29 @@ export default function OverviewSection() {
 
       <div className="mt-10 rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/40">
         {isPending && (
-          <div className="space-y-6">
-            <div className="h-5 w-40 rounded bg-[color:var(--color-border-normal)]/30" />
-            {skeletonParagraphs.map((_, index) => (
-              <div key={`overview-skeleton-${index}`} className="space-y-2">
-                <div className="h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
-                <div className="h-4 w-5/6 rounded bg-[color:var(--color-border-normal)]/20" />
-                <div className="h-4 w-4/6 rounded bg-[color:var(--color-border-normal)]/15" />
-              </div>
-            ))}
+          <div className="space-y-10">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {propertySkeletons.map((_, index) => (
+                <div
+                  key={`overview-property-skeleton-${index}`}
+                  className="h-24 rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-border-normal)]/10 px-4 py-3"
+                >
+                  <div className="h-3 w-24 rounded bg-[color:var(--color-border-normal)]/40" />
+                  <div className="mt-3 h-4 w-32 rounded bg-[color:var(--color-border-normal)]/30" />
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-6">
+              <div className="h-5 w-40 rounded bg-[color:var(--color-border-normal)]/30" />
+              {skeletonParagraphs.map((_, index) => (
+                <div key={`overview-skeleton-${index}`} className="space-y-2">
+                  <div className="h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
+                  <div className="h-4 w-5/6 rounded bg-[color:var(--color-border-normal)]/20" />
+                  <div className="h-4 w-4/6 rounded bg-[color:var(--color-border-normal)]/15" />
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -319,15 +495,24 @@ export default function OverviewSection() {
           </div>
         )}
 
-        {!isPending && !error && data && renderedBlocks.length === 0 && (
+        {!isPending && !error && data &&
+          renderedProperties.length === 0 &&
+          renderedBlocks.length === 0 && (
           <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 text-sm text-[color:var(--color-text-secondary)]">
             표시할 자기소개 블록이 없습니다. 노션 페이지에 내용을 추가하면 자동으로 반영됩니다.
           </div>
         )}
 
-        {!isPending && !error && renderedBlocks.length > 0 && (
-          <div className="space-y-6">
-            {renderedBlocks}
+        {!isPending && !error && (renderedProperties.length > 0 || renderedBlocks.length > 0) && (
+          <div className="space-y-8">
+            {renderedProperties.length > 0 && (
+              <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {renderedProperties}
+              </dl>
+            )}
+            {renderedBlocks.length > 0 && (
+              <div className="space-y-6">{renderedBlocks}</div>
+            )}
           </div>
         )}
       </div>

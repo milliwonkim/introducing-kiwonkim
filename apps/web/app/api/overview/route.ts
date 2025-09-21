@@ -13,10 +13,39 @@ export interface NotionOverviewBlock {
   children?: NotionOverviewBlock[];
 }
 
+export interface NotionOverviewTag {
+  id: string;
+  name: string;
+  color?: string;
+}
+
+export interface NotionOverviewPerson {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+}
+
+export interface NotionOverviewFile {
+  name: string;
+  url: string;
+}
+
+export interface NotionOverviewProperty {
+  id: string;
+  name: string;
+  type: string;
+  value: string;
+  isEmpty: boolean;
+  tags?: NotionOverviewTag[];
+  people?: NotionOverviewPerson[];
+  files?: NotionOverviewFile[];
+}
+
 export interface NotionOverviewResponse {
   title: string;
   lastEditedTime: string;
   url: string;
+  properties: NotionOverviewProperty[];
   blocks: NotionOverviewBlock[];
 }
 
@@ -24,17 +53,229 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
 const FALLBACK_OVERVIEW_PAGE_ID = "2749a57291028051aafcf7982552da08";
 
-function normalizeNotionId(id: string): string {
-  const cleaned = id.replace(/-/g, "").replace(/\?.*/, "");
-  if (cleaned.length !== 32) return id;
-  return `${cleaned.slice(0, 8)}-${cleaned.slice(8, 12)}-${cleaned.slice(12, 16)}-${cleaned.slice(16, 20)}-${cleaned.slice(20)}`;
+function normalizeNotionId(rawId: string): string {
+  const trimmed = rawId.trim();
+  if (!trimmed) return "";
+
+  const matches = trimmed
+    .replace(/-/g, "")
+    .match(/[0-9a-f]{32}/i);
+
+  if (!matches) {
+    return "";
+  }
+
+  const id = matches[0].toLowerCase();
+
+  return `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
 }
 
 function extractPlainText(property: any): string {
   if (!property) return "";
-  const richText = property.rich_text;
+  const richText = property.rich_text ?? property.title;
   if (!Array.isArray(richText)) return "";
   return richText.map((text: any) => text.plain_text).join("").trim();
+}
+
+function formatDate(value?: string | null): string {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+  return date.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
+function formatDateRange(date: any): string {
+  if (!date) return "";
+  const start = formatDate(date.start);
+  const end = formatDate(date.end);
+  if (start && end) {
+    return `${start} ~ ${end}`;
+  }
+  return start || end;
+}
+
+function transformProperty(
+  name: string,
+  property: any
+): NotionOverviewProperty | null {
+  if (!property || !property.type || property.type === "title") {
+    return null;
+  }
+
+  const base: NotionOverviewProperty = {
+    id: property.id,
+    name,
+    type: property.type,
+    value: "",
+    isEmpty: true,
+  };
+
+  switch (property.type) {
+    case "rich_text":
+      base.value = extractPlainText(property);
+      break;
+    case "select":
+      base.value = property.select?.name?.trim() ?? "";
+      if (property.select) {
+        base.tags = [
+          {
+            id: property.select.id,
+            name: property.select.name,
+            color: property.select.color,
+          },
+        ];
+      }
+      break;
+    case "multi_select":
+      base.tags = (property.multi_select ?? []).map((option: any) => ({
+        id: option.id,
+        name: option.name,
+        color: option.color,
+      }));
+      base.value = base.tags.map((tag) => tag.name).join(", ");
+      break;
+    case "status":
+      base.value = property.status?.name?.trim() ?? "";
+      if (property.status) {
+        base.tags = [
+          {
+            id: property.status.id,
+            name: property.status.name,
+            color: property.status.color,
+          },
+        ];
+      }
+      break;
+    case "date":
+      base.value = formatDateRange(property.date);
+      break;
+    case "checkbox":
+      base.value = property.checkbox ? "예" : "아니오";
+      break;
+    case "number":
+      base.value =
+        typeof property.number === "number" ? String(property.number) : "";
+      break;
+    case "url":
+      base.value = property.url?.trim() ?? "";
+      break;
+    case "email":
+      base.value = property.email?.trim() ?? "";
+      break;
+    case "phone_number":
+      base.value = property.phone_number?.trim() ?? "";
+      break;
+    case "people":
+      base.people = (property.people ?? []).map((person: any) => ({
+        id: person.id,
+        name: person.name ?? person?.person?.email ?? "이름 없음",
+        avatarUrl: person.avatar_url ?? undefined,
+      }));
+      base.value = base.people.map((person) => person.name).join(", ");
+      break;
+    case "files":
+      base.files = (property.files ?? []).map((file: any) => {
+        const url =
+          file.file?.url ?? file.external?.url ?? file.name ?? "";
+        return {
+          name: file.name ?? url,
+          url,
+        };
+      });
+      base.value = base.files.map((file) => file.name).join(", ");
+      break;
+    case "relation":
+      base.value = (property.relation ?? [])
+        .map((relation: any) => relation.id)
+        .join(", ");
+      break;
+    case "formula":
+      switch (property.formula?.type) {
+        case "string":
+          base.value = property.formula.string ?? "";
+          break;
+        case "number":
+          base.value =
+            typeof property.formula.number === "number"
+              ? String(property.formula.number)
+              : "";
+          break;
+        case "boolean":
+          base.value = property.formula.boolean ? "예" : "아니오";
+          break;
+        case "date":
+          base.value = formatDateRange(property.formula.date);
+          break;
+        default:
+          base.value = "";
+      }
+      break;
+    case "rollup":
+      if (property.rollup?.type === "array") {
+        const arrayValues = property.rollup.array
+          .map((item: any) => {
+            if (item.type === "title") {
+              return extractPlainText(item);
+            }
+            if (item.type === "rich_text") {
+              return extractPlainText(item);
+            }
+            if (item.type === "people") {
+              return (item.people ?? [])
+                .map((person: any) => person.name ?? "")
+                .filter(Boolean)
+                .join(", ");
+            }
+            if (item[item.type]) {
+              return String(item[item.type]);
+            }
+            return "";
+          })
+          .filter((value: string) => value.trim().length > 0);
+        base.value = arrayValues.join(", ");
+      } else if (property.rollup?.type === "number") {
+        base.value =
+          typeof property.rollup.number === "number"
+            ? String(property.rollup.number)
+            : "";
+      } else if (property.rollup?.type === "date") {
+        base.value = formatDateRange(property.rollup.date);
+      } else if (property.rollup?.type === "incomplete") {
+        base.value = "";
+      }
+      break;
+    default:
+      if (property[property.type]) {
+        base.value = String(property[property.type]);
+      }
+      break;
+  }
+
+  base.isEmpty =
+    !base.value.trim() &&
+    (!base.tags || base.tags.length === 0) &&
+    (!base.people || base.people.length === 0) &&
+    (!base.files || base.files.length === 0);
+
+  return base;
+}
+
+function extractProperties(
+  properties: Record<string, any> | undefined
+): NotionOverviewProperty[] {
+  if (!properties) return [];
+
+  const entries = Object.entries(properties)
+    .map(([name, property]) => transformProperty(name, property))
+    .filter((property): property is NotionOverviewProperty => Boolean(property));
+
+  return entries;
 }
 
 async function fetchBlockChildren(blockId: string): Promise<any[]> {
@@ -128,13 +369,16 @@ export async function GET() {
     const pageId = normalizeNotionId(rawPageId);
 
     if (!pageId) {
-      throw new Error("NOTION_OVERVIEW_PAGE_ID is not set");
+      throw new Error(
+        "NOTION_OVERVIEW_PAGE_ID is not set or is invalid. Provide a Notion page ID or share URL."
+      );
     }
 
     const page = (await notion.pages.retrieve({ page_id: pageId })) as any;
     const title = extractTitle(page.properties ?? {});
     const url = page.public_url || page.url || "";
     const lastEditedTime = page.last_edited_time ?? "";
+    const properties = extractProperties(page.properties ?? {});
 
     const rootBlocks = await fetchBlockChildren(pageId);
     const blocks = await transformBlocks(rootBlocks);
@@ -143,6 +387,7 @@ export async function GET() {
       title,
       url,
       lastEditedTime,
+      properties,
       blocks,
     };
 
