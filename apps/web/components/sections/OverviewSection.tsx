@@ -451,18 +451,20 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                     )}
 
                     {additionalProperties.length > 0 ? (
-                      <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <dl className="mt-4 flex flex-wrap gap-3">
                         {additionalProperties.map((property) => (
                           <div
                             key={`${entry.id}-${property.id}`}
-                            className="rounded-xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 px-4 py-3"
+                            className="flex min-w-[16rem] flex-1 rounded-xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 px-4 py-3"
                           >
-                            <dt className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)]">
-                              {property.name}
-                            </dt>
-                            <dd className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
-                              {renderPropertyValue(property)}
-                            </dd>
+                            <div>
+                              <dt className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)]">
+                                {property.name}
+                              </dt>
+                              <dd className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
+                                {renderPropertyValue(property)}
+                              </dd>
+                            </div>
                           </div>
                         ))}
                       </dl>
@@ -578,14 +580,16 @@ export default function OverviewSection() {
     return data.properties.map((property) => (
       <div
         key={property.id}
-        className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/70 px-4 py-3"
+        className="flex min-w-[16rem] flex-1 rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/70 px-4 py-3"
       >
-        <dt className="text-xs font-medium uppercase tracking-[0.2em] text-[color:var(--color-text-tertiary)]">
-          {property.name}
-        </dt>
-        <dd className="mt-2 text-[color:var(--color-text-primary)]">
-          {renderPropertyValue(property)}
-        </dd>
+        <div>
+          <dt className="text-xs font-medium uppercase tracking-[0.2em] text-[color:var(--color-text-tertiary)]">
+            {property.name}
+          </dt>
+          <dd className="mt-2 text-[color:var(--color-text-primary)]">
+            {renderPropertyValue(property)}
+          </dd>
+        </div>
       </div>
     ));
   }, [data]);
@@ -651,14 +655,16 @@ export default function OverviewSection() {
       <div className="mt-10 rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/40">
         {isPending && (
           <div className="space-y-10">
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="flex flex-wrap gap-4">
               {propertySkeletons.map((_, index) => (
                 <div
                   key={`overview-property-skeleton-${index}`}
-                  className="h-24 rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-border-normal)]/10 px-4 py-3"
+                  className="flex min-w-[16rem] flex-1 rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-border-normal)]/10 px-4 py-3"
                 >
-                  <div className="h-3 w-24 rounded bg-[color:var(--color-border-normal)]/40" />
-                  <div className="mt-3 h-4 w-32 rounded bg-[color:var(--color-border-normal)]/30" />
+                  <div className="w-full">
+                    <div className="h-3 w-24 rounded bg-[color:var(--color-border-normal)]/40" />
+                    <div className="mt-3 h-4 w-32 rounded bg-[color:var(--color-border-normal)]/30" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -693,7 +699,7 @@ export default function OverviewSection() {
         {!isPending && !error && (renderedProperties.length > 0 || renderedBlocks.length > 0) && (
           <div className="space-y-8">
             {renderedProperties.length > 0 && (
-              <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <dl className="flex flex-wrap gap-4">
                 {renderedProperties}
               </dl>
             )}

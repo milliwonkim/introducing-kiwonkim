@@ -1,16 +1,20 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import type { NotionPost } from "@/app/blog/page";
 import BlogCard from "../blog/BlogCard";
 import SectionContainer from "./SectionContainer";
 import SectionHeader from "./SectionHeader";
+import Modal from "../ui/Modal";
+import { getCategoryColor } from "@/utils/categoryColors";
 
 const skeletonCards = Array.from({ length: 3 });
 
 export default function NotionBlogSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { data, isPending, error } = useQuery<NotionPost[]>({
     queryKey: ["homepage-notion-posts"],
     queryFn: async () => {
@@ -22,7 +26,23 @@ export default function NotionBlogSection() {
     },
   });
 
-  const posts = data?.slice(0, 3) ?? [];
+  const posts = useMemo(() => data ?? [], [data]);
+  const previewPosts = posts.slice(0, 3);
+  const hasError = Boolean(error);
+  const categories = useMemo(
+    () =>
+      Array.from(new Set(posts.map((post) => post.category).filter(Boolean))),
+    [posts]
+  );
+  const filteredPosts = selectedCategory
+    ? posts.filter((post) => post.category === selectedCategory)
+    : posts;
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setSelectedCategory(null);
+    }
+  }, [isModalOpen]);
 
   return (
     <SectionContainer
@@ -35,11 +55,12 @@ export default function NotionBlogSection() {
           title="기술 블로그"
           description="Notion에 기록한 글을 불러와 최신 인사이트를 소개합니다."
         />
-        <Link
-          href="/blog"
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
           className="inline-flex items-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-5 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] shadow-sm transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
         >
-          블로그 전체 보기
+          전체 기술 블로그 보기
           <svg
             className="ml-2 h-4 w-4"
             viewBox="0 0 20 20"
@@ -68,42 +89,124 @@ export default function NotionBlogSection() {
               strokeLinejoin="round"
             />
           </svg>
-        </Link>
+        </button>
       </div>
 
-      <div className="mt-14 grid gap-6 md:grid-cols-3">
+      <div className="mt-14 flex flex-wrap gap-6">
         {isPending &&
           skeletonCards.map((_, index) => (
-            <div
-              key={`blog-skeleton-${index}`}
-              className="h-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm"
-            >
-              <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
-              <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
-              <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
-              <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
-              <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
-              <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
+            <div key={`blog-skeleton-${index}`} className="flex flex-1 min-w-[18rem]">
+              <div className="h-full w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm">
+                <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
+                <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
+                <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
+                <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
+                <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
+                <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
+              </div>
             </div>
           ))}
 
-        {error && !isPending && (
-          <div className="col-span-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
+        {hasError && !isPending && (
+          <div className="w-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
             블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
           </div>
         )}
 
-        {!isPending && !error && posts.length === 0 && (
-          <div className="col-span-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
+        {!isPending && !hasError && previewPosts.length === 0 && (
+          <div className="w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
             게시된 글이 없습니다. Notion에 글을 작성하면 여기에서 확인할 수 있습니다.
           </div>
         )}
 
-        {!isPending && !error &&
-          posts.map((post, index) => (
-            <BlogCard key={post.id} post={post} index={index} />
+        {!isPending && !hasError &&
+          previewPosts.map((post, index) => (
+            <div key={post.id} className="flex flex-1 min-w-[18rem]">
+              <BlogCard post={post} index={index} />
+            </div>
           ))}
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="기술 블로그 전체 글"
+        description="Notion에 발행한 모든 아카이브를 모아두었어요. 원하는 글을 선택해 자세히 살펴보세요."
+      >
+        {isPending ? (
+          <div className="flex flex-wrap gap-6">
+            {skeletonCards.map((_, index) => (
+              <div key={`blog-modal-skeleton-${index}`} className="flex flex-1 min-w-[18rem]">
+                <div className="h-full w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm">
+                  <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
+                  <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
+                  <div className="mb-2 h-4 w-2/3 rounded bg-[color:var(--color-border-normal)]/25" />
+                  <div className="mb-2 h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
+                  <div className="mb-2 h-4 w-4/5 rounded bg-[color:var(--color-border-normal)]/20" />
+                  <div className="h-10 w-28 rounded-full bg-[color:var(--color-border-normal)]/20" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : hasError ? (
+          <div className="w-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
+            블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
+            게시된 글이 없습니다. Notion에 글을 작성하면 여기에서 확인할 수 있습니다.
+          </div>
+        ) : (
+          <div className="flex flex-col gap-8">
+            {posts.length > 0 && (
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategory(null)}
+                  className={`border px-4 py-2 text-sm font-semibold rounded-full transition-colors ${
+                    selectedCategory === null
+                      ? "border-[color:var(--color-primary)] bg-[color:var(--color-primary)] text-white shadow-sm"
+                      : "border-[color:var(--color-border-light)] bg-[color:var(--color-background)] text-[color:var(--color-text-primary)] hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+                  }`}
+                >
+                  전체
+                </button>
+                {categories.map((category) => {
+                  const color = getCategoryColor(category);
+                  const isActive = selectedCategory === category;
+                  return (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => setSelectedCategory(category)}
+                      className={`border px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                        isActive
+                          ? `${color.bg} ${color.text} ${color.border} shadow-sm`
+                          : "border-[color:var(--color-border-light)] bg-[color:var(--color-background)] text-[color:var(--color-text-primary)] hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-6">
+              {filteredPosts.length === 0 ? (
+                <div className="w-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
+                  선택한 카테고리에 해당하는 글이 없습니다.
+                </div>
+              ) : (
+                filteredPosts.map((post, index) => (
+                  <div key={post.id} className="flex flex-1 min-w-[18rem]">
+                    <BlogCard post={post} index={index} />
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+      </Modal>
     </SectionContainer>
   );
 }

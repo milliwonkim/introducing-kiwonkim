@@ -25,8 +25,8 @@ const ContactSection = ({
         description="제품 목표와 팀 상황을 알려주시면, 가장 빠르게 임팩트를 낼 수 있는 전략과 실행 계획을 제안드릴게요."
         align="center"
       />
-      <div className="mt-14 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/50">
+      <div className="mt-14 flex flex-col gap-8 lg:flex-row">
+        <div className="flex w-full flex-col rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/50 lg:basis-[60%]">
           <h3 className="text-2xl font-semibold text-[color:var(--color-text-primary)]">
             전략부터 실행까지 함께하는 파트너가 필요하신가요?
           </h3>
@@ -74,7 +74,7 @@ const ContactSection = ({
             </a>
           </div>
         </div>
-        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/75 p-8">
+        <div className="flex w-full flex-col rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/75 p-8 lg:basis-[40%]">
           <dl className="space-y-5 text-sm text-[color:var(--color-text-secondary)]">
             <div>
               <dt className="text-xs uppercase tracking-[0.3em] text-[color:var(--color-text-tertiary)]">
