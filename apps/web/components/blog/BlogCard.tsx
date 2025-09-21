@@ -36,11 +36,11 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
                 {post.category}
               </span>
             )}
-            <div className="mb-3 flex items-start justify-between gap-2">
-              <h2 className="mr-2 flex-1 text-lg font-bold leading-tight text-[color:var(--color-text-primary)] transition-colors group-hover:text-[color:var(--color-primary)]">
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <h2 className="text-lg font-bold leading-tight text-[color:var(--color-text-primary)] transition-colors group-hover:text-[color:var(--color-primary)] sm:flex-1 sm:min-w-0">
                 {post.title}
               </h2>
-              <span className="whitespace-nowrap rounded-full bg-[color:var(--color-primary)]/12 px-3 py-1 text-xs font-medium text-[color:var(--color-primary)]">
+              <span className="inline-flex w-fit rounded-full bg-[color:var(--color-primary)]/12 px-3 py-1 text-xs font-medium text-[color:var(--color-primary)] sm:ml-2 sm:self-start sm:whitespace-nowrap">
                 {new Date(post.createdAt).toLocaleDateString("ko-KR", {
                   year: "numeric",
                   month: "short",
