@@ -14,11 +14,11 @@ const ExpertiseSection = ({ pillars }: ExpertiseSectionProps) => {
         title="스케일업을 위한 프론트엔드 역량"
         description="프론트엔드 아키텍처부터 데이터 기반 실험, 협업 체계 구축까지 제품 팀이 필요로 하는 전 과정을 지원합니다."
       />
-      <div className="mt-12 grid gap-6 md:grid-cols-2">
+      <div className="mt-10 sm:mt-12 grid gap-5 sm:gap-6 md:grid-cols-2">
         {pillars.map((pillar) => (
           <article
             key={pillar.title}
-            className="h-full rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/85 p-6 shadow-md"
+            className="h-full rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/85 p-5 sm:p-6 shadow-md"
           >
             <h3 className="text-xl font-semibold text-[color:var(--color-text-primary)]">
               {pillar.title}

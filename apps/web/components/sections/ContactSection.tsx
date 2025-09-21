@@ -25,18 +25,18 @@ const ContactSection = ({
         description="제품 목표와 팀 상황을 알려주시면, 가장 빠르게 임팩트를 낼 수 있는 전략과 실행 계획을 제안드릴게요."
         align="center"
       />
-      <div className="mt-14 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/50">
+      <div className="mt-10 sm:mt-14 grid gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-6 sm:p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/50">
           <h3 className="text-2xl font-semibold text-[color:var(--color-text-primary)]">
             전략부터 실행까지 함께하는 파트너가 필요하신가요?
           </h3>
-          <p className="mt-4 text-sm text-[color:var(--color-text-secondary)] leading-relaxed">
+          <p className="mt-3 sm:mt-4 text-sm text-[color:var(--color-text-secondary)] leading-relaxed">
             제품 로드맵 검토, 디자인 시스템 구축, 운영툴 고도화 등 어떤 주제든 편하게 이야기를 나눠요. 팀의 현재 페인포인트를 들으며 가장 임팩트가 큰 첫 번째 실험을 찾아드립니다.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-6 sm:mt-8 flex flex-wrap gap-3">
             <button
               onClick={onDownloadResume}
-              className="inline-flex items-center gap-2 rounded-full bg-[color:var(--color-primary)] px-5 py-3 text-sm font-semibold text-white shadow-md shadow-[color:var(--color-primary)]/35 transition-transform duration-200 hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-full bg-[color:var(--color-primary)] px-5 py-2.5 sm:py-3 text-sm font-semibold text-white shadow-md shadow-[color:var(--color-primary)]/35 transition-transform duration-200 hover:scale-[1.02]"
             >
               이력서 PDF 받기
               <svg
@@ -56,7 +56,7 @@ const ContactSection = ({
             </button>
             <a
               href={`mailto:${email}`}
-              className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-normal)] px-5 py-3 text-sm font-semibold text-[color:var(--color-text-primary)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+              className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-normal)] px-5 py-2.5 sm:py-3 text-sm font-semibold text-[color:var(--color-text-primary)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
             >
               메일 보내기
               <svg
@@ -74,8 +74,8 @@ const ContactSection = ({
             </a>
           </div>
         </div>
-        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/75 p-8">
-          <dl className="space-y-5 text-sm text-[color:var(--color-text-secondary)]">
+        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/75 p-6 sm:p-8">
+          <dl className="space-y-4 sm:space-y-5 text-sm text-[color:var(--color-text-secondary)]">
             <div>
               <dt className="text-xs uppercase tracking-[0.3em] text-[color:var(--color-text-tertiary)]">
                 Availability
@@ -93,14 +93,14 @@ const ContactSection = ({
               </dd>
             </div>
           </dl>
-          <div className="mt-6 space-y-4">
+          <div className="mt-5 sm:mt-6 space-y-3 sm:space-y-4">
             {contactChannels.map((channel) => (
               <a
                 key={channel.label}
                 href={channel.href}
                 target={channel.href.startsWith("http") ? "_blank" : undefined}
                 rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="flex items-center justify-between rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 px-5 py-4 text-sm font-medium text-[color:var(--color-text-primary)] transition-colors hover:border-[color:var(--color-primary)]"
+                className="flex items-center justify-between rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 px-4 py-3 sm:px-5 sm:py-4 text-sm font-medium text-[color:var(--color-text-primary)] transition-colors hover:border-[color:var(--color-primary)]"
               >
                 <span>{channel.label}</span>
                 <span className="text-[color:var(--color-text-secondary)]">{channel.value}</span>

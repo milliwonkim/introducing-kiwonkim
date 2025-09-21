@@ -12,7 +12,7 @@ const SectionContainer = ({ id, className, children }: SectionContainerProps) =>
     <section
       id={id}
       className={clsx(
-        "relative py-20 sm:py-24 lg:py-28",
+        "relative py-12 sm:py-20 lg:py-28",
         "scroll-mt-[calc(var(--header-height,4.5rem)+2rem)]",
         className
       )}

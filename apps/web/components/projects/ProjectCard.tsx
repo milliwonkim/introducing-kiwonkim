@@ -24,7 +24,7 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   return (
     <motion.div
       key={project.id}
-      className={`group relative bg-[var(--color-card-background)] border border-[var(--color-card-border)] rounded-2xl shadow-[0_2px_8px_0_rgba(59,130,246,0.06)] hover:shadow-[0_4px_16px_0_rgba(59,130,246,0.13)] transition-all duration-300 p-7 flex flex-col gap-3 items-start hover:-translate-y-1 hover:scale-[1.02] overflow-hidden ${
+      className={`group relative bg-[var(--color-card-background)] border border-[var(--color-card-border)] rounded-2xl shadow-[0_2px_8px_0_rgba(59,130,246,0.06)] hover:shadow-[0_4px_16px_0_rgba(59,130,246,0.13)] transition-all duration-300 p-6 sm:p-7 flex flex-col gap-3 items-start hover:-translate-y-1 hover:scale-[1.02] overflow-hidden ${
         project.url ? "cursor-pointer" : "cursor-default"
       }`}
       initial={{ opacity: 0, y: 20 }}

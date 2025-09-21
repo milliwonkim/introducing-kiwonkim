@@ -15,13 +15,13 @@ interface HeroSectionProps {
 
 const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
   return (
-    <SectionContainer id="hero" className="pt-20 sm:pt-28 pb-12">
-      <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 items-center">
+    <SectionContainer id="hero" className="pt-16 sm:pt-28 pb-10 sm:pb-12">
+      <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="space-y-8"
+          className="space-y-6 sm:space-y-8"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-normal)] bg-[color:var(--color-card-background)] px-4 py-1.5 text-sm font-medium text-[color:var(--color-text-secondary)]">
             {hero.badge}
@@ -35,7 +35,7 @@ const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-5 shadow-sm">
+            <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-4 sm:p-5 shadow-sm">
               <p className="text-xs uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                 현재 집중하고 있는 일
               </p>
@@ -43,7 +43,7 @@ const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
                 {hero.currentFocus}
               </p>
             </div>
-            <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-5 shadow-sm">
+            <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-4 sm:p-5 shadow-sm">
               <p className="text-xs uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                 Working Style
               </p>
@@ -111,16 +111,16 @@ const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.6, ease: "easeOut" }}
-          className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-8 shadow-xl shadow-[color:var(--color-card-shadow)]/70 backdrop-blur"
+          className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-6 sm:p-8 shadow-xl shadow-[color:var(--color-card-shadow)]/70 backdrop-blur"
         >
           <h2 className="text-sm font-semibold uppercase tracking-[0.32em] text-[color:var(--color-text-tertiary)]">
             Impact Metrics
           </h2>
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="mt-5 sm:mt-6 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2">
             {metrics.map((metric) => (
               <div
                 key={metric.label}
-                className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/60 px-4 py-5"
+                className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/60 px-4 py-4 sm:py-5"
               >
                 <p className="text-2xl font-semibold text-[color:var(--color-text-primary)]">
                   {metric.value}
