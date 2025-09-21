@@ -77,7 +77,7 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
       )}
 
       {/* 하단 액션 영역 */}
-      <div className="mt-auto w-full flex justify-between items-center">
+      <div className="mt-auto w-full flex flex-wrap items-center gap-3 sm:justify-between">
         {project.url ? (
           <div className="flex items-center text-sm text-[var(--color-primary)] group-hover:text-[var(--color-primary-hover)] transition-colors">
             <span className="font-semibold">자세히 보기</span>
@@ -103,7 +103,7 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
         {/* 새창 아이콘 표시 */}
         {project.url && (
-          <div className="opacity-60 group-hover:opacity-100 transition-opacity">
+          <div className="ml-auto flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100">
             <svg
               className="w-4 h-4 text-[var(--color-text-tertiary)]"
               fill="none"
