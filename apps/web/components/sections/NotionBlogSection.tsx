@@ -29,7 +29,7 @@ export default function NotionBlogSection() {
       id="blog"
       className="bg-[color:var(--color-background)]"
     >
-      <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
         <SectionHeader
           eyebrow="Tech Blog"
           title="기술 블로그"
@@ -71,12 +71,12 @@ export default function NotionBlogSection() {
         </Link>
       </div>
 
-      <div className="mt-14 grid gap-6 md:grid-cols-3">
+      <div className="mt-10 sm:mt-14 grid gap-5 sm:gap-6 md:grid-cols-3">
         {isPending &&
           skeletonCards.map((_, index) => (
             <div
               key={`blog-skeleton-${index}`}
-              className="h-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 shadow-sm"
+              className="h-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-5 sm:p-6 shadow-sm"
             >
               <div className="mb-4 h-6 w-20 rounded-full bg-[color:var(--color-border-normal)]/40" />
               <div className="mb-3 h-6 w-5/6 rounded bg-[color:var(--color-border-normal)]/30" />
@@ -88,13 +88,13 @@ export default function NotionBlogSection() {
           ))}
 
         {error && !isPending && (
-          <div className="col-span-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
+          <div className="col-span-full rounded-2xl border border-red-300/40 bg-red-50/60 p-5 sm:p-6 text-sm text-red-600">
             블로그 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
           </div>
         )}
 
         {!isPending && !error && posts.length === 0 && (
-          <div className="col-span-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-8 text-center text-[color:var(--color-text-secondary)]">
+          <div className="col-span-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 sm:p-8 text-center text-[color:var(--color-text-secondary)]">
             게시된 글이 없습니다. Notion에 글을 작성하면 여기에서 확인할 수 있습니다.
           </div>
         )}

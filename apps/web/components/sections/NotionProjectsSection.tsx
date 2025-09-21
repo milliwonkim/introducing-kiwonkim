@@ -33,7 +33,7 @@ export default function NotionProjectsSection() {
       id="projects"
       className="bg-[color:var(--color-card-background)]/35 backdrop-blur-md"
     >
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
         <SectionHeader
           eyebrow="Notion Projects"
           title="최근 프로젝트 기록"
@@ -75,12 +75,12 @@ export default function NotionProjectsSection() {
         </Link>
       </div>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mt-10 sm:mt-12 grid gap-5 sm:gap-6 sm:grid-cols-2 md:grid-cols-3">
         {isPending &&
           skeletonCards.map((_, index) => (
             <div
               key={`projects-skeleton-${index}`}
-              className="h-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/70 p-7 shadow-sm"
+              className="h-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/70 p-6 sm:p-7 shadow-sm"
             >
               <div className="mb-4 h-6 w-24 rounded-full bg-[color:var(--color-border-normal)]/40" />
               <div className="mb-2 h-6 w-3/4 rounded bg-[color:var(--color-border-normal)]/30" />
@@ -92,13 +92,13 @@ export default function NotionProjectsSection() {
           ))}
 
         {error && !isPending && (
-          <div className="col-span-full rounded-2xl border border-red-300/40 bg-red-50/60 p-6 text-sm text-red-600">
+          <div className="col-span-full rounded-2xl border border-red-300/40 bg-red-50/60 p-5 sm:p-6 text-sm text-red-600">
             프로젝트 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
           </div>
         )}
 
         {!isPending && !error && projects.length === 0 && (
-          <div className="col-span-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/70 p-8 text-center text-[color:var(--color-text-secondary)]">
+          <div className="col-span-full rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/70 p-6 sm:p-8 text-center text-[color:var(--color-text-secondary)]">
             표시할 프로젝트가 없습니다. Notion에서 프로젝트를 등록하면 자동으로 이곳에 나타납니다.
           </div>
         )}

@@ -26,7 +26,7 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
       >
-        <div className="flex h-full flex-col p-6">
+        <div className="flex h-full flex-col p-5 sm:p-6">
           {/* 헤더 섹션 */}
           <div className="mb-4 flex flex-col">
             {post.category && categoryColor && (
@@ -52,7 +52,7 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
 
           {/* 설명 섹션 - flex-1로 남은 공간 차지 */}
           <div className="flex flex-1 flex-col">
-            <p className="mb-6 flex-1 text-sm leading-relaxed text-[color:var(--color-text-secondary)] line-clamp-3">
+            <p className="mb-5 sm:mb-6 flex-1 text-sm leading-relaxed text-[color:var(--color-text-secondary)] line-clamp-3">
               {post.description || "블로그 글의 미리보기 내용입니다."}
             </p>
           </div>

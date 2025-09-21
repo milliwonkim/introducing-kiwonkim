@@ -18,7 +18,7 @@ const CultureSection = ({ signals }: CultureSectionProps) => {
         {signals.map((signal) => (
           <article
             key={signal.title}
-            className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-6 shadow-sm"
+            className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-5 sm:p-6 shadow-sm"
           >
             <h3 className="text-lg font-semibold text-[color:var(--color-text-primary)]">
               {signal.title}

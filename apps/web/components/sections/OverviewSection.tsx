@@ -599,13 +599,13 @@ export default function OverviewSection() {
       id="overview"
       className="bg-[color:var(--color-card-background)]/30 backdrop-blur-sm"
     >
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
         <SectionHeader
           eyebrow="Resume Overview"
           title={data?.title || "자기소개 Overview"}
           description="Notion 페이지와 연동된 최신 자기소개 이력을 확인할 수 있습니다."
         />
-        <div className="flex flex-col items-start gap-3 text-xs text-[color:var(--color-text-tertiary)] sm:items-end">
+        <div className="flex flex-col items-start gap-2.5 sm:gap-3 text-xs text-[color:var(--color-text-tertiary)] sm:items-end">
           {lastUpdatedLabel && <span>업데이트: {lastUpdatedLabel}</span>}
           {data?.url && (
             <Link
@@ -648,9 +648,9 @@ export default function OverviewSection() {
         </div>
       </div>
 
-      <div className="mt-10 rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/40">
+      <div className="mt-10 rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-6 sm:p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/40">
         {isPending && (
-          <div className="space-y-10">
+          <div className="space-y-8 sm:space-y-10">
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {propertySkeletons.map((_, index) => (
                 <div
@@ -663,7 +663,7 @@ export default function OverviewSection() {
               ))}
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               <div className="h-5 w-40 rounded bg-[color:var(--color-border-normal)]/30" />
               {skeletonParagraphs.map((_, index) => (
                 <div key={`overview-skeleton-${index}`} className="space-y-2">
@@ -677,7 +677,7 @@ export default function OverviewSection() {
         )}
 
         {error && !isPending && (
-          <div className="rounded-2xl border border-red-300/40 bg-red-50/70 p-6 text-sm text-red-600">
+          <div className="rounded-2xl border border-red-300/40 bg-red-50/70 p-5 sm:p-6 text-sm text-red-600">
             {error.message}
           </div>
         )}
@@ -685,20 +685,20 @@ export default function OverviewSection() {
         {!isPending && !error && data &&
           renderedProperties.length === 0 &&
           renderedBlocks.length === 0 && (
-          <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 text-sm text-[color:var(--color-text-secondary)]">
+          <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-5 sm:p-6 text-sm text-[color:var(--color-text-secondary)]">
             표시할 자기소개 블록이 없습니다. 노션 페이지에 내용을 추가하면 자동으로 반영됩니다.
           </div>
         )}
 
         {!isPending && !error && (renderedProperties.length > 0 || renderedBlocks.length > 0) && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {renderedProperties.length > 0 && (
               <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {renderedProperties}
               </dl>
             )}
             {renderedBlocks.length > 0 && (
-              <div className="space-y-6">{renderedBlocks}</div>
+              <div className="space-y-5 sm:space-y-6">{renderedBlocks}</div>
             )}
           </div>
         )}
