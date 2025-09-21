@@ -11,6 +11,7 @@ export interface NotionOverviewDatabaseEntry {
   createdTime?: string;
   lastEditedTime?: string;
   properties: NotionOverviewProperty[];
+  content: NotionOverviewBlock[];
 }
 
 export interface NotionOverviewDatabaseBlock {
@@ -78,6 +79,18 @@ const ORDER_PROPERTY_KEYWORDS = [
   "position",
   "weight",
 ];
+
+interface TransformContext {
+  visitedPageIds: Set<string>;
+  visitedDatabaseIds: Set<string>;
+}
+
+function createTransformContext(): TransformContext {
+  return {
+    visitedPageIds: new Set<string>(),
+    visitedDatabaseIds: new Set<string>(),
+  };
+}
 
 function normalizeNotionId(rawId: string): string {
   const trimmed = rawId.trim();
@@ -400,13 +413,63 @@ async function fetchDatabaseEntries(databaseId: string): Promise<any[]> {
   return results;
 }
 
+interface BuildDatabaseEntryOptions {
+  filterProperties?: (property: NotionOverviewProperty) => boolean;
+}
+
+async function buildDatabaseEntry(
+  entry: any,
+  context: TransformContext,
+  options: BuildDatabaseEntryOptions = {}
+): Promise<NotionOverviewDatabaseEntry> {
+  const entryTitle = extractTitle(entry.properties ?? {}) || "제목 없음";
+  const entryUrl = entry.public_url || entry.url || "";
+  const rawProperties = entry.properties ?? {};
+  let properties = extractProperties(rawProperties);
+
+  if (options.filterProperties) {
+    properties = properties.filter(options.filterProperties);
+  }
+
+  const entryId: string = entry.id;
+  const hasVisited = context.visitedPageIds.has(entryId);
+  let content: NotionOverviewBlock[] = [];
+
+  if (hasVisited) {
+    content = [];
+  } else {
+    context.visitedPageIds.add(entryId);
+    try {
+      const entryBlocks = await fetchBlockChildren(entryId);
+      content = await transformBlocks(entryBlocks, context);
+    } catch {
+      content = [];
+    } finally {
+      context.visitedPageIds.delete(entryId);
+    }
+  }
+
+  return {
+    id: entryId,
+    title: entryTitle,
+    url: entryUrl,
+    createdTime: entry.created_time ?? undefined,
+    lastEditedTime: entry.last_edited_time ?? undefined,
+    properties,
+    content,
+  };
+}
+
 function getTimestamp(value?: string): number {
   if (!value) return 0;
   const timestamp = new Date(value).getTime();
   return Number.isNaN(timestamp) ? 0 : timestamp;
 }
 
-async function transformBlocks(blocks: any[]): Promise<NotionOverviewBlock[]> {
+async function transformBlocks(
+  blocks: any[],
+  context: TransformContext
+): Promise<NotionOverviewBlock[]> {
   const transformed: NotionOverviewBlock[] = [];
 
   for (const block of blocks) {
@@ -417,31 +480,34 @@ async function transformBlocks(blocks: any[]): Promise<NotionOverviewBlock[]> {
 
     switch (block.type) {
       case "child_database": {
+        const databaseId: string = block.id;
         const databaseTitle = block.child_database?.title ?? "";
-        const databaseEntries = await fetchDatabaseEntries(block.id);
-        const entries: NotionOverviewDatabaseEntry[] = databaseEntries.map(
-          (entry: any) => {
-            const entryTitle =
-              extractTitle(entry.properties ?? {}) || "제목 없음";
-            const entryUrl = entry.public_url || entry.url || "";
-            const properties = extractProperties(entry.properties ?? {});
+        const hasVisitedDatabase = context.visitedDatabaseIds.has(databaseId);
+        let entries: NotionOverviewDatabaseEntry[] = [];
 
-            return {
-              id: entry.id,
-              title: entryTitle,
-              url: entryUrl,
-              createdTime: entry.created_time ?? undefined,
-              lastEditedTime: entry.last_edited_time ?? undefined,
-              properties,
-            };
+        if (hasVisitedDatabase) {
+          entries = [];
+        } else {
+          context.visitedDatabaseIds.add(databaseId);
+          try {
+            const databaseEntries = await fetchDatabaseEntries(databaseId);
+            entries = await Promise.all(
+              databaseEntries.map((entry: any) =>
+                buildDatabaseEntry(entry, context)
+              )
+            );
+
+            entries.sort((a, b) => {
+              const timeA = getTimestamp(a.lastEditedTime ?? a.createdTime);
+              const timeB = getTimestamp(b.lastEditedTime ?? b.createdTime);
+              return timeB - timeA;
+            });
+          } catch {
+            entries = [];
+          } finally {
+            context.visitedDatabaseIds.delete(databaseId);
           }
-        );
-
-        entries.sort((a, b) => {
-          const timeA = getTimestamp(a.lastEditedTime ?? a.createdTime);
-          const timeB = getTimestamp(b.lastEditedTime ?? b.createdTime);
-          return timeB - timeA;
-        });
+        }
 
         base.text = databaseTitle;
         base.database = {
@@ -479,7 +545,7 @@ async function transformBlocks(blocks: any[]): Promise<NotionOverviewBlock[]> {
 
     if (block.has_children) {
       const children = await fetchBlockChildren(block.id);
-      const transformedChildren = await transformBlocks(children);
+      const transformedChildren = await transformBlocks(children, context);
       if (transformedChildren.length > 0) {
         base.children = transformedChildren;
       }
@@ -528,27 +594,33 @@ async function buildOverviewResponseFromDatabase(
 
   const databaseEntries = await fetchDatabaseEntries(databaseId);
 
-  const entriesWithOrder = databaseEntries.map((entry: any) => {
-    const entryTitle = extractTitle(entry.properties ?? {}) || "제목 없음";
-    const entryUrl = entry.public_url || entry.url || "";
-    const rawProperties = entry.properties ?? {};
-    const order = extractOrderValueFromProperties(rawProperties);
-    const properties = extractProperties(rawProperties).filter(
-      (property) => !isOrderPropertyName(property.name)
-    );
+  const context = createTransformContext();
+  context.visitedDatabaseIds.add(databaseId);
 
-    return {
-      entry: {
-        id: entry.id,
-        title: entryTitle,
-        url: entryUrl,
-        createdTime: entry.created_time ?? undefined,
-        lastEditedTime: entry.last_edited_time ?? undefined,
-        properties,
-      },
-      order,
-    };
-  });
+  let entriesWithOrder: {
+    entry: NotionOverviewDatabaseEntry;
+    order: number | null;
+  }[] = [];
+
+  try {
+    entriesWithOrder = await Promise.all(
+      databaseEntries.map(async (entry: any) => {
+        const rawProperties = entry.properties ?? {};
+        const order = extractOrderValueFromProperties(rawProperties);
+        const entryData = await buildDatabaseEntry(entry, context, {
+          filterProperties: (property) =>
+            !isOrderPropertyName(property.name),
+        });
+
+        return {
+          entry: entryData,
+          order,
+        };
+      })
+    );
+  } finally {
+    context.visitedDatabaseIds.delete(databaseId);
+  }
 
   entriesWithOrder.sort((a, b) => {
     const orderA =
@@ -625,7 +697,9 @@ export async function GET() {
       const properties = extractProperties(page.properties ?? {});
 
       const rootBlocks = await fetchBlockChildren(pageId);
-      const blocks = await transformBlocks(rootBlocks);
+      const context = createTransformContext();
+      context.visitedPageIds.add(pageId);
+      const blocks = await transformBlocks(rootBlocks, context);
 
       const response: NotionOverviewResponse = {
         title,

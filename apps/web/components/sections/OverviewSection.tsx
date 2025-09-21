@@ -378,6 +378,10 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                     : null;
                 const hasDescription = Boolean(descriptionContent);
                 const categoryLabel = categoryProperty?.value?.trim();
+                const entryContent =
+                  entry.content && entry.content.length > 0
+                    ? renderBlocks(entry.content)
+                    : null;
 
                 return (
                   <article
@@ -468,6 +472,15 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                           표시할 속성이 없습니다.
                         </p>
                       )
+                    )}
+
+                    {entryContent && (
+                      <div className="mt-6 space-y-4 border-t border-[color:var(--color-border-light)] pt-4">
+                        <h5 className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--color-text-tertiary)]">
+                          페이지 내용
+                        </h5>
+                        <div className="space-y-4">{entryContent}</div>
+                      </div>
                     )}
                   </article>
                 );
