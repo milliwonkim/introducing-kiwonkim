@@ -11,7 +11,7 @@ export default function SectionContainer({
 }: SectionContainerProps) {
   return (
     <section className={`py-20 ${className}`}>
-      <div className="container mx-auto px-6 md:px-8">{children}</div>
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">{children}</div>
     </section>
   );
 }

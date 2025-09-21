@@ -95,7 +95,7 @@ const SiteHeader = () => {
           : "bg-transparent"
       )}
     >
-      <div className="mx-auto flex h-[var(--header-height,4.5rem)] max-w-6xl items-center justify-between px-6 sm:px-8">
+      <div className="mx-auto flex h-[var(--header-height,4.5rem)] max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href={getNavHref("hero")}
           className="text-lg font-semibold text-[color:var(--color-text-primary)] hover:text-[color:var(--color-primary)]"
@@ -159,7 +159,7 @@ const SiteHeader = () => {
 
       {isMenuOpen && (
         <div className="md:hidden border-t border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/95 backdrop-blur">
-          <nav className="mx-auto flex max-w-6xl flex-col px-6 py-6 sm:px-8">
+          <nav className="mx-auto flex max-w-6xl flex-col px-4 py-6 sm:px-6">
             {NAV_ITEMS.map((item) => {
               const isActive = activeId === item.id;
               return (

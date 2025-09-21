@@ -7,7 +7,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="relative">
-      <div className="mx-auto max-w-6xl space-y-16 px-6 sm:px-8 text-[color:var(--color-text-primary)]">
+      <div className="mx-auto max-w-6xl space-y-16 px-4 sm:px-6 lg:px-8 text-[color:var(--color-text-primary)]">
         {children}
       </div>
     </div>
