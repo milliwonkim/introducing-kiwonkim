@@ -6,7 +6,8 @@
       "@/components/*": ["components/*"],
       "@/app/*": ["app/*"],
       "@/utils/*": ["utils/*"],
-      "@/constants/*": ["constants/*"]
+      "@/constants/*": ["constants/*"],
+      "@radix-ui/react-dialog": ["lib/radix-ui/react-dialog"]
     },
     "plugins": [
       {

@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode, useEffect, useId } from "react";
+import { ReactNode, useCallback } from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 interface ModalProps {
   isOpen: boolean;
@@ -17,83 +18,61 @@ const sizeClassMap: Record<NonNullable<ModalProps["size"]>, string> = {
 };
 
 const Modal = ({ isOpen, onClose, title, description, children, size = "lg" }: ModalProps) => {
-  const generatedId = useId();
-  const titleId = `modal-title-${generatedId}`;
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (!nextOpen) {
         onClose();
       }
-    };
+    },
+    [onClose],
+  );
 
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) {
-    return null;
-  }
+  const sizeClass = sizeClassMap[size];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-[color:var(--color-overlay)] backdrop-blur-sm"
-        onClick={onClose}
-        aria-hidden
-      />
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        className={`relative z-10 w-full ${sizeClassMap[size]} rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/95 p-6 shadow-[0_28px_68px_var(--color-card-shadow)] backdrop-blur`}
-      >
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 id={titleId} className="text-2xl font-semibold text-[color:var(--color-text-primary)]">
-              {title}
-            </h2>
-            {description ? (
-              <p className="mt-2 text-sm text-[color:var(--color-text-secondary)] leading-relaxed">
-                {description}
-              </p>
-            ) : null}
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-[color:var(--color-border-normal)] text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
-            aria-label="모달 닫기"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+    <DialogPrimitive.Root open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[color:var(--color-overlay)] backdrop-blur-sm" />
+        <DialogPrimitive.Content
+          className={`fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] ${sizeClass} max-h-[85vh] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/95 p-6 shadow-[0_28px_68px_var(--color-card-shadow)] backdrop-blur focus:outline-none`}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <DialogPrimitive.Title className="text-2xl font-semibold text-[color:var(--color-text-primary)]">
+                {title}
+              </DialogPrimitive.Title>
+              {description ? (
+                <DialogPrimitive.Description className="mt-2 text-sm leading-relaxed text-[color:var(--color-text-secondary)]">
+                  {description}
+                </DialogPrimitive.Description>
+              ) : null}
+            </div>
+            <DialogPrimitive.Close
+              type="button"
+              className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-[color:var(--color-border-normal)] text-[color:var(--color-text-secondary)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+              aria-label="모달 닫기"
             >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-        <div className="mt-6 max-h-[70vh] overflow-y-auto pr-2">
-          {children}
-        </div>
-      </div>
-    </div>
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </DialogPrimitive.Close>
+          </div>
+          <div className="mt-6 max-h-[70vh] overflow-y-auto pr-2">
+            {children}
+          </div>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 };
 
