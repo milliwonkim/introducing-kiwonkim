@@ -4,12 +4,14 @@ import { ReactNode, useCallback } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  trigger: ReactNode;
   title: string;
   description?: string;
   children: ReactNode;
   size?: "md" | "lg";
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const sizeClassMap: Record<NonNullable<ModalProps["size"]>, string> = {
@@ -17,20 +19,32 @@ const sizeClassMap: Record<NonNullable<ModalProps["size"]>, string> = {
   lg: "max-w-5xl",
 };
 
-const Modal = ({ isOpen, onClose, title, description, children, size = "lg" }: ModalProps) => {
+const Modal = ({
+  trigger,
+  title,
+  description,
+  children,
+  size = "lg",
+  open,
+  defaultOpen,
+  onOpenChange,
+}: ModalProps) => {
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
-      if (!nextOpen) {
-        onClose();
-      }
+      onOpenChange?.(nextOpen);
     },
-    [onClose],
+    [onOpenChange],
   );
 
   const sizeClass = sizeClassMap[size];
 
   return (
-    <DialogPrimitive.Root open={isOpen} onOpenChange={handleOpenChange}>
+    <DialogPrimitive.Root
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={handleOpenChange}
+    >
+      <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[color:var(--color-overlay)] backdrop-blur-sm" />
         <DialogPrimitive.Content
