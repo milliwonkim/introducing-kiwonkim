@@ -2,7 +2,6 @@
 
 import HeroSection from "@/components/sections/HeroSection";
 import FocusSection from "@/components/sections/FocusSection";
-import ExperienceSection from "@/components/sections/ExperienceSection";
 import CaseStudiesSection from "@/components/sections/CaseStudiesSection";
 import ExpertiseSection from "@/components/sections/ExpertiseSection";
 import CultureSection from "@/components/sections/CultureSection";
@@ -14,7 +13,6 @@ import {
   heroContent,
   impactMetrics,
   focusAreas,
-  experiences,
   caseStudies,
   expertisePillars,
   cultureSignals,
@@ -31,7 +29,6 @@ const HomePage = () => {
       />
       <OverviewSection />
       <FocusSection areas={focusAreas} />
-      <ExperienceSection experiences={experiences} />
       <CaseStudiesSection studies={caseStudies} />
       <NotionProjectsSection />
       <ExpertiseSection pillars={expertisePillars} />

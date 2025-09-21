@@ -261,22 +261,6 @@ export const caseStudies: CaseStudy[] = [
       "Jest",
     ],
   },
-  {
-    title: "한샘 상담 경험 리디자인",
-    company: "한샘",
-    summary:
-      "상담 예약부터 오프라인 매장 방문까지의 흐름을 재구성해 사용자 경험과 내부 효율을 동시에 개선했습니다.",
-    highlights: [
-      "Next.js 기반 단일 플로우로 예약 단계를 단축하고 이탈 지점을 제거",
-      "어드민 도구에서 상담 메모·알림·필터링을 개선해 현장 대응 시간을 절약",
-      "고객 유형별 맞춤 CTA와 추천 콘텐츠로 상담 전환율을 높임",
-    ],
-    metrics: [
-      { value: "15%", label: "예약 이탈률 감소" },
-      { value: "20%", label: "상담 준비 시간 절감" },
-    ],
-    stack: ["Next.js", "TypeScript", "AWS", "Tailwind CSS"],
-  },
 ];
 
 export const expertisePillars: ExpertisePillar[] = [
