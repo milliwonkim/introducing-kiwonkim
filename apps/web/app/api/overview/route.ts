@@ -66,7 +66,18 @@ export interface NotionOverviewResponse {
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-const FALLBACK_OVERVIEW_PAGE_ID = "2749a57291028051aafcf7982552da08";
+const FALLBACK_OVERVIEW_PAGE_ID = "2749a5729102805380c6d33c4ec97e52";
+
+const ORDER_PROPERTY_KEYWORDS = [
+  "order",
+  "순서",
+  "우선순위",
+  "priority",
+  "index",
+  "정렬",
+  "position",
+  "weight",
+];
 
 function normalizeNotionId(rawId: string): string {
   const trimmed = rawId.trim();
@@ -83,6 +94,17 @@ function normalizeNotionId(rawId: string): string {
   const id = matches[0].toLowerCase();
 
   return `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
+}
+
+function isObjectNotFoundError(error: unknown): boolean {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const code = (error as { code?: string }).code;
+  const status = (error as { status?: number }).status;
+
+  return code === "object_not_found" || status === 404;
 }
 
 function extractPlainText(property: any): string {
@@ -153,7 +175,7 @@ function transformProperty(
         name: option.name,
         color: option.color,
       }));
-      base.value = base.tags.map((tag) => tag.name).join(", ");
+      base.value = (base.tags ?? []).map((tag) => tag.name).join(", ");
       break;
     case "status":
       base.value = property.status?.name?.trim() ?? "";
@@ -192,7 +214,7 @@ function transformProperty(
         name: person.name ?? person?.person?.email ?? "이름 없음",
         avatarUrl: person.avatar_url ?? undefined,
       }));
-      base.value = base.people.map((person) => person.name).join(", ");
+      base.value = (base.people ?? []).map((person) => person.name).join(", ");
       break;
     case "files":
       base.files = (property.files ?? []).map((file: any) => {
@@ -203,7 +225,7 @@ function transformProperty(
           url,
         };
       });
-      base.value = base.files.map((file) => file.name).join(", ");
+      base.value = (base.files ?? []).map((file) => file.name).join(", ");
       break;
     case "relation":
       base.value = (property.relation ?? [])
@@ -291,6 +313,29 @@ function extractProperties(
     .filter((property): property is NotionOverviewProperty => Boolean(property));
 
   return entries;
+}
+
+function isOrderPropertyName(name: string): boolean {
+  const normalized = name.trim().toLowerCase();
+  return ORDER_PROPERTY_KEYWORDS.some((keyword) =>
+    normalized.includes(keyword)
+  );
+}
+
+function extractOrderValueFromProperties(
+  properties: Record<string, any> | undefined
+): number | null {
+  if (!properties) return null;
+
+  for (const [name, property] of Object.entries(properties)) {
+    if (!isOrderPropertyName(name)) continue;
+    if (!property) continue;
+    if (property.type === "number" && typeof property.number === "number") {
+      return property.number;
+    }
+  }
+
+  return null;
 }
 
 async function fetchBlockChildren(blockId: string): Promise<any[]> {
@@ -431,6 +476,106 @@ function extractTitle(properties: Record<string, any>): string {
   return "";
 }
 
+function extractDatabaseDescription(database: any): string {
+  const description = database?.description;
+  if (!Array.isArray(description)) return "";
+
+  return description
+    .map((text: any) => text?.plain_text ?? "")
+    .join("\n")
+    .trim();
+}
+
+async function buildOverviewResponseFromDatabase(
+  databaseId: string
+): Promise<NotionOverviewResponse> {
+  const database = (await notion.databases.retrieve({
+    database_id: databaseId,
+  })) as any;
+
+  const title = (database.title ?? [])
+    .map((text: any) => text?.plain_text ?? "")
+    .join("")
+    .trim();
+
+  const description = extractDatabaseDescription(database);
+
+  const databaseEntries = await fetchDatabaseEntries(databaseId);
+
+  const entriesWithOrder = databaseEntries.map((entry: any) => {
+    const entryTitle = extractTitle(entry.properties ?? {}) || "제목 없음";
+    const entryUrl = entry.public_url || entry.url || "";
+    const rawProperties = entry.properties ?? {};
+    const order = extractOrderValueFromProperties(rawProperties);
+    const properties = extractProperties(rawProperties).filter(
+      (property) => !isOrderPropertyName(property.name)
+    );
+
+    return {
+      entry: {
+        id: entry.id,
+        title: entryTitle,
+        url: entryUrl,
+        createdTime: entry.created_time ?? undefined,
+        lastEditedTime: entry.last_edited_time ?? undefined,
+        properties,
+      },
+      order,
+    };
+  });
+
+  entriesWithOrder.sort((a, b) => {
+    const orderA =
+      typeof a.order === "number" ? a.order : Number.POSITIVE_INFINITY;
+    const orderB =
+      typeof b.order === "number" ? b.order : Number.POSITIVE_INFINITY;
+
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+
+    const timeA = getTimestamp(
+      a.entry.lastEditedTime ?? a.entry.createdTime
+    );
+    const timeB = getTimestamp(
+      b.entry.lastEditedTime ?? b.entry.createdTime
+    );
+    return timeB - timeA;
+  });
+
+  const entries = entriesWithOrder.map(({ entry }) => entry);
+
+  const blocks: NotionOverviewBlock[] = [];
+
+  if (description) {
+    blocks.push({
+      id: `${databaseId}-description`,
+      type: "paragraph",
+      text: description,
+    });
+  }
+
+  blocks.push({
+    id: `${databaseId}-database`,
+    type: "child_database",
+    text: title || database.title?.[0]?.plain_text || "자기소개",
+    database: {
+      title: title || "자기소개",
+      entries,
+    },
+  });
+
+  const response: NotionOverviewResponse = {
+    title: title || "자기소개",
+    url: database.public_url || database.url || "",
+    lastEditedTime: database.last_edited_time ?? "",
+    properties: [],
+    blocks,
+  };
+
+  return response;
+}
+
 export async function GET() {
   try {
     if (!process.env.NOTION_API_KEY) {
@@ -446,25 +591,39 @@ export async function GET() {
         "NOTION_OVERVIEW_PAGE_ID is not set or is invalid. Provide a Notion page ID or share URL."
       );
     }
+    try {
+      const page = (await notion.pages.retrieve({ page_id: pageId })) as any;
+      const title = extractTitle(page.properties ?? {});
+      const url = page.public_url || page.url || "";
+      const lastEditedTime = page.last_edited_time ?? "";
+      const properties = extractProperties(page.properties ?? {});
 
-    const page = (await notion.pages.retrieve({ page_id: pageId })) as any;
-    const title = extractTitle(page.properties ?? {});
-    const url = page.public_url || page.url || "";
-    const lastEditedTime = page.last_edited_time ?? "";
-    const properties = extractProperties(page.properties ?? {});
+      const rootBlocks = await fetchBlockChildren(pageId);
+      const blocks = await transformBlocks(rootBlocks);
 
-    const rootBlocks = await fetchBlockChildren(pageId);
-    const blocks = await transformBlocks(rootBlocks);
+      const response: NotionOverviewResponse = {
+        title,
+        url,
+        lastEditedTime,
+        properties,
+        blocks,
+      };
 
-    const response: NotionOverviewResponse = {
-      title,
-      url,
-      lastEditedTime,
-      properties,
-      blocks,
-    };
+      return NextResponse.json(response);
+    } catch (pageError) {
+      if (!isObjectNotFoundError(pageError)) {
+        throw pageError;
+      }
+    }
 
-    return NextResponse.json(response);
+    try {
+      const databaseResponse = await buildOverviewResponseFromDatabase(pageId);
+      return NextResponse.json(databaseResponse);
+    } catch (databaseError) {
+      throw new Error(
+        `Failed to fetch Notion database overview: ${(databaseError as Error).message}`
+      );
+    }
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
