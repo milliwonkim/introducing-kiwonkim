@@ -4,6 +4,20 @@ import { Client } from "@notionhq/client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable turbo/no-undeclared-env-vars */
 
+export interface NotionOverviewDatabaseEntry {
+  id: string;
+  title: string;
+  url: string;
+  createdTime?: string;
+  lastEditedTime?: string;
+  properties: NotionOverviewProperty[];
+}
+
+export interface NotionOverviewDatabaseBlock {
+  title: string;
+  entries: NotionOverviewDatabaseEntry[];
+}
+
 export interface NotionOverviewBlock {
   id: string;
   type: string;
@@ -11,6 +25,7 @@ export interface NotionOverviewBlock {
   checked?: boolean;
   icon?: string;
   children?: NotionOverviewBlock[];
+  database?: NotionOverviewDatabaseBlock;
 }
 
 export interface NotionOverviewTag {
@@ -296,6 +311,30 @@ async function fetchBlockChildren(blockId: string): Promise<any[]> {
   return results;
 }
 
+async function fetchDatabaseEntries(databaseId: string): Promise<any[]> {
+  const results: any[] = [];
+  let cursor: string | undefined;
+
+  do {
+    const response = await notion.databases.query({
+      database_id: databaseId,
+      page_size: 50,
+      start_cursor: cursor,
+    });
+
+    results.push(...response.results);
+    cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
+  } while (cursor);
+
+  return results;
+}
+
+function getTimestamp(value?: string): number {
+  if (!value) return 0;
+  const timestamp = new Date(value).getTime();
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+}
+
 async function transformBlocks(blocks: any[]): Promise<NotionOverviewBlock[]> {
   const transformed: NotionOverviewBlock[] = [];
 
@@ -306,6 +345,40 @@ async function transformBlocks(blocks: any[]): Promise<NotionOverviewBlock[]> {
     };
 
     switch (block.type) {
+      case "child_database": {
+        const databaseTitle = block.child_database?.title ?? "";
+        const databaseEntries = await fetchDatabaseEntries(block.id);
+        const entries: NotionOverviewDatabaseEntry[] = databaseEntries.map(
+          (entry: any) => {
+            const entryTitle =
+              extractTitle(entry.properties ?? {}) || "제목 없음";
+            const entryUrl = entry.public_url || entry.url || "";
+            const properties = extractProperties(entry.properties ?? {});
+
+            return {
+              id: entry.id,
+              title: entryTitle,
+              url: entryUrl,
+              createdTime: entry.created_time ?? undefined,
+              lastEditedTime: entry.last_edited_time ?? undefined,
+              properties,
+            };
+          }
+        );
+
+        entries.sort((a, b) => {
+          const timeA = getTimestamp(a.lastEditedTime ?? a.createdTime);
+          const timeB = getTimestamp(b.lastEditedTime ?? b.createdTime);
+          return timeB - timeA;
+        });
+
+        base.text = databaseTitle;
+        base.database = {
+          title: databaseTitle || "연결된 데이터베이스",
+          entries,
+        };
+        break;
+      }
       case "paragraph":
       case "heading_1":
       case "heading_2":
