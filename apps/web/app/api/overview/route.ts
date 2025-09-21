@@ -96,6 +96,24 @@ function normalizeNotionId(rawId: string): string {
   return `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
 }
 
+function getErrorMessage(error: unknown): string {
+  if (!error || typeof error !== "object") {
+    return "";
+  }
+
+  const message = (error as { message?: string }).message;
+  if (typeof message === "string" && message.trim()) {
+    return message;
+  }
+
+  const bodyMessage = (error as { body?: { message?: string } }).body?.message;
+  if (typeof bodyMessage === "string" && bodyMessage.trim()) {
+    return bodyMessage;
+  }
+
+  return "";
+}
+
 function isObjectNotFoundError(error: unknown): boolean {
   if (!error || typeof error !== "object") {
     return false;
@@ -105,6 +123,14 @@ function isObjectNotFoundError(error: unknown): boolean {
   const status = (error as { status?: number }).status;
 
   return code === "object_not_found" || status === 404;
+}
+
+function isDatabaseInsteadOfPageError(error: unknown): boolean {
+  const message = getErrorMessage(error).toLowerCase();
+
+  return (
+    message.includes("is a database") && message.includes("not a page")
+  );
 }
 
 function extractPlainText(property: any): string {
@@ -611,7 +637,10 @@ export async function GET() {
 
       return NextResponse.json(response);
     } catch (pageError) {
-      if (!isObjectNotFoundError(pageError)) {
+      if (
+        !isObjectNotFoundError(pageError) &&
+        !isDatabaseInsteadOfPageError(pageError)
+      ) {
         throw pageError;
       }
     }
