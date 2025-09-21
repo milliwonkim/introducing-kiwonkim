@@ -19,6 +19,33 @@ const propertySkeletons = Array.from({ length: 6 });
 
 type ListBlockType = "bulleted_list_item" | "numbered_list_item";
 
+const descriptionPropertyKeywords = [
+  "description",
+  "summary",
+  "content",
+  "소개",
+  "설명",
+  "요약",
+  "한줄소개",
+];
+
+const categoryPropertyKeywords = [
+  "category",
+  "type",
+  "분류",
+  "카테고리",
+];
+
+const hiddenPropertyKeywords = [
+  "order",
+  "순서",
+  "index",
+  "정렬",
+  "position",
+  "priority",
+  "weight",
+];
+
 const notionTagColorMap: Record<
   NonNullable<NotionOverviewTag["color"]>,
   { background: string; color: string }
@@ -64,6 +91,11 @@ const notionTagColorMap: Record<
     color: "rgb(185, 28, 28)",
   },
 };
+
+function matchesKeyword(name: string, keywords: string[]) {
+  const normalized = name.trim().toLowerCase();
+  return keywords.some((keyword) => normalized.includes(keyword));
+}
 
 function formatDateLabel(value?: string) {
   if (!value) return "";
@@ -326,7 +358,26 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
               {block.database.entries.map((entry) => {
                 const entryUpdatedLabel =
                   formatDateLabel(entry.lastEditedTime ?? entry.createdTime);
-                const visibleProperties = entry.properties;
+                const entryProperties = entry.properties;
+                const descriptionProperty = entryProperties.find((property) =>
+                  matchesKeyword(property.name, descriptionPropertyKeywords)
+                );
+                const categoryProperty = entryProperties.find((property) =>
+                  property !== descriptionProperty &&
+                  matchesKeyword(property.name, categoryPropertyKeywords)
+                );
+                const additionalProperties = entryProperties.filter(
+                  (property) =>
+                    property !== descriptionProperty &&
+                    property !== categoryProperty &&
+                    !matchesKeyword(property.name, hiddenPropertyKeywords)
+                );
+                const descriptionContent =
+                  descriptionProperty && !descriptionProperty.isEmpty
+                    ? renderPropertyValue(descriptionProperty)
+                    : null;
+                const hasDescription = Boolean(descriptionContent);
+                const categoryLabel = categoryProperty?.value?.trim();
 
                 return (
                   <article
@@ -338,6 +389,11 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                         <h4 className="text-lg font-semibold text-[color:var(--color-text-primary)]">
                           {entry.title || "제목 없음"}
                         </h4>
+                        {categoryLabel && (
+                          <span className="mt-1 inline-flex items-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)]">
+                            {categoryLabel}
+                          </span>
+                        )}
                         {entryUpdatedLabel && (
                           <span className="text-xs text-[color:var(--color-text-tertiary)]">
                             업데이트: {entryUpdatedLabel}
@@ -384,9 +440,15 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                       )}
                     </div>
 
-                    {visibleProperties.length > 0 ? (
+                    {hasDescription && (
+                      <div className="mt-4 text-sm leading-relaxed text-[color:var(--color-text-secondary)]">
+                        {descriptionContent}
+                      </div>
+                    )}
+
+                    {additionalProperties.length > 0 ? (
                       <dl className="mt-4 grid gap-3 sm:grid-cols-2">
-                        {visibleProperties.map((property) => (
+                        {additionalProperties.map((property) => (
                           <div
                             key={`${entry.id}-${property.id}`}
                             className="rounded-xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 px-4 py-3"
@@ -401,9 +463,11 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                         ))}
                       </dl>
                     ) : (
-                      <p className="mt-4 text-sm text-[color:var(--color-text-tertiary)]">
-                        표시할 속성이 없습니다.
-                      </p>
+                      !hasDescription && (
+                        <p className="mt-4 text-sm text-[color:var(--color-text-tertiary)]">
+                          표시할 속성이 없습니다.
+                        </p>
+                      )
                     )}
                   </article>
                 );
