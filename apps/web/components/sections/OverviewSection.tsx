@@ -97,6 +97,10 @@ function matchesKeyword(name: string, keywords: string[]) {
   return keywords.some((keyword) => normalized.includes(keyword));
 }
 
+function normalizePropertyName(name: string) {
+  return name.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
 function formatDateLabel(value?: string) {
   if (!value) return "";
   const date = new Date(value);
@@ -355,7 +359,9 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
             </div>
           ) : (
             <div className="space-y-5">
-              {block.database.entries.map((entry) => {
+              {block.database.entries.map((entry, entryIndex) => {
+                const isLastEntry =
+                  entryIndex === block.database.entries.length - 1;
                 const entryUpdatedLabel =
                   formatDateLabel(entry.lastEditedTime ?? entry.createdTime);
                 const entryProperties = entry.properties;
@@ -371,6 +377,30 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                     property !== descriptionProperty &&
                     property !== categoryProperty &&
                     !matchesKeyword(property.name, hiddenPropertyKeywords)
+                );
+                const displayAdditionalProperties = additionalProperties.map(
+                  (property) => {
+                    if (!isLastEntry) {
+                      return property;
+                    }
+
+                    const normalizedName = normalizePropertyName(
+                      property.name
+                    );
+
+                    if (
+                      normalizedName === "endworkingdate" &&
+                      !property.value.trim()
+                    ) {
+                      return {
+                        ...property,
+                        value: "재직중",
+                        isEmpty: false,
+                      };
+                    }
+
+                    return property;
+                  }
                 );
                 const descriptionContent =
                   descriptionProperty && !descriptionProperty.isEmpty
@@ -450,9 +480,9 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                       </div>
                     )}
 
-                    {additionalProperties.length > 0 ? (
+                    {displayAdditionalProperties.length > 0 ? (
                       <dl className="mt-4 flex flex-wrap gap-3">
-                        {additionalProperties.map((property) => (
+                        {displayAdditionalProperties.map((property) => (
                           <div
                             key={`${entry.id}-${property.id}`}
                             className="flex min-w-[16rem] flex-1 rounded-xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 px-4 py-3"
