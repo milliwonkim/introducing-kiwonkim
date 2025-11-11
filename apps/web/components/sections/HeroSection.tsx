@@ -1,22 +1,18 @@
 "use client";
 
+import { HeroContent } from "@/constants/portfolio";
 import { motion } from "motion/react";
-import {
-  HeroContent,
-  ImpactMetric,
-} from "@/constants/portfolio";
 import SectionContainer from "./SectionContainer";
 
 interface HeroSectionProps {
   hero: HeroContent;
-  metrics: ImpactMetric[];
   onDownloadResume: () => Promise<void> | void;
 }
 
-const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
+const HeroSection = ({ hero, onDownloadResume }: HeroSectionProps) => {
   return (
     <SectionContainer id="hero" className="pt-20 sm:pt-28 pb-12">
-      <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 items-center">
+      <div className="flex items-center">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,13 +45,9 @@ const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
               </p>
               <dl className="mt-3 space-y-2 text-sm">
                 <div>
-                  <dt className="text-[color:var(--color-text-tertiary)]">Availability</dt>
-                  <dd className="text-[color:var(--color-text-primary)] font-medium">
-                    {hero.availability}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-[color:var(--color-text-tertiary)]">Location</dt>
+                  <dt className="text-[color:var(--color-text-tertiary)]">
+                    Location
+                  </dt>
                   <dd className="text-[color:var(--color-text-primary)] font-medium">
                     {hero.location}
                   </dd>
@@ -104,35 +96,6 @@ const HeroSection = ({ hero, metrics, onDownloadResume }: HeroSectionProps) => {
                 <path d="M4 4h16v12H5.17L4 17.17z" />
               </svg>
             </a>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.6, ease: "easeOut" }}
-          className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-8 shadow-xl shadow-[color:var(--color-card-shadow)]/70 backdrop-blur"
-        >
-          <h2 className="text-sm font-semibold uppercase tracking-[0.32em] text-[color:var(--color-text-tertiary)]">
-            Impact Metrics
-          </h2>
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {metrics.map((metric) => (
-              <div
-                key={metric.label}
-                className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/60 px-4 py-5"
-              >
-                <p className="text-2xl font-semibold text-[color:var(--color-text-primary)]">
-                  {metric.value}
-                </p>
-                <p className="mt-1 text-sm font-medium text-[color:var(--color-text-secondary)]">
-                  {metric.label}
-                </p>
-                <p className="mt-2 text-xs text-[color:var(--color-text-tertiary)] leading-relaxed">
-                  {metric.description}
-                </p>
-              </div>
-            ))}
           </div>
         </motion.div>
       </div>

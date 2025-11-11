@@ -8,8 +8,6 @@ import ThemeToggle from "../ThemeToggle";
 const NAV_ITEMS = [
   { label: "Intro", id: "hero" },
   { label: "Experience", id: "experience" },
-  { label: "Work", id: "work" },
-  { label: "Expertise", id: "expertise" },
   { label: "How I Work", id: "culture" },
   { label: "Contact", id: "contact" },
 ] as const;
@@ -20,8 +18,6 @@ const OBSERVER_IDS = [
   "hero",
   "about",
   "experience",
-  "work",
-  "expertise",
   "culture",
   "contact",
 ];

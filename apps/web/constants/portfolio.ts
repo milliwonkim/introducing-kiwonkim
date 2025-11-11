@@ -3,7 +3,6 @@ export interface HeroContent {
   title: string;
   description: string;
   currentFocus: string;
-  availability: string;
   location: string;
   contactEmail: string;
 }
@@ -36,21 +35,6 @@ export interface ExperienceItem {
   impacts?: ExperienceImpact[];
 }
 
-export interface CaseStudy {
-  title: string;
-  company: string;
-  summary: string;
-  highlights: string[];
-  metrics: ExperienceImpact[];
-  stack: string[];
-}
-
-export interface ExpertisePillar {
-  title: string;
-  description: string;
-  points: string[];
-}
-
 export interface CultureSignal {
   title: string;
   description: string;
@@ -63,7 +47,6 @@ export const heroContent: HeroContent = {
     "넥슨, 위메프, 한샘에서 제품 KPI를 직접 책임지며 React/Next.js 기반의 대규모 웹 서비스를 고도화했습니다. 디자인 시스템과 자동화된 테스트 파이프라인을 구축해 팀의 출시 속도와 품질을 동시에 끌어올립니다.",
   currentFocus:
     "현재 넥슨코리아 메이플스토리 운영툴 2.0 전환 프로젝트를 리드하며, 아이템 코드 생성 자동화와 CS 처리 경험을 재설계하고 있습니다.",
-  availability: "2024 Q4부터 신규 프로젝트 논의 가능",
   location: "Seoul, Republic of Korea",
   contactEmail: "kwk627@naver.com",
 };
@@ -216,92 +199,6 @@ export const experiences: ExperienceItem[] = [
       "Testing Library",
       "ECharts",
       "D3.js",
-    ],
-  },
-];
-
-export const caseStudies: CaseStudy[] = [
-  {
-    title: "메이플스토리 운영툴 2.0 전환",
-    company: "넥슨코리아",
-    summary:
-      "스프레드시트 중심의 수동 프로세스를 자동화된 웹 플랫폼으로 전환하여 운영팀의 반복 업무를 대폭 줄였습니다.",
-    highlights: [
-      "아이템 코드 생성 모듈 5종을 설계해 신규 이벤트 론칭 시간을 단축",
-      "CS 처리 시나리오를 시각화하고 우선순위 큐를 적용해 대응 품질 향상",
-      "테스트·배포 파이프라인을 정비해 야간 장애 대응 빈도를 크게 낮춤",
-    ],
-    metrics: [
-      { value: "60%", label: "운영 시나리오 제작 시간 단축" },
-      { value: "30%", label: "CS 처리 리드타임 감소" },
-    ],
-    stack: ["React", "Vite", "TanStack Query", "Playwright", "Tailwind CSS"],
-  },
-  {
-    title: "위메프 디자인 시스템 & DX 플랫폼",
-    company: "위메프",
-    summary:
-      "세 가지 프레임워크를 아우르는 컴포넌트 시스템과 운영 도구를 구축해 전사 UI 일관성을 확보했습니다.",
-    highlights: [
-      "React/Vue 컴포넌트를 단일 토큰 시스템으로 통합하여 유지보수 비용 절감",
-      "컴포넌트 사용량을 실시간 추적하는 Chrome Extension과 대시보드를 제작",
-      "테스트 자동화와 릴리즈 프로세스를 정립해 배포 리드타임을 절반으로 단축",
-    ],
-    metrics: [
-      { value: "90%", label: "전사 활용률" },
-      { value: "50%", label: "릴리즈 리드타임 단축" },
-    ],
-    stack: [
-      "React",
-      "Vue2",
-      "Vue3",
-      "Storybook",
-      "Node.js",
-      "Cypress",
-      "Jest",
-    ],
-  },
-];
-
-export const expertisePillars: ExpertisePillar[] = [
-  {
-    title: "프론트엔드 아키텍처",
-    description:
-      "확장 가능한 설계와 코드 품질 도구로 팀이 장기적으로 유지보수 가능한 기반을 만듭니다.",
-    points: [
-      "모노레포·패키지 전략으로 공용 모듈과 디자인 토큰 관리",
-      "SSR/CSR 혼합 환경에서의 성능 튜닝과 번들 최적화",
-      "ESLint, 테스트 커버리지, 코드 리뷰 규칙 자동화를 통한 품질 관리",
-    ],
-  },
-  {
-    title: "데이터 기반 제품 의사결정",
-    description:
-      "정량 지표와 사용자 리서치를 연결해 제품 방향성을 명확히 합니다.",
-    points: [
-      "대시보드 설계와 이벤트 로깅으로 핵심 퍼널 측정",
-      "AB 테스트 실험 설계 및 결과 해석으로 기능 성공 여부 검증",
-      "SQL/노코드 분석 툴을 활용한 자율적인 지표 점검",
-    ],
-  },
-  {
-    title: "협업과 리더십",
-    description:
-      "크로스 기능 스쿼드에서 빠르게 합의하고 실행할 수 있는 문화를 만듭니다.",
-    points: [
-      "디자인·백엔드와의 도메인 워크숍을 주도하여 문제 정의",
-      "OKR/로드맵 기반의 분기별 실행 계획 수립",
-      "온보딩 핸드북과 코드랩으로 팀 지식 전파",
-    ],
-  },
-  {
-    title: "지속 가능한 딜리버리",
-    description:
-      "배포 이후에도 안심하고 개선할 수 있도록 모니터링과 지원 체계를 설계합니다.",
-    points: [
-      "Playwright, Jest, Storybook 테스트로 회귀 이슈 예방",
-      "CI/CD 파이프라인 자동화와 Feature Flag 전략 운영",
-      "장애 대응 플레북과 회고 문화 정착",
     ],
   },
 ];

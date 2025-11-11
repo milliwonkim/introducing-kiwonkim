@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 interface SectionHeaderProps {
-  eyebrow: string;
+  eyebrow?: string;
   title?: string;
   description?: string;
   align?: "left" | "center";
@@ -19,9 +19,11 @@ const SectionHeader = ({
         "mx-auto text-center": align === "center",
       })}
     >
-      <span className="text-xs font-semibold tracking-[0.35em] uppercase text-[color:var(--color-text-tertiary)]">
-        {eyebrow}
-      </span>
+      {eyebrow && (
+        <span className="text-xs font-semibold tracking-[0.35em] uppercase text-[color:var(--color-text-tertiary)]">
+          {eyebrow}
+        </span>
+      )}
       {title && (
         <h2 className="mt-3 text-3xl sm:text-4xl font-semibold text-[color:var(--color-text-primary)]">
           {title}

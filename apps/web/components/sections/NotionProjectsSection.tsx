@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import type { NotionProject } from "@/app/api/projects/route";
 import ProjectCard from "../projects/ProjectCard";
+import ProjectsModal from "../projects/ProjectsModal";
 import SectionContainer from "./SectionContainer";
 import SectionHeader from "./SectionHeader";
 
@@ -15,6 +16,7 @@ interface ProjectsResponse {
 const skeletonCards = Array.from({ length: 3 });
 
 export default function NotionProjectsSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data, isPending, error } = useQuery<ProjectsResponse>({
     queryKey: ["homepage-notion-projects"],
     queryFn: async () => {
@@ -39,9 +41,12 @@ export default function NotionProjectsSection() {
           title="최근 프로젝트 기록"
           description="Notion 데이터베이스와 연동된 실제 프로젝트 히스토리를 확인해보세요."
         />
-        <Link
-          href="/projects"
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
           className="inline-flex w-full items-center justify-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-5 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] shadow-sm transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)] sm:w-auto"
+          aria-haspopup="dialog"
+          aria-expanded={isModalOpen}
         >
           전체 프로젝트 보기
           <svg
@@ -72,7 +77,7 @@ export default function NotionProjectsSection() {
               strokeLinejoin="round"
             />
           </svg>
-        </Link>
+        </button>
       </div>
 
       <div className="mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
@@ -118,6 +123,10 @@ export default function NotionProjectsSection() {
             />
           ))}
       </div>
+      <ProjectsModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </SectionContainer>
   );
 }

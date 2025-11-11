@@ -13,7 +13,6 @@ const FocusSection = ({ areas }: FocusSectionProps) => {
       className="bg-[color:var(--color-card-background)]/40 backdrop-blur-sm"
     >
       <SectionHeader
-        eyebrow="Value Proposition"
         title="사용자 가치와 비즈니스 임팩트를 동시에 추구합니다"
         description="다양한 도메인에서 반복적으로 검증된 방법론과 실행력을 바탕으로, 팀이 원하는 속도로 실험하고 성장할 수 있는 환경을 만듭니다."
       />
