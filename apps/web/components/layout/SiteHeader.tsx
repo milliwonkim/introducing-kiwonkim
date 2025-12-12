@@ -13,7 +13,9 @@ const NAV_ITEMS = [
   { label: "Contact", id: "contact" },
 ] as const;
 
-const getNavHref = (id: (typeof NAV_ITEMS)[number]["id"]) => `/#${id}`;
+type NavTarget = (typeof NAV_ITEMS)[number]["id"] | "hero";
+
+const getNavHref = (id: NavTarget) => `/#${id}`;
 
 const OBSERVER_IDS = [
   "about",

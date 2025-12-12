@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Inter } from "next/font/google";
 import SiteHeader from "../components/layout/SiteHeader";
 import { ThemeProvider } from "@repo/ui";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -69,6 +63,9 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/manifest.json",
+  verification: {
+    google: "8D_h7lywJcTCklWlVzrRLKp8FZrPBaHwWyjZ8keeXkY",
+  },
   other: {
     // AI 봇 차단 메타 태그
     ChatGPT: "noindex, nofollow",
@@ -116,7 +113,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${inter.variable}`} suppressHydrationWarning>
+    <html lang="ko" className={geistSans.variable} suppressHydrationWarning>
       <head>
         {/* AI 봇 차단을 위한 추가 메타 태그 */}
         <meta

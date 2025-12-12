@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 :root {
+  --font-sans: var(
+    --font-geist-sans,
+    "Pretendard",
+    "Apple SD Gothic Neo",
+    sans-serif
+  );
   --header-height: 4.5rem;
   color-scheme: light;
 
