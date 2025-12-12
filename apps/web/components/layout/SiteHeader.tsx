@@ -7,7 +7,9 @@ import ThemeToggle from "../ThemeToggle";
 
 const NAV_ITEMS = [
   { label: "Intro", id: "hero" },
-  { label: "Experience", id: "experience" },
+  { label: "자기소개", id: "overview" },
+  { label: "최근 프로젝트 기록", id: "projects" },
+  { label: "기술블로그", id: "blog" },
   { label: "How I Work", id: "culture" },
   { label: "Contact", id: "contact" },
 ] as const;
@@ -17,7 +19,9 @@ const getNavHref = (id: (typeof NAV_ITEMS)[number]["id"]) => `/#${id}`;
 const OBSERVER_IDS = [
   "hero",
   "about",
-  "experience",
+  "overview",
+  "projects",
+  "blog",
   "culture",
   "contact",
 ];
