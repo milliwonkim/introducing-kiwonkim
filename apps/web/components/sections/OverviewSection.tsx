@@ -29,12 +29,7 @@ const descriptionPropertyKeywords = [
   "한줄소개",
 ];
 
-const categoryPropertyKeywords = [
-  "category",
-  "type",
-  "분류",
-  "카테고리",
-];
+const categoryPropertyKeywords = ["category", "type", "분류", "카테고리"];
 
 const hiddenPropertyKeywords = [
   "order",
@@ -91,6 +86,35 @@ const notionTagColorMap: Record<
     color: "rgb(185, 28, 28)",
   },
 };
+
+const CAREER_START_DATE = {
+  year: 2021,
+  month: 3,
+  day: 2,
+} as const;
+
+function getCareerDuration(startDate: typeof CAREER_START_DATE) {
+  const now = new Date();
+  const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
+  const kstNow = new Date(utcTime + 9 * 60 * 60000);
+
+  let years = kstNow.getUTCFullYear() - startDate.year;
+  let months = kstNow.getUTCMonth() + 1 - startDate.month;
+
+  if (kstNow.getUTCDate() < startDate.day) {
+    months -= 1;
+  }
+
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  return {
+    years: Math.max(years, 0),
+    months: Math.max(months, 0),
+  };
+}
 
 function matchesKeyword(name: string, keywords: string[]) {
   const normalized = name.trim().toLowerCase();
@@ -259,9 +283,7 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
           <div className="space-y-3 text-sm sm:text-base">
             {block.text}
             {block.children && block.children.length > 0 && (
-              <div className="space-y-3">
-                {renderBlocks(block.children)}
-              </div>
+              <div className="space-y-3">{renderBlocks(block.children)}</div>
             )}
           </div>
         </div>
@@ -332,9 +354,7 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
             {block.text}
           </span>
           {block.children && block.children.length > 0 && (
-            <div className="mt-2 space-y-2">
-              {renderBlocks(block.children)}
-            </div>
+            <div className="mt-2 space-y-2">{renderBlocks(block.children)}</div>
           )}
         </li>
       );
@@ -351,20 +371,23 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
           )}
           {block.database.entries.length === 0 ? (
             <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/70 px-5 py-6 text-sm text-[color:var(--color-text-secondary)]">
-              연결된 데이터베이스 항목이 없습니다. 노션에서 항목을 추가하면 자동으로 반영됩니다.
+              연결된 데이터베이스 항목이 없습니다. 노션에서 항목을 추가하면
+              자동으로 반영됩니다.
             </div>
           ) : (
             <div className="space-y-5">
               {block.database.entries.map((entry) => {
-                const entryUpdatedLabel =
-                  formatDateLabel(entry.lastEditedTime ?? entry.createdTime);
+                const entryUpdatedLabel = formatDateLabel(
+                  entry.lastEditedTime ?? entry.createdTime
+                );
                 const entryProperties = entry.properties;
                 const descriptionProperty = entryProperties.find((property) =>
                   matchesKeyword(property.name, descriptionPropertyKeywords)
                 );
-                const categoryProperty = entryProperties.find((property) =>
-                  property !== descriptionProperty &&
-                  matchesKeyword(property.name, categoryPropertyKeywords)
+                const categoryProperty = entryProperties.find(
+                  (property) =>
+                    property !== descriptionProperty &&
+                    matchesKeyword(property.name, categoryPropertyKeywords)
                 );
                 const additionalProperties = entryProperties.filter(
                   (property) =>
@@ -386,7 +409,7 @@ function renderBlock(block: NotionOverviewBlock): ReactNode {
                 return (
                   <article
                     key={entry.id}
-                    className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/75 px-5 py-5 shadow-[0_18px_42px_var(--color-card-shadow)]/45"
+                    className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/75 px-5 py-5"
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
@@ -558,12 +581,16 @@ export default function OverviewSection() {
       const response = await fetch("/api/overview");
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
-        const message = body?.error || "자기소개 정보를 불러오지 못했습니다.";
+        const message = body?.error || "경력 브리핑 정보를 불러오지 못했습니다.";
         throw new Error(message);
       }
       return response.json();
     },
   });
+
+  const { years: careerYears, months: careerMonths } =
+    getCareerDuration(CAREER_START_DATE);
+  const careerIntroduction = `${careerYears}년 ${careerMonths}개월차 프론트엔드 개발자 김기원입니다.`;
 
   const renderedBlocks = useMemo(
     () => (data ? renderBlocks(data.blocks) : []),
@@ -597,13 +624,13 @@ export default function OverviewSection() {
   return (
     <SectionContainer
       id="overview"
-      className="bg-[color:var(--color-card-background)]/30 backdrop-blur-sm"
+      className="bg-[color:var(--color-card-background)]/30 backdrop-blur-sm pt-12 pb-16 sm:pt-14 sm:pb-20 lg:pt-16 lg:pb-24"
     >
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <SectionHeader
-          eyebrow="Resume Overview"
-          title={data?.title || "자기소개 Overview"}
-          description="Notion 페이지와 연동된 최신 자기소개 이력을 확인할 수 있습니다."
+          eyebrow="Career Briefing"
+          title={data?.title || "경력 브리핑"}
+          description="Notion 페이지와 연동된 최신 경력 브리핑을 확인할 수 있습니다."
         />
         <div className="flex flex-col items-start gap-3 text-xs text-[color:var(--color-text-tertiary)] sm:items-end">
           {lastUpdatedLabel && <span>업데이트: {lastUpdatedLabel}</span>}
@@ -648,60 +675,80 @@ export default function OverviewSection() {
         </div>
       </div>
 
-      <div className="mt-10 rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/40">
-        {isPending && (
-          <div className="space-y-10">
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {propertySkeletons.map((_, index) => (
-                <div
-                  key={`overview-property-skeleton-${index}`}
-                  className="h-24 rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-border-normal)]/10 px-4 py-3"
-                >
-                  <div className="h-3 w-24 rounded bg-[color:var(--color-border-normal)]/40" />
-                  <div className="mt-3 h-4 w-32 rounded bg-[color:var(--color-border-normal)]/30" />
-                </div>
-              ))}
+      <div className="mt-10 space-y-6">
+        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/90 p-6 shadow-md shadow-[color:var(--color-card-shadow)]/10">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--color-text-tertiary)]">
+            경력 브리핑
+          </p>
+          <p className="mt-3 text-2xl font-semibold leading-snug text-[color:var(--color-text-primary)]">
+            {careerIntroduction}
+          </p>
+          <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
+            노션과 실시간으로 동기화된 상세 경력 이력은 아래 카드에서 확인할 수
+            있습니다.
+          </p>
+        </div>
+
+        <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-8 shadow-md shadow-[color:var(--color-card-shadow)]/20">
+          {isPending && (
+            <div className="space-y-10">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {propertySkeletons.map((_, index) => (
+                  <div
+                    key={`overview-property-skeleton-${index}`}
+                    className="h-24 rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-border-normal)]/10 px-4 py-3"
+                  >
+                    <div className="h-3 w-24 rounded bg-[color:var(--color-border-normal)]/40" />
+                    <div className="mt-3 h-4 w-32 rounded bg-[color:var(--color-border-normal)]/30" />
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-6">
+                <div className="h-5 w-40 rounded bg-[color:var(--color-border-normal)]/30" />
+                {skeletonParagraphs.map((_, index) => (
+                  <div key={`overview-skeleton-${index}`} className="space-y-2">
+                    <div className="h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
+                    <div className="h-4 w-5/6 rounded bg-[color:var(--color-border-normal)]/20" />
+                    <div className="h-4 w-4/6 rounded bg-[color:var(--color-border-normal)]/15" />
+                  </div>
+                ))}
+              </div>
             </div>
+          )}
 
-            <div className="space-y-6">
-              <div className="h-5 w-40 rounded bg-[color:var(--color-border-normal)]/30" />
-              {skeletonParagraphs.map((_, index) => (
-                <div key={`overview-skeleton-${index}`} className="space-y-2">
-                  <div className="h-4 w-full rounded bg-[color:var(--color-border-normal)]/20" />
-                  <div className="h-4 w-5/6 rounded bg-[color:var(--color-border-normal)]/20" />
-                  <div className="h-4 w-4/6 rounded bg-[color:var(--color-border-normal)]/15" />
-                </div>
-              ))}
+          {error && !isPending && (
+            <div className="rounded-2xl border border-red-300/40 bg-red-50/70 p-6 text-sm text-red-600">
+              {error.message}
             </div>
-          </div>
-        )}
+          )}
 
-        {error && !isPending && (
-          <div className="rounded-2xl border border-red-300/40 bg-red-50/70 p-6 text-sm text-red-600">
-            {error.message}
-          </div>
-        )}
-
-        {!isPending && !error && data &&
-          renderedProperties.length === 0 &&
-          renderedBlocks.length === 0 && (
-          <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 text-sm text-[color:var(--color-text-secondary)]">
-            표시할 자기소개 블록이 없습니다. 노션 페이지에 내용을 추가하면 자동으로 반영됩니다.
-          </div>
-        )}
-
-        {!isPending && !error && (renderedProperties.length > 0 || renderedBlocks.length > 0) && (
-          <div className="space-y-8">
-            {renderedProperties.length > 0 && (
-              <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {renderedProperties}
-              </dl>
+          {!isPending &&
+            !error &&
+            data &&
+            renderedProperties.length === 0 &&
+            renderedBlocks.length === 0 && (
+              <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 text-sm text-[color:var(--color-text-secondary)]">
+                표시할 경력 브리핑 블록이 없습니다. 노션 페이지에 내용을 추가하면
+                자동으로 반영됩니다.
+              </div>
             )}
-            {renderedBlocks.length > 0 && (
-              <div className="space-y-6">{renderedBlocks}</div>
+
+          {!isPending &&
+            !error &&
+            (renderedProperties.length > 0 || renderedBlocks.length > 0) && (
+              <div className="space-y-8">
+                {renderedProperties.length > 0 && (
+                  <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    {renderedProperties}
+                  </dl>
+                )}
+                {renderedBlocks.length > 0 && (
+                  <div className="space-y-6">{renderedBlocks}</div>
+                )}
+              </div>
             )}
-          </div>
-        )}
+        </div>
       </div>
     </SectionContainer>
   );

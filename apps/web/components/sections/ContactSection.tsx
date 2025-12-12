@@ -19,19 +19,19 @@ const ContactSection = ({
     <SectionContainer id="contact">
       <SectionHeader
         eyebrow="Contact"
-        title="다음 프로젝트를 함께 만들어가요"
-        description="제품 목표와 팀 상황을 알려주시면, 가장 빠르게 임팩트를 낼 수 있는 전략과 실행 계획을 제안드릴게요."
+        title="다음 팀에서 함께 성장할 기회를 찾고 있어요"
+        description="사용자 경험에 집중하는 프론트엔드 개발자로서 풀타임 포지션을 찾고 있습니다. 팀의 목표를 알려주시면 제 경험이 어떻게 기여할 수 있을지 이야기 나눠요."
         align="center"
       />
       <div className="mt-14 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/90 p-8 shadow-lg shadow-[color:var(--color-card-shadow)]/50">
           <h3 className="text-2xl font-semibold text-[color:var(--color-text-primary)]">
-            전략부터 실행까지 함께하는 파트너가 필요하신가요?
+            팀에 합류할 프론트엔드 개발자가 필요하신가요?
           </h3>
           <p className="mt-4 text-sm text-[color:var(--color-text-secondary)] leading-relaxed">
-            제품 로드맵 검토, 디자인 시스템 구축, 운영툴 고도화 등 어떤 주제든
-            편하게 이야기를 나눠요. 팀의 현재 페인포인트를 들으며 가장 임팩트가
-            큰 첫 번째 실험을 찾아드립니다.
+            제품 로드맵을 실행하고 디자인 시스템을 다듬으며, 운영툴을 고도화했던
+            경험을 새로운 팀에서 이어가고 싶습니다. 팀의 페인포인트를 들려주시면
+            제가 만들었던 해결 방식과 기여 포인트를 공유드릴게요.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <button

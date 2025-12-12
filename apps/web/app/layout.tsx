@@ -173,7 +173,7 @@ export default function RootLayout({
                 <div className="absolute top-1/3 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[color:var(--color-primary)]/8 blur-[180px]" />
               </div>
               <SiteHeader />
-              <main className="pt-[calc(var(--header-height,4.5rem)+3rem)] pb-24">
+              <main className="pt-[72px] pb-24">
                 <div className="toss-fade-in">{children}</div>
               </main>
             </div>
