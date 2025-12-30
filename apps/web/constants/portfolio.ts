@@ -76,12 +76,12 @@ export const impactMetrics: ImpactMetric[] = [
 
 export const focusAreas: FocusArea[] = [
   {
-    title: "제품 KPI와 연결된 개발",
+    title: "대용량 처리 및 데이터 시각화",
     description:
       "문제 정의부터 실험 설계, 데이터 검증까지 제품 사이클 전체를 함께 설계합니다.",
     bullets: [
-      "AB 테스트 설계와 데이터 분석을 통해 기능별 KPI를 추적",
-      "사용자 여정과 비즈니스 목표를 동시에 만족시키는 우선순위 정립",
+      "10만건 이상의 대용량 데이터를 성능 저하를 최소화하며 서비스 개선",
+      "SKU, 매출 데이터 등 Apache EChart, D3를 이용한 데이터 시각화",
     ],
   },
   {
@@ -90,17 +90,14 @@ export const focusAreas: FocusArea[] = [
       "팀이 빠르게 합의하고 일관된 경험을 전달할 수 있는 토대를 만들었습니다.",
     bullets: [
       "Storybook 기반 컴포넌트 라이브러리 운영 및 버전 전략 수립",
-      "문서화·워크숍을 통한 조직 전반의 컴포넌트 활용률 확대",
+      "모노레포를 이용한 디자인 시스템 구현으로 검증된 UI를 이용한 빠른 프로덕트 생산",
     ],
   },
   {
     title: "지속 가능한 품질 확보",
     description:
       "배포 이후에도 신뢰할 수 있는 서비스를 위해 테스트와 모니터링을 자동화합니다.",
-    bullets: [
-      "Playwright E2E 파이프라인으로 회귀 버그 30% 감소",
-      "도메인 지식을 담는 코드 리뷰 가이드와 온보딩 키트 제작",
-    ],
+    bullets: ["Playwright E2E 테스트를 통한 서비스 안정성 확보"],
   },
 ];
 

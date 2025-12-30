@@ -581,7 +581,8 @@ export default function OverviewSection() {
       const response = await fetch("/api/overview");
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
-        const message = body?.error || "경력 브리핑 정보를 불러오지 못했습니다.";
+        const message =
+          body?.error || "경력 브리핑 정보를 불러오지 못했습니다.";
         throw new Error(message);
       }
       return response.json();
@@ -683,10 +684,39 @@ export default function OverviewSection() {
           <p className="mt-3 text-2xl font-semibold leading-snug text-[color:var(--color-text-primary)]">
             {careerIntroduction}
           </p>
-          <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
-            노션과 실시간으로 동기화된 상세 경력 이력은 아래 카드에서 확인할 수
-            있습니다.
-          </p>
+          <div className="mt-4 space-y-4 text-sm text-[color:var(--color-text-secondary)]">
+            <p>
+              약 4년 9개월 차 프론트엔드 개발자로서 데이터 기반 웹 시스템
+              개발·운영에 강점이 있습니다. D3, ECharts, Chart.js를 활용한 시각화
+              경험을 바탕으로 10만 건 이상의 대용량 테이블과 복잡한 품질·지표
+              데이터를 안정적으로 렌더링하고 인터랙션을 최적화해 왔습니다.
+            </p>
+            <p>
+              모노레포 기반 React·Vue 디자인 시스템 환경을 경험하며 공통
+              컴포넌트와 UI 가이드를 활용해 일관된 사용자 경험을 제공했습니다.
+              여러 서비스와 팀에서 재사용되는 컴포넌트를 설계·개선하며
+              유지보수성과 확장성을 꾸준히 고민해 왔습니다.
+            </p>
+            <p>
+              백엔드 개발자와는 Swagger(OpenAPI) 스키마 기반의 API 설계 협의를
+              주도하며 데이터 모델과 응답 구조를 사전에 정의해 커뮤니케이션
+              비용과 개발 리스크를 줄였습니다. 이를 통해 프론트엔드와 백엔드의
+              역할 분담과 책임 경계를 명확히 하는 개발 문화를 중요하게 생각하게
+              되었습니다.
+            </p>
+            <p>
+              또한 디자이너·기획자와 Figma를 기반으로 효율적인 협업을
+              수행해왔으며, 다양한 국가·조직에서 사용하는 글로벌 품질 관리
+              시스템에서는 안정성, 표준화, 빠른 요구사항 대응이 핵심이라고
+              믿습니다.
+            </p>
+            <p>
+              데이터 정확성과 UI 신뢰도를 동시에 만족시키는 프론트엔드
+              개발자로서 차세대 품질 시스템과 공통 패키지 개발에 기여하고
+              싶습니다. 앞으로도 최신 기술과 도구를 적극적으로 학습·활용하며
+              품질 업무의 효율과 사용자 경험을 함께 개선하겠습니다.
+            </p>
+          </div>
         </div>
 
         <div className="rounded-3xl border border-[color:var(--color-border-light)] bg-[color:var(--color-background)]/85 p-8 shadow-md shadow-[color:var(--color-card-shadow)]/20">
@@ -729,8 +759,8 @@ export default function OverviewSection() {
             renderedProperties.length === 0 &&
             renderedBlocks.length === 0 && (
               <div className="rounded-2xl border border-[color:var(--color-border-light)] bg-[color:var(--color-card-background)]/80 p-6 text-sm text-[color:var(--color-text-secondary)]">
-                표시할 경력 브리핑 블록이 없습니다. 노션 페이지에 내용을 추가하면
-                자동으로 반영됩니다.
+                표시할 경력 브리핑 블록이 없습니다. 노션 페이지에 내용을
+                추가하면 자동으로 반영됩니다.
               </div>
             )}
 
