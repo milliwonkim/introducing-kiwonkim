@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 
 import type { NotionPost } from "@/app/blog/page";
@@ -35,37 +34,30 @@ export default function NotionBlogSection() {
           title="기술 블로그"
           description="Notion에 기록한 글을 불러와 최신 인사이트를 소개합니다."
         />
-        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:min-w-[240px]">
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center rounded-full border border-[color:var(--color-border-light)] bg-[color:var(--color-background)] px-5 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] shadow-sm transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-transparent bg-[color:var(--color-primary)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[color:var(--color-primary)]/25 transition hover:-translate-y-0.5 hover:shadow-[color:var(--color-primary)]/35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-primary)]"
             aria-haspopup="dialog"
             aria-expanded={isModalOpen}
           >
             블로그 전체 보기
             <svg
-              className="ml-2 h-4 w-4"
+              className="h-4 w-4"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
             >
               <path
-                d="M11.25 3.75H16.25V8.75"
+                d="M4.16602 10H15.8327"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinecap="round"
-                strokeLinejoin="round"
               />
               <path
-                d="M8.75 11.25L16.25 3.75"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M8.75 3.75H5.75C4.64543 3.75 3.75 4.64543 3.75 5.75V14.25C3.75 15.3546 4.64543 16.25 5.75 16.25H14.25C15.3546 16.25 16.25 15.3546 16.25 14.25V11.5"
+                d="M10.832 5L15.832 10L10.832 15"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinecap="round"

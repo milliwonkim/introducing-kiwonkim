@@ -591,7 +591,8 @@ export default function OverviewSection() {
 
   const { years: careerYears, months: careerMonths } =
     getCareerDuration(CAREER_START_DATE);
-  const careerIntroduction = `${careerYears}년 ${careerMonths}개월차 프론트엔드 개발자 김기원입니다.`;
+  const careerYearCount = Math.max(careerYears, 0) + 1;
+  const careerIntroduction = `${careerYears}년 ${careerMonths}개월차 (연차 기준 ${careerYearCount}년차) 프론트엔드 개발자 김기원입니다.`;
 
   const renderedBlocks = useMemo(
     () => (data ? renderBlocks(data.blocks) : []),
@@ -686,7 +687,8 @@ export default function OverviewSection() {
           </p>
           <div className="mt-4 space-y-4 text-sm text-[color:var(--color-text-secondary)]">
             <p>
-              약 4년 9개월 차 프론트엔드 개발자로서 데이터 기반 웹 시스템
+              약 {careerYears}년 {careerMonths}개월 차 (연차 기준{" "}
+              {careerYearCount}년차) 프론트엔드 개발자로서 데이터 기반 웹 시스템
               개발·운영에 강점이 있습니다. D3, ECharts, Chart.js를 활용한 시각화
               경험을 바탕으로 10만 건 이상의 대용량 테이블과 복잡한 품질·지표
               데이터를 안정적으로 렌더링하고 인터랙션을 최적화해 왔습니다.
