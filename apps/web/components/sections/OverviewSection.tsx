@@ -93,6 +93,8 @@ const CAREER_START_DATE = {
   day: 2,
 } as const;
 
+const CAREER_DURATION_MONTH_OFFSET = -3;
+
 function getCareerDuration(startDate: typeof CAREER_START_DATE) {
   const now = new Date();
   const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -110,9 +112,14 @@ function getCareerDuration(startDate: typeof CAREER_START_DATE) {
     months += 12;
   }
 
+  const adjustedTotalMonths = Math.max(
+    years * 12 + months + CAREER_DURATION_MONTH_OFFSET,
+    0,
+  );
+
   return {
-    years: Math.max(years, 0),
-    months: Math.max(months, 0),
+    years: Math.floor(adjustedTotalMonths / 12),
+    months: adjustedTotalMonths % 12,
   };
 }
 
